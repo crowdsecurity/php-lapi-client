@@ -133,6 +133,14 @@ The first parameter `$configs` of the Bouncer constructor can be used to pass th
 
 ### LAPI url
 
+```php
+$configs = [
+        ... 
+        'api_url' => 'https://your-crowdsec-lapi-url:8080'
+        ...
+];
+```
+
 Define the URL to your LAPI server, default to `http://localhost:8080`.
 
 ### Authorization type for connection
@@ -373,7 +381,7 @@ php tests/scripts/bouncer/request-handler-override/decisions-stream.php 1 '{"sco
 #### Command usage
 
 ```php
-php tests/scripts/bouncer/decisions-filter.php <FILTER_JSON>
+php tests/scripts/bouncer/decisions-filter.php <FILTER_JSON> <BOUNCER_KEY> <LAPI_URL>
 ```
 
 #### Example
