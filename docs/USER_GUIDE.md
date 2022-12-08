@@ -6,7 +6,38 @@
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
 
+- [Description](#description)
+- [Features](#features)
+- [Quick start](#quick-start)
+  - [Installation](#installation)
+  - [Bouncer client instantiation](#bouncer-client-instantiation)
+    - [LAPI calls](#lapi-calls)
+      - [Get Decisions stream list](#get-decisions-stream-list)
+      - [Get filtered Decisions](#get-filtered-decisions)
+- [Bouncer client configurations](#bouncer-client-configurations)
+  - [LAPI url](#lapi-url)
+  - [Authorization type for connection](#authorization-type-for-connection)
+  - [Settings for Api key authorization](#settings-for-api-key-authorization)
+    - [Api key](#api-key)
+  - [Settings for TLS authorization](#settings-for-tls-authorization)
+    - [Bouncer certificate path](#bouncer-certificate-path)
+    - [Bouncer key path](#bouncer-key-path)
+    - [Peer verification](#peer-verification)
+    - [CA certificate path](#ca-certificate-path)
+  - [LAPI timeout](#lapi-timeout)
+  - [User Agent suffix](#user-agent-suffix)
+- [Override the curl request handler](#override-the-curl-request-handler)
+  - [Custom implementation](#custom-implementation)
+  - [Ready to use `file_get_contents` implementation](#ready-to-use-file_get_contents-implementation)
+- [Example scripts](#example-scripts)
+  - [Get decisions stream](#get-decisions-stream)
+    - [Command usage](#command-usage)
+    - [Example usage](#example-usage)
+  - [Get filtered decisions](#get-filtered-decisions-1)
+    - [Command usage](#command-usage-1)
+    - [Example](#example)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
