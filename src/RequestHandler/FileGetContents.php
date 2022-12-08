@@ -35,11 +35,9 @@ class FileGetContents extends AbstractRequestHandler implements RequestHandlerIn
         $parameters = $request->getParams();
         $url = $request->getUri();
 
-        if ('GET' === strtoupper($method)) {
-            if (!empty($parameters)) {
-                $url .= strpos($url, '?') ? '&' : '?';
-                $url .= http_build_query($parameters);
-            }
+        if ('GET' === strtoupper($method) && !empty($parameters)) {
+            $url .= strpos($url, '?') ? '&' : '?';
+            $url .= http_build_query($parameters);
         }
 
         $fullResponse = $this->exec($url, $context);
