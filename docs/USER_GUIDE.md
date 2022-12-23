@@ -28,6 +28,7 @@
     - [CA certificate path](#ca-certificate-path)
   - [LAPI timeout](#lapi-timeout)
   - [User Agent suffix](#user-agent-suffix)
+  - [User Agent version](#user-agent-version)
 - [Override the curl request handler](#override-the-curl-request-handler)
   - [Custom implementation](#custom-implementation)
   - [Ready to use `file_get_contents` implementation](#ready-to-use-file_get_contents-implementation)
