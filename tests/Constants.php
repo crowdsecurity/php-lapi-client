@@ -22,6 +22,11 @@ class Constants
     public const USER_AGENT_SUFFIX = 'PHPLAPITEST';
 
     /**
+     * @var string The user agent version used to send request to LAPI
+     */
+    public const USER_AGENT_VERSION = 'v0.0.0';
+
+    /**
      * @var string The user agent suffix used to send request to LAPI
      */
     public const API_KEY = '1234abcd';

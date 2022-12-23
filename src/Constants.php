@@ -17,7 +17,7 @@ namespace CrowdSec\LapiClient;
 class Constants
 {
     /** @var int The default timeout (in seconds) when calling LAPI */
-    public const API_TIMEOUT = 5;
+    public const API_TIMEOUT = 120;
     /** @var string The API-KEY auth type */
     public const AUTH_KEY = 'api_key';
     /** @var string The TLS auth type */
@@ -37,5 +37,5 @@ class Constants
     /**
      * @var string The current version of this library
      */
-    public const VERSION = 'v0.0.1';
+    public const VERSION = 'v0.1.0';
 }

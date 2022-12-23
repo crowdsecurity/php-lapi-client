@@ -258,7 +258,11 @@ $configs = [
 ];
 ```
 
-In seconds. The timeout when calling LAPI. Must be greater or equal than 1. Default to 5 seconds if not set.
+This setting is not required.
+
+This is the maximum number of seconds allowed to execute a LAPI request.
+
+It must be an integer. If you don't set any value, default value is 120. If you set a negative value, timeout is unlimited.
 
 ### User Agent suffix
 
@@ -274,11 +278,27 @@ This setting is not required.
 Sending a `User-Agent` header during a LAPI call is mandatory. By default, user agent will be `csphplapi/vX.Y.Z` where 
 `vX.Y.Z` is the current release version of this library.
 
-You can add a custom suffix to this value by using the `user_agent_suffix` setting. It must be a string with a length
-less than or equal to 16 and matching the regular expression `#^[A-Za-z0-9]+$#`.
+You can add a custom suffix to this value by using the `user_agent_suffix` setting. It must be a string matching the regular expression `#^[A-Za-z0-9]{0,16}$#`.
 
 With the example setting above, result will be  `csphplapi_MySuffix/vX.Y.Z`.
 
+### User Agent version
+
+```php
+$configs = [
+        ... 
+        'user_agent_version' => 'v2.3.0'
+        ...
+];
+```
+This setting is not required.
+
+As mentioned above, default user agent is `csphplapi/vX.Y.Z` where `vX.Y.Z` is the current release version of this
+library.
+
+You can add a custom version to this value by using the `user_agent_version` setting. It must be a string matching the regular expression `#^v\d{1,4}(\.\d{1,4}){2}$#`.
+
+With the example setting above, result will be  `csphplapi/v2.3.0`.
 
 
 ## Override the curl request handler
