@@ -61,7 +61,7 @@ final class BouncerTest extends AbstractClient
                     ['startup' => true],
                     [
                         'User-Agent' => Constants::USER_AGENT_PREFIX . '_' . TestConstants::USER_AGENT_SUFFIX
-                                        . '/' . Constants::VERSION,
+                                        . '/' . TestConstants::USER_AGENT_VERSION,
                         'X-Api-Key' => TestConstants::API_KEY,
                     ],
                 ]
@@ -85,7 +85,7 @@ final class BouncerTest extends AbstractClient
                     ['ip' => '1.2.3.4'],
                     [
                         'User-Agent' => Constants::USER_AGENT_PREFIX . '_' . TestConstants::USER_AGENT_SUFFIX
-                                        . '/' . Constants::VERSION,
+                                        . '/' . TestConstants::USER_AGENT_VERSION,
                         'X-Api-Key' => TestConstants::API_KEY,
                     ],
                 ]
@@ -194,6 +194,16 @@ final class BouncerTest extends AbstractClient
             $client->getConfig('user_agent_suffix'),
             'user_agent_suffix can be empty'
         );
+        // user agent version
+        $client = new Bouncer(['api_key' => '1111', 'user_agent_version' => 'v4.56.7']);
+
+        $this->assertEquals(
+            'v4.56.7',
+            $client->getConfig('user_agent_version'),
+            'user_agent_version should be configurable'
+        );
+
+
         // auth type
         $error = '';
         try {

@@ -29,15 +29,24 @@ class Configuration implements ConfigurationInterface
         $rootNode->children()
             ->scalarNode('user_agent_suffix')
                 ->validate()
-                ->ifTrue(function (string $value) {
-                    if (!empty($value)) {
-                        return strlen($value) > 16 || 1 !== preg_match('#^[A-Za-z0-9]+$#', $value);
-                    }
-
-                    return false;
-                })
-                ->thenInvalid('Invalid user agent suffix. Length must be <= 16. Allowed chars are A-Za-z0-9')
+                    ->ifTrue(function (string $value) {
+                        return 1 !== preg_match('#^[A-Za-z0-9]{0,16}$#', $value);
+                    })
+                    ->thenInvalid('Invalid user agent suffix. Length must be <= 16. Allowed chars are A-Za-z0-9')
                 ->end()
+            ->end()
+            ->scalarNode('user_agent_version')
+                ->validate()
+                    ->ifTrue(function (string $value) {
+                        if (!empty($value)) {
+                            return 1 !== preg_match('#^v\d{1,4}(\.\d{1,4}){2}$#', $value);
+                        }
+
+                        return true;
+                    })
+                    ->thenInvalid('Invalid user agent version. Must match vX.Y.Z format')
+                ->end()
+                ->defaultValue(Constants::VERSION)
             ->end()
         ->end()
         ;

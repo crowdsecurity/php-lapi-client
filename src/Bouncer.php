@@ -96,8 +96,10 @@ class Bouncer extends AbstractClient
     private function formatUserAgent(array $configs = []): string
     {
         $userAgentSuffix = !empty($configs['user_agent_suffix']) ? '_' . $configs['user_agent_suffix'] : '';
+        $userAgentVersion =
+            !empty($configs['user_agent_version']) ? $configs['user_agent_version'] : Constants::VERSION;
 
-        return Constants::USER_AGENT_PREFIX . $userAgentSuffix . '/' . Constants::VERSION;
+        return Constants::USER_AGENT_PREFIX . $userAgentSuffix . '/' . $userAgentVersion;
     }
 
     /**
