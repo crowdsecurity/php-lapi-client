@@ -90,7 +90,9 @@ class Curl extends AbstractRequestHandler implements RequestHandlerInterface
             }
         }
         $timeout = $this->getConfig('api_timeout') ?? Constants::API_TIMEOUT;
-        $result[\CURLOPT_TIMEOUT] = $timeout;
+        if ($timeout > 0) {
+            $result[\CURLOPT_TIMEOUT] = $timeout;
+        }
 
         return $result;
     }

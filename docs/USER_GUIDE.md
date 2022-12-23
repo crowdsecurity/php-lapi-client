@@ -258,7 +258,11 @@ $configs = [
 ];
 ```
 
-In seconds. The timeout when calling LAPI. Must be greater or equal than 1. Default to 5 seconds if not set.
+This setting is not required.
+
+This is the maximum number of seconds allowed to execute a LAPI request.
+
+It must be an integer. If you don't set any value, default value is 120. If you set a negative value, timeout is unlimited.
 
 ### User Agent suffix
 
