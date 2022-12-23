@@ -203,6 +203,20 @@ final class BouncerTest extends AbstractClient
             'user_agent_version should be configurable'
         );
 
+        $error = '';
+        try {
+            new Bouncer(['api_key' => TestConstants::API_KEY, 'user_agent_version' => '']);
+        } catch (\Exception $e) {
+            $error = $e->getMessage();
+        }
+
+        PHPUnitUtil::assertRegExp(
+            $this,
+            '/Invalid user agent version/',
+            $error,
+            'user_agent_version can not be empty'
+        );
+
 
         // auth type
         $error = '';
