@@ -54,6 +54,7 @@ class Bouncer extends AbstractClient
      * Process a decisions call to LAPI with some filter(s).
      *
      * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/bouncers/getDecisions
+     * @throws ClientException
      */
     public function getFilteredDecisions(array $filter = []): array
     {
@@ -68,6 +69,7 @@ class Bouncer extends AbstractClient
      * Process a decisions stream call to LAPI.
      *
      * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/bouncers/getDecisionsStream
+     * @throws ClientException
      */
     public function getStreamDecisions(
         bool $startup,
