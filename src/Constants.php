@@ -26,9 +26,9 @@ class Constants
     public const DEFAULT_LAPI_URL = 'http://localhost:8080';
     /** @var string The CrowdSec country scope for decisions */
     public const SCOPE_COUNTRY = 'country';
-    /** @var string The CrowdSec Ip scope for decisions */
+    /** @var string The CrowdSec ip scope for decisions */
     public const SCOPE_IP = 'ip';
-    /** @var string The CrowdSec Range scope for decisions */
+    /** @var string The CrowdSec range scope for decisions */
     public const SCOPE_RANGE = 'range';
     /**
      * @var string The user agent prefix used to send request to LAPI
@@ -37,5 +37,5 @@ class Constants
     /**
      * @var string The current version of this library
      */
-    public const VERSION = 'v0.1.0';
+    public const VERSION = 'v0.2.0';
 }

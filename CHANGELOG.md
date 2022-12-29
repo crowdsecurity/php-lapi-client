@@ -5,6 +5,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [0.2.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v0.2.0) - 2022-12-29
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v0.1.0...v0.2.0)
+
+### Changed
+
+- Lowercase all scope constants (`ip`, `range`, `country`)
+
+---
+
 ## [0.1.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v0.1.0) - 2022-12-23
 [_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v0.0.1...v0.1.0)
 
