@@ -67,6 +67,8 @@ class Bouncer extends AbstractClient
 
     /**
      * Process a decisions stream call to LAPI.
+     * When the $startup flag is used, all the decisions are returned.
+     * Else only the decisions updates (add or remove) from the last stream call are returned.
      *
      * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/bouncers/getDecisionsStream
      * @throws ClientException
@@ -114,7 +116,7 @@ class Bouncer extends AbstractClient
         string $endpoint,
         array $parameters = []
     ): array {
-        $this->logger->debug('', [
+        $this->logger->debug('Now processing a bouncer request', [
             'type' => 'BOUNCER_CLIENT_REQUEST',
             'method' => $method,
             'endpoint' => $endpoint,

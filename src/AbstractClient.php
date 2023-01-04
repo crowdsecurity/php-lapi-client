@@ -96,7 +96,9 @@ abstract class AbstractClient
     ): array {
         $method = strtoupper($method);
         if (!in_array($method, $this->allowedMethods)) {
-            throw new ClientException("Method ($method) is not allowed.");
+            $message = "Method ($method) is not allowed.";
+            $this->logger->error($message, ['type' => 'LAPI_CLIENT_REQUEST']);
+            throw new ClientException($message);
         }
 
         $response = $this->sendRequest(
@@ -130,13 +132,17 @@ abstract class AbstractClient
             $decoded = json_decode($response->getJsonBody(), true);
 
             if (null === $decoded) {
-                throw new ClientException('Body response is not a valid json');
+                $message = 'Body response is not a valid json';
+                $this->logger->error($message, ['type' => 'LAPI_CLIENT_FORMAT_RESPONSE']);
+                throw new ClientException($message);
             }
         }
 
         if ($statusCode < 200 || $statusCode >= 300) {
             $message = "Unexpected response status code: $statusCode. Body was: " . str_replace("\n", '', $body);
-            throw new ClientException($message, $statusCode);
+            if ($statusCode !== 404) {
+                throw new ClientException($message, $statusCode);
+            }
         }
 
         return $decoded;
