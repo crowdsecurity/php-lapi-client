@@ -140,6 +140,7 @@ class Curl extends AbstractRequestHandler implements RequestHandlerInterface
             \CURLOPT_HEADER => false,
             \CURLOPT_RETURNTRANSFER => true,
             \CURLOPT_USERAGENT => $headers['User-Agent'],
+            \CURLOPT_ENCODING => ''
         ];
 
         $options[\CURLOPT_HTTPHEADER] = [];
