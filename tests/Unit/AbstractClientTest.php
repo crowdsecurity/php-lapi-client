@@ -49,7 +49,7 @@ final class AbstractClientTest extends AbstractClient
         $this->assertEquals(
             Constants::DEFAULT_LAPI_URL . '/',
             $url,
-            'Url should be dev by default'
+            'Url should be default'
         );
         $this->assertEquals(
             '/',

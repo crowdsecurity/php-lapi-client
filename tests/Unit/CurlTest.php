@@ -180,6 +180,7 @@ final class CurlTest extends AbstractClient
             \CURLOPT_CUSTOMREQUEST => $method,
             \CURLOPT_TIMEOUT => TestConstants::API_TIMEOUT,
             \CURLOPT_SSL_VERIFYPEER => false,
+            \CURLOPT_ENCODING => ''
         ];
 
         $this->assertEquals(
@@ -217,6 +218,7 @@ final class CurlTest extends AbstractClient
             \CURLOPT_CUSTOMREQUEST => $method,
             \CURLOPT_TIMEOUT => TestConstants::API_TIMEOUT,
             \CURLOPT_SSL_VERIFYPEER => false,
+            \CURLOPT_ENCODING => ''
         ];
 
         $this->assertEquals(
@@ -253,6 +255,7 @@ final class CurlTest extends AbstractClient
             \CURLOPT_CUSTOMREQUEST => $method,
             \CURLOPT_TIMEOUT => TestConstants::API_TIMEOUT,
             \CURLOPT_SSL_VERIFYPEER => true,
+            \CURLOPT_ENCODING => '',
             \CURLOPT_SSLCERT => 'tls_cert_path_test',
             \CURLOPT_SSLKEY => 'tls_key_path_test',
             \CURLOPT_CAINFO => 'tls_ca_cert_path_test',
@@ -282,6 +285,7 @@ final class CurlTest extends AbstractClient
                 'User-Agent:' . TestConstants::USER_AGENT_SUFFIX,
             ],
             \CURLOPT_POST => false,
+            \CURLOPT_ENCODING => '',
             \CURLOPT_URL => $url,
             \CURLOPT_CUSTOMREQUEST => $method,
             \CURLOPT_TIMEOUT => TestConstants::API_TIMEOUT,
