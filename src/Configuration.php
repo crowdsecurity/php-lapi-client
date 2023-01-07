@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * The Watcher configuration.
+ * The LAPI client configuration.
  *
  * @author    CrowdSec team
  *
@@ -21,6 +21,30 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  */
 class Configuration implements ConfigurationInterface
 {
+    /** @var array<string> The list of each configuration tree key */
+    protected $keys = [
+        'user_agent_suffix',
+        'user_agent_version',
+        'api_url',
+        'auth_type',
+        'api_key',
+        'tls_cert_path',
+        'tls_key_path',
+        'tls_ca_cert_path',
+        'tls_verify_peer',
+        'api_timeout'
+    ];
+
+    /**
+     * Keep only necessary configs
+     * @param array $configs
+     * @return array
+     */
+    public function cleanConfigs(array $configs): array
+    {
+        return array_intersect_key($configs, array_flip($this->keys));
+    }
+
     /**
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
@@ -54,8 +78,8 @@ class Configuration implements ConfigurationInterface
             ->end()
         ->end()
         ;
-        $this->validate($rootNode);
         $this->addConnectionNodes($rootNode);
+        $this->validate($rootNode);
 
         return $treeBuilder;
     }
@@ -109,35 +133,36 @@ class Configuration implements ConfigurationInterface
      */
     private function validate($rootNode)
     {
-        $rootNode->validate()
-            ->ifTrue(function (array $v) {
-                if (Constants::AUTH_KEY === $v['auth_type'] && empty($v['api_key'])) {
-                    return true;
-                }
+        $rootNode
+            ->validate()
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_KEY === $v['auth_type'] && empty($v['api_key'])) {
+                        return true;
+                    }
 
-                return false;
-            })
-            ->thenInvalid('Api key is required as auth type is api_key')
+                    return false;
+                })
+                ->thenInvalid('Api key is required as auth type is api_key')
             ->end()
             ->validate()
-            ->ifTrue(function (array $v) {
-                if (Constants::AUTH_TLS === $v['auth_type']) {
-                    return empty($v['tls_cert_path']) || empty($v['tls_key_path']);
-                }
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_TLS === $v['auth_type']) {
+                        return empty($v['tls_cert_path']) || empty($v['tls_key_path']);
+                    }
 
-                return false;
-            })
-            ->thenInvalid('Bouncer certificate and key paths are required for tls authentification.')
+                    return false;
+                })
+                ->thenInvalid('Bouncer certificate and key paths are required for tls authentification.')
             ->end()
             ->validate()
-            ->ifTrue(function (array $v) {
-                if (Constants::AUTH_TLS === $v['auth_type'] && true === $v['tls_verify_peer']) {
-                    return empty($v['tls_ca_cert_path']);
-                }
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_TLS === $v['auth_type'] && true === $v['tls_verify_peer']) {
+                        return empty($v['tls_ca_cert_path']);
+                    }
 
-                return false;
-            })
-            ->thenInvalid('CA path is required for tls authentification with verify_peer.')
+                    return false;
+                })
+                ->thenInvalid('CA path is required for tls authentification with verify_peer.')
             ->end();
     }
 }

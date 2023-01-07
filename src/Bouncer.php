@@ -91,7 +91,7 @@ class Bouncer extends AbstractClient
     {
         $configuration = new Configuration();
         $processor = new Processor();
-        $this->configs = $processor->processConfiguration($configuration, [$configs]);
+        $this->configs = $processor->processConfiguration($configuration, [$configuration->cleanConfigs($configs)]);
     }
 
     /**
