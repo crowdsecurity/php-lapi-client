@@ -38,6 +38,7 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @uses \CrowdSec\LapiClient\Bouncer::manageRequest
  * @uses \CrowdSec\LapiClient\Configuration::addConnectionNodes
  * @uses \CrowdSec\LapiClient\Configuration::validate
+ * @uses \CrowdSec\LapiClient\Configuration::cleanConfigs
  *
  * @covers \CrowdSec\LapiClient\RequestHandler\FileGetContents::handle
  * @covers \CrowdSec\LapiClient\RequestHandler\FileGetContents::createContextConfig
