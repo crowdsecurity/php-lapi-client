@@ -34,6 +34,7 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @uses \CrowdSec\LapiClient\Bouncer::formatUserAgent
  * @uses \CrowdSec\LapiClient\Configuration::addConnectionNodes
  * @uses \CrowdSec\LapiClient\Configuration::validate
+ * @uses \CrowdSec\LapiClient\Configuration::cleanConfigs
  *
  * @covers \CrowdSec\LapiClient\RequestHandler\Curl::createOptions
  * @covers \CrowdSec\LapiClient\RequestHandler\Curl::handle

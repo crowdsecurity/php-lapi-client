@@ -58,6 +58,10 @@ abstract class AbstractClient
             $logger->pushHandler(new NullHandler());
         }
         $this->logger = $logger;
+        $this->logger->debug('Instantiate client', [
+            'type' => 'CLIENT_INIT',
+            'configs' => array_merge($configs, ['api_key' => '***'])
+        ]);
     }
 
     /**
@@ -97,7 +101,7 @@ abstract class AbstractClient
         $method = strtoupper($method);
         if (!in_array($method, $this->allowedMethods)) {
             $message = "Method ($method) is not allowed.";
-            $this->logger->error($message, ['type' => 'LAPI_CLIENT_REQUEST']);
+            $this->logger->error($message, ['type' => 'CLIENT_REQUEST']);
             throw new ClientException($message);
         }
 
@@ -133,7 +137,7 @@ abstract class AbstractClient
 
             if (null === $decoded) {
                 $message = 'Body response is not a valid json';
-                $this->logger->error($message, ['type' => 'LAPI_CLIENT_FORMAT_RESPONSE']);
+                $this->logger->error($message, ['type' => 'CLIENT_FORMAT_RESPONSE']);
                 throw new ClientException($message);
             }
         }

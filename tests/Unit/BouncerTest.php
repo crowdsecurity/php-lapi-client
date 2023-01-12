@@ -32,6 +32,9 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @uses \CrowdSec\LapiClient\RequestHandler\Curl::handle
  * @uses \CrowdSec\LapiClient\RequestHandler\AbstractRequestHandler::__construct
  *
+ *
+ *
+ * @covers \CrowdSec\LapiClient\Configuration::cleanConfigs
  * @covers \CrowdSec\LapiClient\Bouncer::__construct
  * @covers \CrowdSec\LapiClient\Bouncer::configure
  * @covers \CrowdSec\LapiClient\Bouncer::manageRequest
@@ -274,5 +277,20 @@ final class BouncerTest extends AbstractClient
             $error,
             'CA cert path should be required if verify peer is true'
         );
+        // Unexpected conf
+        $client = new Bouncer(['api_key' => '1111', 'user_agent_version' => 'v4.56.7', 'unexpected' => true]);
+
+        $this->assertEquals(
+            'v4.56.7',
+            $client->getConfig('user_agent_version'),
+            'user_agent_version should be configurable'
+        );
+
+        $this->assertEquals(
+            null,
+            $client->getConfig('unexpected'),
+            'Unexpected config should have been removed with no exception'
+        );
+
     }
 }
