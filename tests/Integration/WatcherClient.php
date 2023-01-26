@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace CrowdSec\LapiClient\Tests\Integration;
 
-use CrowdSec\LapiClient\AbstractClient;
+use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\LapiClient\ClientException;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\HttpMessage\Request;

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace CrowdSec\LapiClient;
 
-use CrowdSec\LapiClient\RequestHandler\RequestHandlerInterface;
+use CrowdSec\Common\Client\AbstractClient;
+use CrowdSec\Common\Client\RequestHandler\AbstractRequestHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
+use CrowdSec\Common\Client\ClientException as CommonClientException;
 
 /**
  * The Bouncer Client.
@@ -21,14 +23,6 @@ use Symfony\Component\Config\Definition\Processor;
 class Bouncer extends AbstractClient
 {
     /**
-     * @var string The decisions endpoint
-     */
-    public const DECISIONS_FILTER_ENDPOINT = '/v1/decisions';
-    /**
-     * @var string The decisions stream endpoint
-     */
-    public const DECISIONS_STREAM_ENDPOINT = '/v1/decisions/stream';
-    /**
      * @var array
      */
     protected $configs;
@@ -39,7 +33,7 @@ class Bouncer extends AbstractClient
 
     public function __construct(
         array $configs,
-        RequestHandlerInterface $requestHandler = null,
+        AbstractRequestHandler $requestHandler = null,
         LoggerInterface $logger = null
     ) {
         $this->configure($configs);
@@ -60,7 +54,7 @@ class Bouncer extends AbstractClient
     {
         return $this->manageRequest(
             'GET',
-            self::DECISIONS_FILTER_ENDPOINT,
+            Constants::DECISIONS_FILTER_ENDPOINT,
             $filter
         );
     }
@@ -79,7 +73,7 @@ class Bouncer extends AbstractClient
     ): array {
         return $this->manageRequest(
             'GET',
-            self::DECISIONS_STREAM_ENDPOINT,
+            Constants::DECISIONS_STREAM_ENDPOINT,
             array_merge(['startup' => $startup ? 'true' : 'false'], $filter)
         );
     }
@@ -116,13 +110,17 @@ class Bouncer extends AbstractClient
         string $endpoint,
         array $parameters = []
     ): array {
-        $this->logger->debug('Now processing a bouncer request', [
-            'type' => 'BOUNCER_CLIENT_REQUEST',
-            'method' => $method,
-            'endpoint' => $endpoint,
-            'parameters' => $parameters,
-        ]);
+        try {
+            $this->logger->debug('Now processing a bouncer request', [
+                'type' => 'BOUNCER_CLIENT_REQUEST',
+                'method' => $method,
+                'endpoint' => $endpoint,
+                'parameters' => $parameters,
+            ]);
 
-        return $this->request($method, $endpoint, $parameters, $this->headers);
+            return $this->request($method, $endpoint, $parameters, $this->headers);
+        } catch (CommonClientException $e) {
+            throw new ClientException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 }
