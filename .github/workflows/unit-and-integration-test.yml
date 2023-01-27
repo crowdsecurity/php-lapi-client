@@ -76,7 +76,7 @@ jobs:
         run: |
           echo "BOUNCER_KEY=$(ddev create-bouncer)" >> $GITHUB_ENV
 
-      - name: Clone PHP lib Crowdsec files
+      - name: Clone sources
         uses: actions/checkout@v3
         with:
           path: ${{env.EXTENSION_PATH}}
