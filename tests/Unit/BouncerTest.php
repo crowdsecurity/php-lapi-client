@@ -15,16 +15,15 @@ namespace CrowdSec\LapiClient\Tests\Unit;
  * @license   MIT License
  */
 
-use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\Common\Client\ClientException;
-use CrowdSec\LapiClient\Constants;
 use CrowdSec\Common\Client\HttpMessage\Response;
+use CrowdSec\LapiClient\Bouncer;
+use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 
 /**
- *
  * @covers \CrowdSec\LapiClient\Bouncer::__construct
  * @covers \CrowdSec\LapiClient\Bouncer::configure
  * @covers \CrowdSec\LapiClient\Bouncer::manageRequest
@@ -213,7 +212,6 @@ final class BouncerTest extends AbstractClient
             'user_agent_version can not be empty'
         );
 
-
         // auth type
         $error = '';
         try {
@@ -284,6 +282,5 @@ final class BouncerTest extends AbstractClient
             $client->getConfig('unexpected'),
             'Unexpected config should have been removed with no exception'
         );
-
     }
 }

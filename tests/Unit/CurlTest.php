@@ -71,5 +71,4 @@ final class CurlTest extends AbstractClient
             'Success get filtered decisions'
         );
     }
-
 }

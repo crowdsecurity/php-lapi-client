@@ -15,10 +15,10 @@ namespace CrowdSec\LapiClient\Tests\Unit;
  * @license   MIT License
  */
 
-use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\Common\Client\ClientException;
-use CrowdSec\LapiClient\Constants;
 use CrowdSec\Common\Client\HttpMessage\Response;
+use CrowdSec\LapiClient\Bouncer;
+use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 
@@ -78,7 +78,7 @@ final class AbstractClientTest extends AbstractClient
 
         PHPUnitUtil::assertRegExp(
             $this,
-            '/must .*AbstractRequestHandler/',
+            '/must .*RequestHandler/',
             $error,
             'Bad request handler should throw an error'
         );

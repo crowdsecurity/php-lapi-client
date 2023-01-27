@@ -28,7 +28,8 @@ the following files:
 
 ### Deprecated
 
-- Deprecate `Bouncer` constants `DECISIONS_FILTER_ENDPOINT` and `DECISIONS_STREAM_ENDPOINT`
+- Deprecate public `Bouncer` constants and use `Constants` instead
+- Deprecate `RequestHandler` folder classes to use `CrowdSec\Common\Client\RequestHandler` classes instead
 
 ---
 

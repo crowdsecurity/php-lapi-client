@@ -15,8 +15,8 @@ namespace CrowdSec\LapiClient\Tests\Unit;
  * @license   MIT License
  */
 
-use CrowdSec\Common\Client\RequestHandler\Curl;
-use CrowdSec\Common\Client\RequestHandler\FileGetContents;
+use CrowdSec\LapiClient\RequestHandler\Curl;
+use CrowdSec\LapiClient\RequestHandler\FileGetContents;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use PHPUnit\Framework\TestCase;
@@ -54,5 +54,4 @@ abstract class AbstractClient extends TestCase
             ->onlyMethods($methods)
             ->getMock();
     }
-
 }

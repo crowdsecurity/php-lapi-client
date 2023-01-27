@@ -75,11 +75,11 @@ To instantiate a bouncer client, you have to:
   settings](#bouncer-client-configurations).
 
 
-- Optionally, you can pass an implementation of the `AbstractRequestHandler` as a second 
-  parameter. By default, a `Curl` request handler will be used.
+- Optionally, you can pass an implementation of the `AbstractRequestHandler` (from the `crowdsec/common` dependency 
+  package) as a second parameter. By default, a `Curl` request handler will be used.
 
 
-- Optionally, to log some information, you can pass an implementation of the `Psr\Log\LoggerInterface` as a fourth 
+- Optionally, to log some information, you can pass an implementation of the `Psr\Log\LoggerInterface` as a third 
   parameter. You will find an example of such implementation with the provided `Logger\FileLog` class of the 
   `crowdsec/common` dependency package.
 

@@ -6,7 +6,7 @@ namespace CrowdSec\LapiClient;
 
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
-use CrowdSec\Common\Client\RequestHandler\AbstractRequestHandler;
+use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -24,13 +24,17 @@ class Bouncer extends AbstractClient
 {
     /**
      * @var string The decisions endpoint
+     *
      * @deprecated since 1.1.0: use Constants::DECISIONS_FILTER_ENDPOINT instead
+     *
      * @todo remove in 2.0.0
      */
     public const DECISIONS_FILTER_ENDPOINT = '/v1/decisions';
     /**
      * @var string The decisions stream endpoint
+     *
      * @deprecated since 1.1.0: use Constants::DECISIONS_STREAM_ENDPOINT instead
+     *
      * @todo remove in 2.0.0
      */
     public const DECISIONS_STREAM_ENDPOINT = '/v1/decisions/stream';
@@ -45,7 +49,7 @@ class Bouncer extends AbstractClient
 
     public function __construct(
         array $configs,
-        AbstractRequestHandler $requestHandler = null,
+        RequestHandlerInterface $requestHandler = null,
         LoggerInterface $logger = null
     ) {
         $this->configure($configs);
@@ -60,6 +64,7 @@ class Bouncer extends AbstractClient
      * Process a decisions call to LAPI with some filter(s).
      *
      * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/bouncers/getDecisions
+     *
      * @throws ClientException
      */
     public function getFilteredDecisions(array $filter = []): array
@@ -77,6 +82,7 @@ class Bouncer extends AbstractClient
      * Else only the decisions updates (add or remove) from the last stream call are returned.
      *
      * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/bouncers/getDecisionsStream
+     *
      * @throws ClientException
      */
     public function getStreamDecisions(
