@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## Public API
+
+The purpose of this section is to declare the public API of this library as required by  [item 1 of semantic versioning specification](https://semver.org/spec/v2.0.0.html#spec-item-1).
+
+The public API of this library consists of all public or protected methods, properties and constants belonging to
+the following files:
+- `src/Bouncer.php`
+- `src/ClientException.php`
+- `src/Configuration.php`
+- `src/Constants.php`
+
+---
+
+
+## [1.0.1](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v1.0.1) - 2023-01-27
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v1.0.0...v1.0.1)
+
+### Added
+
+- Add public API declaration
+
+---
+
+
 ## [1.0.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v1.0.0) - 2023-01-27
 [_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v0.4.0...v1.0.0)
 
