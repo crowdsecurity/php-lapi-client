@@ -19,6 +19,20 @@ the following files:
 ---
 
 
+## [?.?.?](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v1.1.0) - 2023-??-??
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v1.0.1...v?.?.?)
+
+### Changed
+
+- Use `crowdsec/common` package as a dependency for code factoring
+
+### Deprecated
+
+- Deprecate `Bouncer` constants `DECISIONS_FILTER_ENDPOINT` and `DECISIONS_STREAM_ENDPOINT`
+
+---
+
+
 ## [1.0.1](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v1.0.1) - 2023-01-27
 [_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v1.0.0...v1.0.1)
 
