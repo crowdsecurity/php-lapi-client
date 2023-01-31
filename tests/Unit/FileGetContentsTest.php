@@ -18,12 +18,8 @@ namespace CrowdSec\LapiClient\Tests\Unit;
  */
 
 use CrowdSec\Common\Client\HttpMessage\Request;
-use CrowdSec\LapiClient\RequestHandler\FileGetContents;
 use CrowdSec\LapiClient\Bouncer;
-use CrowdSec\LapiClient\Constants;
-use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use CrowdSec\LapiClient\Tests\MockedData;
-use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 
 /**
  * @uses \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
@@ -39,125 +35,6 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  */
 final class FileGetContentsTest extends AbstractClient
 {
-    public function testContextConfig()
-    {
-        $method = 'POST';
-        $parameters = ['machine_id' => 'test', 'password' => 'test'];
-
-        $fgcRequestHandler = new FileGetContents();
-
-        $client = new Bouncer($this->configs, $fgcRequestHandler);
-        $fgcRequester = $client->getRequestHandler();
-
-        $request = new Request('test-url', $method, ['User-Agent' => TestConstants::USER_AGENT_SUFFIX], $parameters);
-
-        $contextConfig = PHPUnitUtil::callMethod(
-            $fgcRequester,
-            'createContextConfig',
-            [$request]
-        );
-
-        $contextConfig['http']['header'] = str_replace("\r", '', $contextConfig['http']['header']);
-
-        $expected = [
-            'http' => [
-                'method' => $method,
-                'header' => 'Accept: application/json
-Content-Type: application/json
-User-Agent: ' . TestConstants::USER_AGENT_SUFFIX . '
-',
-                'ignore_errors' => true,
-                'content' => '{"machine_id":"test","password":"test"}',
-                'timeout' => Constants::API_TIMEOUT,
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-            ],
-        ];
-
-        $this->assertEquals(
-            $expected,
-            $contextConfig,
-            'Context config must be as expected for POST'
-        );
-
-        $method = 'GET';
-        $parameters = ['foo' => 'bar', 'crowd' => 'sec'];
-
-        $request = new Request('test-url', $method, ['User-Agent' => TestConstants::USER_AGENT_SUFFIX], $parameters);
-
-        $contextConfig = PHPUnitUtil::callMethod(
-            $fgcRequester,
-            'createContextConfig',
-            [$request]
-        );
-
-        $contextConfig['http']['header'] = str_replace("\r", '', $contextConfig['http']['header']);
-
-        $expected = [
-            'http' => [
-                'method' => $method,
-                'header' => 'Accept: application/json
-Content-Type: application/json
-User-Agent: ' . TestConstants::USER_AGENT_SUFFIX . '
-',
-                'ignore_errors' => true,
-                'timeout' => Constants::API_TIMEOUT,
-            ],
-            'ssl' => [
-                'verify_peer' => false,
-            ],
-        ];
-
-        $this->assertEquals(
-            $expected,
-            $contextConfig,
-            'Context config must be as expected for GET'
-        );
-
-        $configs = $this->tlsConfigs;
-        $method = 'POST';
-        $parameters = ['machine_id' => 'test', 'password' => 'test'];
-
-        $client = new Bouncer($configs, new FileGetContents($configs));
-        $fgcRequester = $client->getRequestHandler();
-
-        $request = new Request('test-url', $method, ['User-Agent' => TestConstants::USER_AGENT_SUFFIX], $parameters);
-
-        $contextConfig = PHPUnitUtil::callMethod(
-            $fgcRequester,
-            'createContextConfig',
-            [$request]
-        );
-
-        $contextConfig['http']['header'] = str_replace("\r", '', $contextConfig['http']['header']);
-
-        $expected = [
-            'http' => [
-                'method' => $method,
-                'header' => 'Accept: application/json
-Content-Type: application/json
-User-Agent: ' . TestConstants::USER_AGENT_SUFFIX . '
-',
-                'ignore_errors' => true,
-                'content' => '{"machine_id":"test","password":"test"}',
-                'timeout' => TestConstants::API_TIMEOUT,
-            ],
-            'ssl' => [
-                'verify_peer' => true,
-                'local_cert' => 'tls_cert_path_test',
-                'local_pk' => 'tls_key_path_test',
-                'cafile' => 'tls_ca_cert_path_test',
-            ],
-        ];
-
-        $this->assertEquals(
-            $expected,
-            $contextConfig,
-            'Context config must be as expected for POST'
-        );
-    }
-
     public function testDecisionsStream()
     {
         // Success test

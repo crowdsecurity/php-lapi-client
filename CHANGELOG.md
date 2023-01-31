@@ -9,27 +9,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The purpose of this section is to declare the public API of this library as required by  [item 1 of semantic versioning specification](https://semver.org/spec/v2.0.0.html#spec-item-1).
 
-The public API of this library consists of all public or protected methods, properties and constants belonging to
-the following files:
-- `src/Bouncer.php`
-- `src/ClientException.php`
-- `src/Configuration.php`
-- `src/Constants.php`
+The public API of this library consists of all public or protected methods, properties and constants belonging to the `src` folder.
 
 ---
 
 
-## [?.?.?](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v1.1.0) - 2023-??-??
-[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v1.0.1...v?.?.?)
+## [2.0.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v2.0.0) - 2023-02-02
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v1.0.1...v2.0.0)
 
 ### Changed
 
-- Use `crowdsec/common` package as a dependency for code factoring
+- Use `crowdsec/common` package as a dependency for code factoring  
 
-### Deprecated
+  - *Breaking change*: Use `CrowdSec\Common` classes for the following files and folder:
+    - `HttpMessage`
+    - `Logger`
+    - `RequestHanlder`
+    - `AbstractClient.php`
 
-- Deprecate public `Bouncer` constants and use `Constants` instead
-- Deprecate `RequestHandler` folder classes to use `CrowdSec\Common\Client\RequestHandler` classes instead
+  - *Breaking change*: If not null, the second param of `Bouncer` constructor must be of type 
+    `CrowdSec\Common\Client\RequestHandler\AbstractRequestHandler` 
+  - *Breaking change*: Move `Bouncer` constants in `Constants`
 
 ---
 

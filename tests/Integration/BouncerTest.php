@@ -14,7 +14,7 @@ namespace CrowdSec\LapiClient\Tests\Integration;
  */
 
 use CrowdSec\Common\Client\AbstractClient;
-use CrowdSec\LapiClient\RequestHandler\FileGetContents;
+use CrowdSec\Common\Client\RequestHandler\FileGetContents;
 use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;

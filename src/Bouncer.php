@@ -6,7 +6,7 @@ namespace CrowdSec\LapiClient;
 
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
-use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
+use CrowdSec\Common\Client\RequestHandler\AbstractRequestHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -23,22 +23,6 @@ use Symfony\Component\Config\Definition\Processor;
 class Bouncer extends AbstractClient
 {
     /**
-     * @var string The decisions endpoint
-     *
-     * @deprecated since 1.1.0: use Constants::DECISIONS_FILTER_ENDPOINT instead
-     *
-     * @todo remove in 2.0.0
-     */
-    public const DECISIONS_FILTER_ENDPOINT = '/v1/decisions';
-    /**
-     * @var string The decisions stream endpoint
-     *
-     * @deprecated since 1.1.0: use Constants::DECISIONS_STREAM_ENDPOINT instead
-     *
-     * @todo remove in 2.0.0
-     */
-    public const DECISIONS_STREAM_ENDPOINT = '/v1/decisions/stream';
-    /**
      * @var array
      */
     protected $configs;
@@ -49,7 +33,7 @@ class Bouncer extends AbstractClient
 
     public function __construct(
         array $configs,
-        RequestHandlerInterface $requestHandler = null,
+        AbstractRequestHandler $requestHandler = null,
         LoggerInterface $logger = null
     ) {
         $this->configure($configs);
