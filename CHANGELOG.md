@@ -18,8 +18,7 @@ The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this librar
 
 
 - *Breaking change*: Use `crowdsec/common` `^2.0.0` dependency instead of `^1.2.0`
-- *Breaking change*: If not null, the second param of `Bouncer` constructor must implement
-      `CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface`
+- *Breaking change*: If not null, the second param of `Bouncer` constructor must implement `RequestHandlerInterface`
 
 
 ---
