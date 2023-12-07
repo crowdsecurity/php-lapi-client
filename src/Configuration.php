@@ -33,7 +33,7 @@ class Configuration extends AbstractConfiguration
         'tls_ca_cert_path',
         'tls_verify_peer',
         'api_timeout',
-        'api_connect_timeout'
+        'api_connect_timeout',
     ];
 
     /**
