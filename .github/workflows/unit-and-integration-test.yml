@@ -15,6 +15,8 @@ on:
         type: boolean
         description: Run Integration tests
         default: true
+  schedule:
+    - cron: '15 3 * * 4'
 
 permissions:
   contents: read
@@ -75,7 +77,7 @@ jobs:
           echo "BOUNCER_KEY=$(ddev create-bouncer)" >> $GITHUB_ENV
 
       - name: Clone sources
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ${{env.EXTENSION_PATH}}
 
