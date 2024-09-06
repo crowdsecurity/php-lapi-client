@@ -7,6 +7,7 @@ namespace CrowdSec\LapiClient;
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
+use CrowdSec\Common\Constants;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -37,9 +38,9 @@ class Bouncer extends AbstractClient
         ?LoggerInterface $logger = null
     ) {
         $this->configure($configs);
-        $this->headers = ['User-Agent' => $this->formatUserAgent($this->configs)];
+        $this->headers = [Constants::HEADER_LAPI_USER_AGENT => $this->formatUserAgent($this->configs)];
         if (!empty($this->configs['api_key'])) {
-            $this->headers['X-Api-Key'] = $this->configs['api_key'];
+            $this->headers[Constants::HEADER_LAPI_API_KEY] = $this->configs['api_key'];
         }
         parent::__construct($this->configs, $requestHandler, $logger);
     }
