@@ -57,18 +57,18 @@ jobs:
           ddev get julienloizelet/ddev-tools
           ddev get julienloizelet/ddev-crowdsec-php
 
-      - name: Add Redis, Memcached and X-Debug
-        if: ${{ matrix.php-version == '8.3' }}
-        run: |
-          cp .ddev/okaeli-add-on/common/custom_files/config.php83missing.yaml .ddev/config.php83missing.yaml
-
       - name: Prepare for TLS tests
         run: |
           mkdir ${{ github.workspace }}/cfssl
           cp -r .ddev/okaeli-add-on/custom_files/crowdsec/cfssl/* ${{ github.workspace }}/cfssl    
 
-      - name: Start DDEV  with PHP ${{ matrix.php-version }}
-        run: ddev start
+      - name: Start DDEV
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          shell: bash
+          command: ddev start
 
       - name: Some DEBUG information
         run: |

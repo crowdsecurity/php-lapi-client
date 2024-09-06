@@ -10,21 +10,10 @@
 
 - [Local development](#local-development)
   - [DDEV setup](#ddev-setup)
-    - [DDEV installation](#ddev-installation)
-    - [Prepare DDEV PHP environment](#prepare-ddev-php-environment)
   - [DDEV Usage](#ddev-usage)
-    - [Use composer to update or install the lib](#use-composer-to-update-or-install-the-lib)
-    - [Unit test](#unit-test)
-    - [Integration test](#integration-test)
-    - [Coding standards](#coding-standards)
-      - [PHPCS Fixer](#phpcs-fixer)
-      - [PHPSTAN](#phpstan)
-      - [PHP Mess Detector](#php-mess-detector)
-      - [PHPCS and PHPCBF](#phpcs-and-phpcbf)
-      - [PSALM](#psalm)
-      - [PHP Unit Code coverage](#php-unit-code-coverage)
 - [Commit message](#commit-message)
   - [Allowed message `type` values](#allowed-message-type-values)
+- [Update documentation table of contents](#update-documentation-table-of-contents)
 - [Release process](#release-process)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -136,7 +125,7 @@ Finally, run
 In order to launch integration tests, we have to set some environment variables:
 
 ```bash
-ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APP_SEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
 ```
 
 `<BOUNCER_KEY>` should have been created and retrieved before this test by running `ddev create-bouncer`.
@@ -144,7 +133,7 @@ ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl LAPI_URL=
 If you need to test with a TLS authentication, you should launch:
 
 ```bash
-ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl AGENT_TLS_PATH=/var/www/html/cfssl LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
+ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APP_SEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
 ```
 
 #### Coding standards
@@ -269,6 +258,24 @@ chmod +x .git/hooks/commit-msg
 - refactor (refactoring production code)
 - style (formatting; no production code change)
 - test (adding missing tests, refactoring tests; no production code change)
+
+
+## Update documentation table of contents
+
+To update the table of contents in the documentation, you can use [the `doctoc` tool](https://github.com/thlorenz/doctoc).
+
+First, install it:
+
+```bash
+npm install -g doctoc
+```
+
+Then, run it in the documentation folder:
+
+```bash
+doctoc docs/* --maxlevel 3  
+```
+
 
 ## Release process
 

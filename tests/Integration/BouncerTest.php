@@ -54,6 +54,7 @@ final class BouncerTest extends TestCase
             'auth_type' => $this->useTls ? Constants::AUTH_TLS : Constants::AUTH_KEY,
             'api_key' => getenv('BOUNCER_KEY'),
             'api_url' => getenv('LAPI_URL'),
+            'app_sec_url' => getenv('APP_SEC_URL'),
             'user_agent_suffix' => TestConstants::USER_AGENT_SUFFIX,
         ];
         if ($this->useTls) {
@@ -173,6 +174,62 @@ final class BouncerTest extends TestCase
         $this->watcherClient->deleteAllDecisions();
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
         $this->assertCount(0, $response, '0 decision after delete for specified IP');
+    }
+
+    /**
+     * @dataProvider requestHandlerProvider
+     */
+    public function testAppSecDecision($requestHandler)
+    {
+        $bouncerKey = getenv('BOUNCER_KEY');
+        if(!$bouncerKey) {
+            $this->fail('BOUNCER_KEY is not set');
+        }
+        if ('FileGetContents' === $requestHandler) {
+            $client = new Bouncer($this->configs, new FileGetContents($this->configs));
+        } else {
+            // Curl by default
+            $client = new Bouncer($this->configs);
+        }
+        if ($this->useTls) {
+            $this->assertEquals(Constants::AUTH_TLS, $this->configs['auth_type']);
+        } else {
+            $this->assertEquals(Constants::AUTH_KEY, $this->configs['auth_type']);
+        }
+        $this->checkRequestHandler($client, $requestHandler);
+
+        $headers = [
+            'X-Crowdsec-Appsec-Api-Key' => $bouncerKey,
+            'X-Crowdsec-Appsec-Ip' => TestConstants::BAD_IP,
+            'X-Crowdsec-Appsec-Host' => 'example.com',
+            'X-Crowdsec-Appsec-User-Agent' => 'Mozilla/5.0',
+            'X-Crowdsec-Appsec-Verb' => 'GET',
+            'X-Crowdsec-Appsec-Uri' => '/login',
+        ];
+
+        // Test 1: clean GET request
+        $response = $client->getAppSecDecision('GET', $headers);
+        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200');
+        // Test 2: malicious GET request
+        $headers['X-Crowdsec-Appsec-Uri'] = '/.env';
+        $response = $client->getAppSecDecision('GET', $headers);
+        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403');
+        // Test 3: clean POST request
+        $headers['X-Crowdsec-Appsec-Verb'] = 'POST';
+        $headers['X-Crowdsec-Appsec-Uri'] = '/login';
+        $response = $client->getAppSecDecision('POST', $headers);
+        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200');
+        // Test 4: malicious POST request
+        $headers['X-Crowdsec-Appsec-Uri'] = '/login';
+        $rawBody = 'class.module.classLoader.resources.'; // Malicious payload (@see /etc/crowdsec/appsec-rules/vpatch-CVE-2022-22965.yaml)
+        // Required header for file_get_contents handler
+        if ('FileGetContents' === $requestHandler) {
+            $headers['Content-type'] = 'application/x-www-form-urlencoded';
+        }
+        $response = $client->getAppSecDecision('POST', $headers, $rawBody);
+
+        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403');
+
     }
 
     /**

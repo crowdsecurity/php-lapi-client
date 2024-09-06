@@ -29,6 +29,7 @@ use CrowdSec\LapiClient\Tests\MockedData;
  * @uses \CrowdSec\LapiClient\Bouncer::manageRequest
  * @uses \CrowdSec\LapiClient\Configuration::addConnectionNodes
  * @uses \CrowdSec\LapiClient\Configuration::validate
+ * @uses \CrowdSec\LapiClient\Configuration::addAppSecNodes
  *
  * @covers \CrowdSec\LapiClient\Bouncer::getStreamDecisions
  * @covers \CrowdSec\LapiClient\Bouncer::getFilteredDecisions

@@ -33,8 +33,8 @@ class Bouncer extends AbstractClient
 
     public function __construct(
         array $configs,
-        RequestHandlerInterface $requestHandler = null,
-        LoggerInterface $logger = null
+        ?RequestHandlerInterface $requestHandler = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->configure($configs);
         $this->headers = ['User-Agent' => $this->formatUserAgent($this->configs)];
@@ -42,6 +42,22 @@ class Bouncer extends AbstractClient
             $this->headers['X-Api-Key'] = $this->configs['api_key'];
         }
         parent::__construct($this->configs, $requestHandler, $logger);
+    }
+
+    /**
+     * Process a call to AppSec component.
+     *
+     * @see https://docs.crowdsec.net/docs/appsec/protocol
+     *
+     * @throws ClientException
+     */
+    public function getAppSecDecision(string $method, array $headers, string $rawBody = ''): array
+    {
+        return $this->manageAppSecRequest(
+            $method,
+            $headers,
+            $rawBody
+        );
     }
 
     /**
@@ -103,7 +119,7 @@ class Bouncer extends AbstractClient
     }
 
     /**
-     * Make a request.
+     * Make a request to LAPI.
      *
      * @throws ClientException
      */
@@ -121,6 +137,30 @@ class Bouncer extends AbstractClient
             ]);
 
             return $this->request($method, $endpoint, $parameters, $this->headers);
+        } catch (CommonClientException $e) {
+            throw new ClientException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Make a request to the AppSec component of LAPI.
+     *
+     * @throws ClientException
+     */
+    private function manageAppSecRequest(
+        string $method,
+        array $headers = [],
+        string $rawBody = ''
+    ): array {
+        try {
+            $this->logger->debug('Now processing a bouncer AppSec request', [
+                'type' => 'BOUNCER_CLIENT_APPSEC_REQUEST',
+                'method' => $method,
+                'rawBody' => $rawBody,
+                'headers' => $headers,
+            ]);
+
+            return $this->requestAppSec($method, $headers, $rawBody);
         } catch (CommonClientException $e) {
             throw new ClientException($e->getMessage(), $e->getCode(), $e);
         }

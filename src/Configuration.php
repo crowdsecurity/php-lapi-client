@@ -26,6 +26,7 @@ class Configuration extends AbstractConfiguration
         'user_agent_suffix',
         'user_agent_version',
         'api_url',
+        'app_sec_url',
         'auth_type',
         'api_key',
         'tls_cert_path',
@@ -70,6 +71,7 @@ class Configuration extends AbstractConfiguration
         ->end()
         ;
         $this->addConnectionNodes($rootNode);
+        $this->addAppSecNodes($rootNode);
         $this->validate($rootNode);
 
         return $treeBuilder;
@@ -110,6 +112,22 @@ class Configuration extends AbstractConfiguration
             ->booleanNode('tls_verify_peer')->defaultValue(false)->end()
             ->integerNode('api_timeout')->defaultValue(Constants::API_TIMEOUT)->end()
             ->integerNode('api_connect_timeout')->defaultValue(Constants::API_CONNECT_TIMEOUT)->end()
+        ->end();
+    }
+
+    /**
+     * AppSec settings.
+     *
+     * @param NodeDefinition|ArrayNodeDefinition $rootNode
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function addAppSecNodes($rootNode)
+    {
+        $rootNode->children()
+            ->scalarNode('app_sec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
         ->end();
     }
 
