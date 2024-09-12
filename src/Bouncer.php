@@ -51,8 +51,9 @@ class Bouncer extends AbstractClient
      *
      * @throws ClientException
      */
-    public function getAppSecDecision(string $method, array $headers, string $rawBody = ''): array
+    public function getAppSecDecision(array $headers, string $rawBody = ''): array
     {
+        $method = $rawBody ? 'POST' : 'GET';
         return $this->manageAppSecRequest(
             $method,
             $headers,
