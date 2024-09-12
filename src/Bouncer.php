@@ -7,7 +7,6 @@ namespace CrowdSec\LapiClient;
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
-use CrowdSec\Common\Constants;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
