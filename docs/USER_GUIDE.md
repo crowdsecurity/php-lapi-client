@@ -142,10 +142,9 @@ The `$filter` parameter is an array. Please see the [CrowdSec LAPI documentation
 To retrieve an AppSec decision, you can do the following call:
 
 ```php
-$client->getAppSecDecision($method, $headers, $rawBody);
+$client->getAppSecDecision($headers, $rawBody);
 ```
 
-The `$method` parameter can be `GET` or `POST`. It must be `POST` if and only if the forwarded request contains a body.
 The `$headers` parameter is an array containing the headers of the forwarded request and some required headers for the AppSec decision.
 
 The `$rawBody` parameter is optional and must be used if the forwarded request contains a body. It must be a string.
@@ -513,11 +512,12 @@ php tests/scripts/bouncer/request-handler-override/decisions-filter.php '{"scope
 #### Command usage
 
 ```bash
-php tests/scripts/bouncer/appsec-decision.php <HEADERS_JSON> <APPSEC_METHOD> <APPSEC_URL> [<RAW_BODY_STRING>]
+php tests/scripts/bouncer/appsec-decision.php <BOUNCER_KEY> <HEADERS_JSON> <APPSEC_URL> 
+[<RAW_BODY_STRING>]
 ```
 
 #### Example
 
 ```bash
-php tests/scripts/bouncer/appsec-decision.php 'KWurslwIaE2aZSZjYU9mQAWTFb6AHiPTFNTsYTZvoAU' '{"X-Crowdsec-Appsec-Ip":"1.2.3.4","X-Crowdsec-Appsec-Uri":"/login","X-Crowdsec-Appsec-Host":"example.com","X-Crowdsec-Appsec-Verb":"POST","X-Crowdsec-Appsec-User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}' 'POST' http://crowdsec:7422 'class.module.classLoader.resources.'
+php tests/scripts/bouncer/appsec-decision.php 'KWurslwIaE2aZSZjYU9mQAWTFb6AHiPTFNTsYTZvoAU' '{"X-Crowdsec-Appsec-Ip":"1.2.3.4","X-Crowdsec-Appsec-Uri":"/login","X-Crowdsec-Appsec-Host":"example.com","X-Crowdsec-Appsec-Verb":"POST","X-Crowdsec-Appsec-User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101 Firefox/68.0"}' http://crowdsec:7422 'class.module.classLoader.resources.'
 ```
