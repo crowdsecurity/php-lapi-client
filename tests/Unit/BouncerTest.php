@@ -87,7 +87,6 @@ final class BouncerTest extends AbstractClient
         $mockClient->getFilteredDecisions(['ip' => '1.2.3.4']);
     }
 
-
     public function testAppSecDecisionParams()
     {
         $mockClient = $this->getMockBuilder('CrowdSec\LapiClient\Bouncer')
@@ -234,7 +233,7 @@ final class BouncerTest extends AbstractClient
         // appsec url
         $this->assertEquals(
             Constants::DEFAULT_APPSEC_URL,
-            $client->getConfig('app_sec_url'),
+            $client->getConfig('appsec_url'),
             'App Sec Url should be configured by default'
         );
         // user agent suffix
@@ -242,6 +241,30 @@ final class BouncerTest extends AbstractClient
             TestConstants::USER_AGENT_SUFFIX,
             $client->getConfig('user_agent_suffix'),
             'User agent suffix should be configured'
+        );
+        // api timeout
+        $this->assertEquals(
+            TestConstants::API_TIMEOUT,
+            $client->getConfig('api_timeout'),
+            'Api timeout should be configured'
+        );
+        // api connect timeout
+        $this->assertEquals(
+            TestConstants::API_CONNECT_TIMEOUT,
+            $client->getConfig('api_connect_timeout'),
+            'Api connect timeout should be configured'
+        );
+        // appsec timeout
+        $this->assertEquals(
+            TestConstants::APPSEC_TIMEOUT,
+            $client->getConfig('appsec_timeout'),
+            'App Sec timeout should be configured'
+        );
+        // appsec connect timeout
+        $this->assertEquals(
+            TestConstants::APPSEC_CONNECT_TIMEOUT,
+            $client->getConfig('appsec_connect_timeout'),
+            'App Sec connect timeout should be configured'
         );
         $error = '';
         try {

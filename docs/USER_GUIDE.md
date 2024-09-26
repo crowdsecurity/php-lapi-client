@@ -13,12 +13,18 @@
 - [Quick start](#quick-start)
   - [Installation](#installation)
   - [Bouncer client instantiation](#bouncer-client-instantiation)
+    - [LAPI calls](#lapi-calls)
 - [Bouncer client configurations](#bouncer-client-configurations)
   - [LAPI url](#lapi-url)
   - [AppSec url](#appsec-url)
   - [Authorization type for connection](#authorization-type-for-connection)
   - [Settings for Api key authorization](#settings-for-api-key-authorization)
+    - [Api key](#api-key)
   - [Settings for TLS authorization](#settings-for-tls-authorization)
+    - [Bouncer certificate path](#bouncer-certificate-path)
+    - [Bouncer key path](#bouncer-key-path)
+    - [Peer verification](#peer-verification)
+    - [CA certificate path](#ca-certificate-path)
   - [LAPI timeout](#lapi-timeout)
   - [User Agent suffix](#user-agent-suffix)
   - [User Agent version](#user-agent-version)
@@ -27,8 +33,14 @@
   - [Ready to use `file_get_contents` implementation](#ready-to-use-file_get_contents-implementation)
 - [Example scripts](#example-scripts)
   - [Get decisions stream](#get-decisions-stream)
+    - [Command usage](#command-usage)
+    - [Example usage](#example-usage)
   - [Get filtered decisions](#get-filtered-decisions)
+    - [Command usage](#command-usage-1)
+    - [Example](#example)
   - [Get AppSec decision](#get-appsec-decision)
+    - [Command usage](#command-usage-2)
+    - [Example](#example-1)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -81,7 +93,7 @@ use Crowdsec\LapiClient\Storage\FileStorage;
 $configs = [
     'auth_type' => 'api_key',
     'api_url' => 'https://your-crowdsec-lapi-url:8080',
-    'app_sec_url' => 'https://your-crowdsec-app-sec-url:7422',
+    'appsec_url' => 'https://your-crowdsec-app-sec-url:7422',
     'api_key' => '**************************',
 ];
 $client = new Bouncer($configs);
@@ -157,7 +169,7 @@ Define the URL to your LAPI server, default to `http://localhost:8080`.
 ```php
 $configs = [
         ... 
-        'app_sec_url' => 'http://your-crowdsec-app-sec-url:7422'
+        'appsec_url' => 'http://your-crowdsec-app-sec-url:7422'
         ...
 ];
 ```
@@ -441,7 +453,7 @@ php tests/scripts/bouncer/request-handler-override/decisions-filter.php '{"scope
 #### Command usage
 
 ```bash
-php tests/scripts/bouncer/appsec-decision.php <HEADERS_JSON> <APP_SEC_METHOD> <APP_SEC_URL> [<RAW_BODY_STRING>]
+php tests/scripts/bouncer/appsec-decision.php <HEADERS_JSON> <APPSEC_METHOD> <APPSEC_URL> [<RAW_BODY_STRING>]
 ```
 
 #### Example

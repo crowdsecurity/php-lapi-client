@@ -1,7 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../../../vendor/autoload.php';
+require_once __DIR__ . '/../../../../vendor/autoload.php';
 
+use CrowdSec\Common\Client\RequestHandler\FileGetContents;
 use CrowdSec\Common\Logger\ConsoleLog;
 use CrowdSec\LapiClient\Bouncer;
 
@@ -32,7 +33,8 @@ $configs = [
     'api_key' => $apiKey,
 ];
 $logger = new ConsoleLog();
-$client = new Bouncer($configs, null, $logger);
+$customRequestHandler = new FileGetContents();
+$client = new Bouncer($configs, $customRequestHandler, $logger);
 echo 'Bouncer instantiated' . \PHP_EOL;
 
 $headers += ['X-Crowdsec-Appsec-Api-Key' => $apiKey];

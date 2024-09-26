@@ -54,7 +54,7 @@ final class BouncerTest extends TestCase
             'auth_type' => $this->useTls ? Constants::AUTH_TLS : Constants::AUTH_KEY,
             'api_key' => getenv('BOUNCER_KEY'),
             'api_url' => getenv('LAPI_URL'),
-            'app_sec_url' => getenv('APP_SEC_URL'),
+            'appsec_url' => getenv('APPSEC_URL'),
             'user_agent_suffix' => TestConstants::USER_AGENT_SUFFIX,
         ];
         if ($this->useTls) {
@@ -182,7 +182,7 @@ final class BouncerTest extends TestCase
     public function testAppSecDecision($requestHandler)
     {
         $bouncerKey = getenv('BOUNCER_KEY');
-        if(!$bouncerKey) {
+        if (!$bouncerKey) {
             $this->fail('BOUNCER_KEY is not set');
         }
         if ('FileGetContents' === $requestHandler) {
@@ -229,7 +229,6 @@ final class BouncerTest extends TestCase
         $response = $client->getAppSecDecision('POST', $headers, $rawBody);
 
         $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403');
-
     }
 
     /**

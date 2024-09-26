@@ -19,7 +19,12 @@ As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com
 ### Added
 
 - Add `getAppSecDecision` method to `Bouncer` class
-- Add `app_sec_url` configuration
+- Add `appsec_url`, 'appsec_timeout' and `appsec_connect_timeout` configuration
+
+### Changed
+
+- Throws a `CrowdSec\LapiClient\TimeoutException` when a timeout is detected during client calls
+
 
 
 ---

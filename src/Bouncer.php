@@ -7,6 +7,7 @@ namespace CrowdSec\LapiClient;
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
+use CrowdSec\Common\Client\TimeoutException as CommonTimeoutException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -120,30 +121,6 @@ class Bouncer extends AbstractClient
     }
 
     /**
-     * Make a request to LAPI.
-     *
-     * @throws ClientException
-     */
-    private function manageRequest(
-        string $method,
-        string $endpoint,
-        array $parameters = []
-    ): array {
-        try {
-            $this->logger->debug('Now processing a bouncer request', [
-                'type' => 'BOUNCER_CLIENT_REQUEST',
-                'method' => $method,
-                'endpoint' => $endpoint,
-                'parameters' => $parameters,
-            ]);
-
-            return $this->request($method, $endpoint, $parameters, $this->headers);
-        } catch (CommonClientException $e) {
-            throw new ClientException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
-
-    /**
      * Make a request to the AppSec component of LAPI.
      *
      * @throws ClientException
@@ -162,6 +139,34 @@ class Bouncer extends AbstractClient
             ]);
 
             return $this->requestAppSec($method, $headers, $rawBody);
+        } catch (CommonTimeoutException $e) {
+            throw new TimeoutException($e->getMessage(), $e->getCode(), $e);
+        } catch (CommonClientException $e) {
+            throw new ClientException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * Make a request to LAPI.
+     *
+     * @throws ClientException
+     */
+    private function manageRequest(
+        string $method,
+        string $endpoint,
+        array $parameters = []
+    ): array {
+        try {
+            $this->logger->debug('Now processing a bouncer request', [
+                'type' => 'BOUNCER_CLIENT_REQUEST',
+                'method' => $method,
+                'endpoint' => $endpoint,
+                'parameters' => $parameters,
+            ]);
+
+            return $this->request($method, $endpoint, $parameters, $this->headers);
+        } catch (CommonTimeoutException $e) {
+            throw new TimeoutException($e->getMessage(), $e->getCode(), $e);
         } catch (CommonClientException $e) {
             throw new ClientException($e->getMessage(), $e->getCode(), $e);
         }

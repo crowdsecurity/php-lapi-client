@@ -10,7 +10,14 @@
 
 - [Local development](#local-development)
   - [DDEV setup](#ddev-setup)
+    - [DDEV installation](#ddev-installation)
+    - [Prepare DDEV PHP environment](#prepare-ddev-php-environment)
   - [DDEV Usage](#ddev-usage)
+    - [Use composer to update or install the lib](#use-composer-to-update-or-install-the-lib)
+    - [Unit test](#unit-test)
+    - [Integration test](#integration-test)
+    - [Coding standards](#coding-standards)
+    - [Testing timeout in the CrowdSec container](#testing-timeout-in-the-crowdsec-container)
 - [Commit message](#commit-message)
   - [Allowed message `type` values](#allowed-message-type-values)
 - [Update documentation table of contents](#update-documentation-table-of-contents)
@@ -125,7 +132,7 @@ Finally, run
 In order to launch integration tests, we have to set some environment variables:
 
 ```bash
-ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APP_SEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
 ```
 
 `<BOUNCER_KEY>` should have been created and retrieved before this test by running `ddev create-bouncer`.
@@ -133,7 +140,7 @@ ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APP_SEC_U
 If you need to test with a TLS authentication, you should launch:
 
 ```bash
-ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APP_SEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
+ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
 ```
 
 #### Coding standards
@@ -154,7 +161,6 @@ With ddev, you can do the following:
 
 ```bash
 ddev phpcsfixer my-code/lapi-client/tools/coding-standards/php-cs-fixer ../
-
 ```
 
 ##### PHPSTAN
@@ -224,6 +230,30 @@ If you want to generate a text report in the same folder:
 ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/vendor/bin/phpunit --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --coverage-text=./my-code/lapi-client/tools/coding-standards/phpunit/code-coverage/report.txt
 ```
 
+#### Testing timeout in the CrowdSec container
+
+If you need to test a timeout, you can use the following command:
+
+Enter the container:
+```bash
+ddev exec -s crowdsec bash
+```
+
+Then install `iproute2`
+```bash
+apk add iproute2
+```
+Add the delay you want:
+```bash
+tc qdisc add dev eth0 root netem delay 5000ms
+```
+
+To remove the delay:
+```bash
+tc qdisc del dev eth0 root netem
+```
+
+
 ## Commit message
 
 In order to have an explicit commit history, we are using some commits message convention with the following format:
@@ -273,7 +303,7 @@ npm install -g doctoc
 Then, run it in the documentation folder:
 
 ```bash
-doctoc docs/* --maxlevel 3  
+doctoc docs/* --maxlevel 4  
 ```
 
 

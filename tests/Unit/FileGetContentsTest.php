@@ -20,6 +20,7 @@ namespace CrowdSec\LapiClient\Tests\Unit;
 use CrowdSec\Common\Client\HttpMessage\Request;
 use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\LapiClient\Tests\MockedData;
+use CrowdSec\LapiClient\TimeoutException;
 
 /**
  * @uses \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
@@ -79,6 +80,41 @@ final class FileGetContentsTest extends AbstractClient
             json_decode(MockedData::DECISIONS_FILTER, true),
             $decisionsResponse,
             'Success get decisions stream'
+        );
+    }
+
+    public function testFilteredDecisionsWithTimeout()
+    {
+        // Timeout test
+        $mockFGCRequest = $this->getFGCMock(['exec']);
+        $mockFGCRequest->method('exec')
+            ->willReturnCallback(function () {
+                // Trigger a warning that will be caught by the method's error handler
+                trigger_error('it appears that request timed out', \E_USER_ERROR);
+
+                // Simulate a failure response
+                return ['response' => false];
+            });
+
+        $client = new Bouncer($this->configs, $mockFGCRequest);
+        $error = false;
+        $message = '';
+        try {
+            $client->getFilteredDecisions();
+        } catch (TimeoutException $e) {
+            $error = true;
+            $message = $e->getMessage();
+        }
+        $this->assertEquals(
+            true,
+            $error,
+            'A timeout should be thrown'
+        );
+
+        $this->assertEquals(
+            'file_get_contents call timeout: it appears that request timed out',
+            $message,
+            'A timeout should be thrown'
         );
     }
 }

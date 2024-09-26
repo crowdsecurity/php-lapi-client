@@ -26,7 +26,7 @@ class Configuration extends AbstractConfiguration
         'user_agent_suffix',
         'user_agent_version',
         'api_url',
-        'app_sec_url',
+        'appsec_url',
         'auth_type',
         'api_key',
         'tls_cert_path',
@@ -35,6 +35,8 @@ class Configuration extends AbstractConfiguration
         'tls_verify_peer',
         'api_timeout',
         'api_connect_timeout',
+        'appsec_timeout',
+        'appsec_connect_timeout',
     ];
 
     /**
@@ -127,7 +129,9 @@ class Configuration extends AbstractConfiguration
     private function addAppSecNodes($rootNode)
     {
         $rootNode->children()
-            ->scalarNode('app_sec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
+            ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
+            ->integerNode('appsec_timeout')->defaultValue(Constants::APPSEC_TIMEOUT)->end()
+            ->integerNode('appsec_connect_timeout')->defaultValue(Constants::APPSEC_CONNECT_TIMEOUT)->end()
         ->end();
     }
 
