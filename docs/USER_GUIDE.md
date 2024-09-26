@@ -25,7 +25,12 @@
     - [Bouncer key path](#bouncer-key-path)
     - [Peer verification](#peer-verification)
     - [CA certificate path](#ca-certificate-path)
-  - [LAPI timeout](#lapi-timeout)
+  - [Settings for LAPI timeout](#settings-for-lapi-timeout)
+    - [LAPI timeout](#lapi-timeout)
+    - [LAPI connect timeout](#lapi-connect-timeout)
+  - [Settings for AppSec timeout](#settings-for-appsec-timeout)
+    - [AppSec timeout](#appsec-timeout)
+    - [AppSec connect timeout](#appsec-connect-timeout)
   - [User Agent suffix](#user-agent-suffix)
   - [User Agent version](#user-agent-version)
 - [Override the curl request handler](#override-the-curl-request-handler)
@@ -63,6 +68,7 @@ This client allows you to interact with the CrowdSec Local API (LAPI).
 ### Installation
 
 First, install CrowdSec LAPI PHP Client via the [composer](https://getcomposer.org/) package manager:
+
 ```bash
 composer require crowdsec/lapi-client
 ```
@@ -280,8 +286,9 @@ Absolute path to the CA used to process peer verification.
 
 Only required if you choose `tls` as `auth_type` and `tls_verify_peer` is `true`.
 
+### Settings for LAPI timeout
 
-### LAPI timeout
+#### LAPI timeout
 
 ```php
 $configs = [
@@ -296,6 +303,59 @@ This setting is not required.
 This is the maximum number of seconds allowed to execute a LAPI request.
 
 It must be an integer. If you don't set any value, default value is 120. If you set a negative value, timeout is unlimited.
+
+#### LAPI connect timeout
+
+```php
+$configs = [
+        ... 
+        'api_connect_timeout' => 5
+        ...
+];
+```
+
+This setting is not required and will only be used for the `Curl` request handler.
+
+This is the maximum number of seconds allowed to connect to a LAPI server.
+
+It must be an integer. If you don't set any value, default value is 300. If you set a negative value, timeout is unlimited.
+
+
+### Settings for AppSec timeout
+
+#### AppSec timeout
+
+```php
+$configs = [
+        ... 
+        'appsec_timeout_ms' => 300
+        ...
+];
+```
+
+This setting is not required.
+
+This is the maximum number of milliseconds allowed to execute an AppSec request.
+
+It must be an integer. If you don't set any value, default value is 400. If you set a negative value, timeout is unlimited.
+
+
+#### AppSec connect timeout
+
+```php
+$configs = [
+        ... 
+        'appsec_connect_timeout_ms' => 100
+        ...
+];
+```
+
+This setting is not required and will only be used for the `Curl` request handler.
+
+This is the maximum number of milliseconds allowed to connect to an AppSec server.
+
+It must be an integer. If you don't set any value, default value is 150. If you set a negative value, timeout is unlimited.
+
 
 ### User Agent suffix
 
