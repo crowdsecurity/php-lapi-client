@@ -108,7 +108,7 @@ final class BouncerTest extends AbstractClient
                     $headers,
                 ]
             );
-        $mockClient->getAppSecDecision('GET', $headers);
+        $mockClient->getAppSecDecision($headers);
     }
 
     public function testRequest()
@@ -256,14 +256,14 @@ final class BouncerTest extends AbstractClient
         );
         // appsec timeout
         $this->assertEquals(
-            TestConstants::APPSEC_TIMEOUT,
-            $client->getConfig('appsec_timeout'),
+            TestConstants::APPSEC_TIMEOUT_MS,
+            $client->getConfig('appsec_timeout_ms'),
             'App Sec timeout should be configured'
         );
         // appsec connect timeout
         $this->assertEquals(
-            TestConstants::APPSEC_CONNECT_TIMEOUT,
-            $client->getConfig('appsec_connect_timeout'),
+            TestConstants::APPSEC_CONNECT_TIMEOUT_MS,
+            $client->getConfig('appsec_connect_timeout_ms'),
             'App Sec connect timeout should be configured'
         );
         $error = '';

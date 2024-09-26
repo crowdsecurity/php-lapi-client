@@ -95,7 +95,7 @@ final class CurlTest extends AbstractClient
             'X-Crowdsec-Appsec-Uri' => 'test-value',
             'X-Crowdsec-Appsec-Api-Key' => 'test-value',
         ];
-        $appSecResponse = $client->getAppSecDecision('GET', $headers);
+        $appSecResponse = $client->getAppSecDecision($headers);
 
         $this->assertEquals(
             json_decode(MockedData::APPSEC_ALLOWED, true),
@@ -125,7 +125,7 @@ final class CurlTest extends AbstractClient
         $error = false;
         $message = '';
         try {
-            $client->getAppSecDecision('GET', $headers);
+            $client->getAppSecDecision($headers);
         } catch (TimeoutException $e) {
             $error = true;
             $message = $e->getMessage();

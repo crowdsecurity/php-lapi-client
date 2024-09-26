@@ -35,8 +35,8 @@ class Configuration extends AbstractConfiguration
         'tls_verify_peer',
         'api_timeout',
         'api_connect_timeout',
-        'appsec_timeout',
-        'appsec_connect_timeout',
+        'appsec_timeout_ms',
+        'appsec_connect_timeout_ms',
     ];
 
     /**
@@ -130,8 +130,8 @@ class Configuration extends AbstractConfiguration
     {
         $rootNode->children()
             ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
-            ->integerNode('appsec_timeout')->defaultValue(Constants::APPSEC_TIMEOUT)->end()
-            ->integerNode('appsec_connect_timeout')->defaultValue(Constants::APPSEC_CONNECT_TIMEOUT)->end()
+            ->integerNode('appsec_timeout_ms')->defaultValue(Constants::APPSEC_TIMEOUT_MS)->end()
+            ->integerNode('appsec_connect_timeout_ms')->defaultValue(Constants::APPSEC_CONNECT_TIMEOUT_MS)->end()
         ->end();
     }
 
