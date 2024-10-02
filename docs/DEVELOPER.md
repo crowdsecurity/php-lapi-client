@@ -132,7 +132,8 @@ Finally, run
 In order to launch integration tests, we have to set some environment variables:
 
 ```bash
-ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 
+LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --exclude-group timeout     
 ```
 
 `<BOUNCER_KEY>` should have been created and retrieved before this test by running `ddev create-bouncer`.
@@ -140,7 +141,8 @@ ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_UR
 If you need to test with a TLS authentication, you should launch:
 
 ```bash
-ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox     
+ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl 
+APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --exclude-group timeout     
 ```
 
 #### Coding standards
@@ -234,24 +236,27 @@ ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/ven
 
 If you need to test a timeout, you can use the following command:
 
-Enter the container:
+Install `iproute2`
 ```bash
-ddev exec -s crowdsec bash
-```
-
-Then install `iproute2`
-```bash
-apk add iproute2
+ddev exec -s crowdsec apk add iproute2
 ```
 Add the delay you want:
 ```bash
-tc qdisc add dev eth0 root netem delay 5000ms
+ddev exec -s crowdsec tc qdisc add dev eth0 root netem delay 500ms
 ```
 
 To remove the delay:
 ```bash
-tc qdisc del dev eth0 root netem
+ddev exec -s crowdsec tc qdisc del dev eth0 root netem
 ```
+
+To execute integration tests with a timeout, you can run:
+
+```bash
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 
+LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --group timeout     
+```
+
 
 
 ## Commit message
