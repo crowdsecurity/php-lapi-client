@@ -13,18 +13,17 @@ As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com
 
 ---
 
-## [3.3.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.3.0) - 2024-??-??
-[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.2.0...HEAD)
+## [3.3.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.3.0) - 2024-10-04
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.2.0...v3.3.0)
 
 ### Added
 
 - Add `getAppSecDecision` method to `Bouncer` class
-- Add `appsec_url`, 'appsec_timeout' and `appsec_connect_timeout` configuration
+- Add `appsec_url`, `appsec_timeout_ms` and `appsec_connect_timeout_ms` configurations
 
 ### Changed
 
 - Throws a `CrowdSec\LapiClient\TimeoutException` when a timeout is detected during client calls
-
 
 
 ---

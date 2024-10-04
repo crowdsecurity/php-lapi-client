@@ -149,7 +149,7 @@ The `$headers` parameter is an array containing the headers of the forwarded req
 
 The `$rawBody` parameter is optional and must be used if the forwarded request contains a body. It must be a string.
 
-Please see the [CrowdSec AppSec documentation](https://docs.crowdsec.net/docs/appsec/intro) for more details.
+Please see the [CrowdSec AppSec documentation](https://docs.crowdsec.net/docs/appsec/intro/) for more details.
 
 
 ## Bouncer client configurations
