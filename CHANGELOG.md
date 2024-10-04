@@ -9,6 +9,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The [public API](https://semver.org/spec/v2.0.0.html#spec-item-1) of this library consists of all public or protected methods, properties and constants belonging to the `src` folder.
 
+As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com/doc/current/contributing/code/bc.html#working-on-symfony-code) when deciding whether a change is a breaking change or not.
+
+---
+
+## [3.3.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.3.0) - 2024-??-??
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.2.0...HEAD)
+
+### Added
+
+- Add `getAppSecDecision` method to `Bouncer` class
+- Add `appsec_url`, 'appsec_timeout' and `appsec_connect_timeout` configuration
+
+### Changed
+
+- Throws a `CrowdSec\LapiClient\TimeoutException` when a timeout is detected during client calls
+
+
+
 ---
 
 ## [3.2.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.2.0) - 2023-12-07
