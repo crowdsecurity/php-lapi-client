@@ -10,7 +10,7 @@ $apiKey = $argv[1] ?? false;
 $headers = isset($argv[2]) ? json_decode($argv[2], true) : [];
 $rawBody = $argv[4] ?? '';
 $appSecUrl = $argv[3] ?? false;
-if (!$apiKey  || !$appSecUrl) {
+if (!$apiKey || !$appSecUrl) {
     exit('Params <BOUNCER_KEY> and <APPSEC_URL> are required' . \PHP_EOL
          . 'Usage: php appsec-decisions.php <BOUNCER_KEY> <HEADERS_JSON> <APPSEC_URL> [<RAW_BODY_STRING>]'
          . \PHP_EOL

@@ -17,9 +17,9 @@ use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\RequestHandler\FileGetContents;
 use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\LapiClient\Constants;
+use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 use CrowdSec\LapiClient\TimeoutException;
-use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -219,7 +219,7 @@ final class BouncerTest extends TestCase
         // Test 3: clean POST request
         $headers['X-Crowdsec-Appsec-Verb'] = 'POST';
         $headers['X-Crowdsec-Appsec-Uri'] = '/login';
-        $response = $client->getAppSecDecision($headers,'something');
+        $response = $client->getAppSecDecision($headers, 'something');
         $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200');
         // Test 4: malicious POST request
         $headers['X-Crowdsec-Appsec-Uri'] = '/login';
@@ -235,6 +235,7 @@ final class BouncerTest extends TestCase
 
     /**
      * @dataProvider requestHandlerProvider
+     *
      * @group timeout
      * (requires APPSEC to answer with a delay of 500ms or more)
      */
