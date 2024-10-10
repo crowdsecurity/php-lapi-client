@@ -202,7 +202,7 @@ final class BouncerTest extends TestCase
 
         $headers = [
             'X-Crowdsec-Appsec-Api-Key' => $bouncerKey,
-            'X-Crowdsec-Appsec-Ip' => TestConstants::BAD_IP,
+            'X-Crowdsec-Appsec-Ip' => TestConstants::BAD_IP_APPSEC,
             'X-Crowdsec-Appsec-Host' => 'example.com',
             'X-Crowdsec-Appsec-User-Agent' => 'Mozilla/5.0',
             'X-Crowdsec-Appsec-Verb' => 'GET',
