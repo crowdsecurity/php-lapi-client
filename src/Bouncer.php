@@ -99,6 +99,16 @@ class Bouncer extends AbstractClient
         );
     }
 
+    private function cleanHeadersForLog(array $headers): array
+    {
+        $cleanedHeaders = $headers;
+        if (array_key_exists(Constants::HEADER_APPSEC_API_KEY, $cleanedHeaders)) {
+            $cleanedHeaders[Constants::HEADER_APPSEC_API_KEY] = '***';
+        }
+
+        return $cleanedHeaders;
+    }
+
     /**
      * Process and validate input configurations.
      */
@@ -136,7 +146,7 @@ class Bouncer extends AbstractClient
                 'type' => 'BOUNCER_CLIENT_APPSEC_REQUEST',
                 'method' => $method,
                 'rawBody' => $rawBody,
-                'headers' => $headers,
+                'headers' => $this->cleanHeadersForLog($headers),
             ]);
 
             return $this->requestAppSec($method, $headers, $rawBody);

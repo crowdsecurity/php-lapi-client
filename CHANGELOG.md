@@ -13,6 +13,15 @@ As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com
 
 ---
 
+## [3.3.1](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.3.1) - 2024-10-11
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.3.0...v3.3.1)
+
+### Fixed
+
+- Remove sensitive data from logs
+
+---
+
 ## [3.3.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.3.0) - 2024-10-04
 [_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.2.0...v3.3.0)
 

@@ -36,6 +36,7 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @covers \CrowdSec\LapiClient\Configuration::addConnectionNodes
  * @covers \CrowdSec\LapiClient\Configuration::addAppSecNodes
  * @covers \CrowdSec\LapiClient\Configuration::validate
+ * @uses \CrowdSec\LapiClient\Bouncer::cleanHeadersForLog
  */
 final class BouncerTest extends AbstractClient
 {
