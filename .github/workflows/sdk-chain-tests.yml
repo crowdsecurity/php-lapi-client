@@ -69,9 +69,9 @@ jobs:
         id: prepare-lapi-client
         run: |
           if [ "${{ github.event_name }}" == "push" ] || [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo 'branch=main' >> $GITHUB_OUTPUT
+            echo 'branch=${{ github.ref_name }}' >> $GITHUB_OUTPUT
           else
-            echo "branch=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+            echo "branch=${{ env.LAPI_CLIENT_BRANCH }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Prepare Remediation Engine data
