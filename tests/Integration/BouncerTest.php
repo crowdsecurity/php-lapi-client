@@ -108,7 +108,7 @@ final class BouncerTest extends TestCase
         $this->watcherClient->addDecision($now, '24h', '+24 hours', TestConstants::JAPAN, 'captcha', Constants::SCOPE_COUNTRY);
         // Retrieve default decisions (Ip and Range) without startup
         $response = $client->getStreamDecisions(false);
-        $this->assertCount(2, $response['new'], 'Should be 2 active decisions for default scopes Ip and Range');
+        $this->assertCount(2, $response['new'], 'Should be 2 active decisions for default scopes Ip and Range. Response: '. json_encode($response));
         // Retrieve all decisions (Ip, Range and Country) with startup
         $response = $client->getStreamDecisions(
             true,
@@ -116,7 +116,7 @@ final class BouncerTest extends TestCase
                 'scopes' => Constants::SCOPE_IP . ',' . Constants::SCOPE_RANGE . ',' . Constants::SCOPE_COUNTRY,
             ]
         );
-        $this->assertCount(3, $response['new'], 'Should be 3 active decisions for all scopes');
+        $this->assertCount(3, $response['new'], 'Should be 3 active decisions for all scopes. Response: '. json_encode($response));
         // Retrieve all decisions (Ip, Range and Country) without startup
         $response = $client->getStreamDecisions(
             false,
@@ -124,7 +124,7 @@ final class BouncerTest extends TestCase
                 'scopes' => Constants::SCOPE_IP . ',' . Constants::SCOPE_RANGE . ',' . Constants::SCOPE_COUNTRY,
             ]
         );
-        $this->assertNull($response['new'], 'Should be no new if startup has been done');
+        $this->assertNull($response['new'], 'Should be no new if startup has been done. Response: '. json_encode($response));
         // Delete all decisions
         $this->watcherClient->deleteAllDecisions();
         $response = $client->getStreamDecisions(
@@ -133,8 +133,8 @@ final class BouncerTest extends TestCase
                 'scopes' => Constants::SCOPE_IP . ',' . Constants::SCOPE_RANGE . ',' . Constants::SCOPE_COUNTRY,
             ]
         );
-        $this->assertNull($response['new'], 'Should be no new decision yet');
-        $this->assertNotNull($response['deleted'], 'Should be deleted decisions now');
+        $this->assertNull($response['new'], 'Should be no new decision yet. Response: '. json_encode($response));
+        $this->assertNotNull($response['deleted'], 'Should be deleted decisions now. Response: '. json_encode($response));
     }
 
     /**
@@ -163,15 +163,15 @@ final class BouncerTest extends TestCase
         $this->watcherClient->addDecision($now, '24h', '+24 hours', '1.2.3.0/' . TestConstants::IP_RANGE, 'ban');
         $this->watcherClient->addDecision($now, '24h', '+24 hours', TestConstants::JAPAN, 'captcha', Constants::SCOPE_COUNTRY);
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
-        $this->assertCount(2, $response, '2 decisions for specified IP');
+        $this->assertCount(2, $response, '2 decisions for specified IP. Response: '. json_encode($response));
         $response = $client->getFilteredDecisions(['scope' => Constants::SCOPE_COUNTRY, 'value' => TestConstants::JAPAN]);
-        $this->assertCount(1, $response, '1 decision for specified country');
+        $this->assertCount(1, $response, '1 decision for specified country. Response: '. json_encode($response));
         $response = $client->getFilteredDecisions(['range' => '1.2.3.0/' . TestConstants::IP_RANGE]);
-        $this->assertCount(1, $response, '1 decision for specified range');
+        $this->assertCount(1, $response, '1 decision for specified range. Response: '. json_encode($response));
         $response = $client->getFilteredDecisions(['ip' => '2.3.4.5']);
-        $this->assertCount(0, $response, '0 decision for specified IP');
+        $this->assertCount(0, $response, '0 decision for specified IP. Response: '. json_encode($response));
         $response = $client->getFilteredDecisions(['type' => 'captcha']);
-        $this->assertCount(2, $response, '2 decision for specified type');
+        $this->assertCount(2, $response, '2 decision for specified type. Response: '. json_encode($response));
         // Delete all decisions
         $this->watcherClient->deleteAllDecisions();
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
