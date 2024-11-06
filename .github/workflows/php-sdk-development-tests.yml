@@ -159,12 +159,16 @@ jobs:
         run: ddev php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --debug ./${{env.EXTENSION_PATH}}/tests/Unit --testdox
 
       - name: Run Integration tests (without TLS)
-        run: ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout ./${{env.EXTENSION_PATH}}/tests/Integration
+        run: ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout,appsec ./${{env.EXTENSION_PATH}}/tests/Integration
 
       - name: Run Integration tests (with TLS)
-        run: ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl BOUNCER_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout ./${{env.EXTENSION_PATH}}/tests/Integration
+        run: ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl BOUNCER_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout,appsec ./${{env.EXTENSION_PATH}}/tests/Integration
 
-      - name: Run Integration tests with timeout
+      - name: Run AppSec tests
+        run: |
+          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --group appsec ./${{env.EXTENSION_PATH}}/tests/Integration
+
+      - name: Run AppSec tests with timeout
         run: |
           ddev exec -s crowdsec apk add iproute2
           ddev exec -s crowdsec tc qdisc add dev eth0 root netem delay 500ms
