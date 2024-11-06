@@ -181,6 +181,7 @@ final class BouncerTest extends TestCase
 
     /**
      * @dataProvider requestHandlerProvider
+     * @group appsec
      */
     public function testAppSecDecision($requestHandler)
     {
