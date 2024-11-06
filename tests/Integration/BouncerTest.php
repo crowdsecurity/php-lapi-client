@@ -175,7 +175,7 @@ final class BouncerTest extends TestCase
         // Delete all decisions
         $this->watcherClient->deleteAllDecisions();
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
-        $this->assertCount(0, $response, '0 decision after delete for specified IP');
+        $this->assertCount(0, $response, '0 decision after delete for specified IP. Response: '. json_encode($response));
     }
 
     /**
@@ -211,16 +211,16 @@ final class BouncerTest extends TestCase
 
         // Test 1: clean GET request
         $response = $client->getAppSecDecision($headers);
-        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200');
+        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200. Response: '. json_encode($response));
         // Test 2: malicious GET request
         $headers['X-Crowdsec-Appsec-Uri'] = '/.env';
         $response = $client->getAppSecDecision($headers);
-        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403');
+        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403. Response: '. json_encode($response));
         // Test 3: clean POST request
         $headers['X-Crowdsec-Appsec-Verb'] = 'POST';
         $headers['X-Crowdsec-Appsec-Uri'] = '/login';
         $response = $client->getAppSecDecision($headers, 'something');
-        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200');
+        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200. Response: '. json_encode($response));
         // Test 4: malicious POST request
         $headers['X-Crowdsec-Appsec-Uri'] = '/login';
         $rawBody = 'class.module.classLoader.resources.'; // Malicious payload (@see /etc/crowdsec/appsec-rules/vpatch-CVE-2022-22965.yaml)
@@ -230,7 +230,7 @@ final class BouncerTest extends TestCase
         }
         $response = $client->getAppSecDecision($headers, $rawBody);
 
-        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403');
+        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403. Response: '. json_encode($response));
     }
 
     /**
