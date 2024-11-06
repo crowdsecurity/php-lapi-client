@@ -65,8 +65,7 @@ final class BouncerTest extends TestCase
 
         $this->configs = $bouncerConfigs;
         $this->watcherClient = new WatcherClient($this->configs);
-        // Delete all decisions
-        $this->watcherClient->deleteAllDecisions();
+       
     }
 
     public function requestHandlerProvider(): array
@@ -82,6 +81,9 @@ final class BouncerTest extends TestCase
      */
     public function testDecisionsStream($requestHandler)
     {
+         // Delete all decisions
+        $this->watcherClient->deleteAllDecisions();
+        usleep(200000); // 200ms
         if ('FileGetContents' === $requestHandler) {
             $client = new Bouncer($this->configs, new FileGetContents($this->configs));
         } else {
@@ -142,6 +144,9 @@ final class BouncerTest extends TestCase
      */
     public function testFilteredDecisions($requestHandler)
     {
+         // Delete all decisions
+        $this->watcherClient->deleteAllDecisions();
+        usleep(200000); // 200ms
         if ('FileGetContents' === $requestHandler) {
             $client = new Bouncer($this->configs, new FileGetContents($this->configs));
         } else {
@@ -183,6 +188,9 @@ final class BouncerTest extends TestCase
      */
     public function testAppSecDecision($requestHandler)
     {
+         // Delete all decisions
+        $this->watcherClient->deleteAllDecisions();
+        usleep(200000); // 200ms
         $bouncerKey = getenv('BOUNCER_KEY');
         if (!$bouncerKey) {
             $this->fail('BOUNCER_KEY is not set');
@@ -241,6 +249,9 @@ final class BouncerTest extends TestCase
      */
     public function testAppSecDecisionTimeout($requestHandler)
     {
+         // Delete all decisions
+        $this->watcherClient->deleteAllDecisions();
+        usleep(200000); // 200ms
         $bouncerKey = getenv('BOUNCER_KEY');
         if (!$bouncerKey) {
             $this->fail('BOUNCER_KEY is not set');
