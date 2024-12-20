@@ -39,6 +39,10 @@ class Constants extends CommonConstants
      */
     public const METRICS_ENDPOINT = '/v1/usage-metrics';
     /**
+     * @var string The metrics type
+     */
+    public const METRICS_TYPE = 'crowdsec-php-bouncer';
+    /**
      * @var string The user agent prefix used to send request to LAPI
      */
     public const USER_AGENT_PREFIX = 'csphplapi';
@@ -46,8 +50,4 @@ class Constants extends CommonConstants
      * @var string The current version of this library
      */
     public const VERSION = 'v3.3.2';
-    /**
-     * @var string The metrics type
-     */
-    public const METRICS_TYPE = 'crowdsec-php-bouncer';
 }
