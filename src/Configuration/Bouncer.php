@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace CrowdSec\LapiClient;
+namespace CrowdSec\LapiClient\Configuration;
 
 use CrowdSec\Common\Configuration\AbstractConfiguration;
+use CrowdSec\LapiClient\Constants;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -19,7 +20,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
  */
-class Configuration extends AbstractConfiguration
+class Bouncer extends AbstractConfiguration
 {
     /** @var array<string> The list of each configuration tree key */
     protected $keys = [
@@ -80,6 +81,24 @@ class Configuration extends AbstractConfiguration
     }
 
     /**
+     * AppSec settings.
+     *
+     * @param NodeDefinition|ArrayNodeDefinition $rootNode
+     *
+     * @return void
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function addAppSecNodes($rootNode)
+    {
+        $rootNode->children()
+            ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
+            ->integerNode('appsec_timeout_ms')->defaultValue(Constants::APPSEC_TIMEOUT_MS)->end()
+            ->integerNode('appsec_connect_timeout_ms')->defaultValue(Constants::APPSEC_CONNECT_TIMEOUT_MS)->end()
+        ->end();
+    }
+
+    /**
      * LAPI connection settings.
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
@@ -114,24 +133,6 @@ class Configuration extends AbstractConfiguration
             ->booleanNode('tls_verify_peer')->defaultValue(false)->end()
             ->integerNode('api_timeout')->defaultValue(Constants::API_TIMEOUT)->end()
             ->integerNode('api_connect_timeout')->defaultValue(Constants::API_CONNECT_TIMEOUT)->end()
-        ->end();
-    }
-
-    /**
-     * AppSec settings.
-     *
-     * @param NodeDefinition|ArrayNodeDefinition $rootNode
-     *
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function addAppSecNodes($rootNode)
-    {
-        $rootNode->children()
-            ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
-            ->integerNode('appsec_timeout_ms')->defaultValue(Constants::APPSEC_TIMEOUT_MS)->end()
-            ->integerNode('appsec_connect_timeout_ms')->defaultValue(Constants::APPSEC_CONNECT_TIMEOUT_MS)->end()
         ->end();
     }
 
