@@ -8,6 +8,7 @@ use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
 use CrowdSec\Common\Client\TimeoutException as CommonTimeoutException;
+use CrowdSec\LapiClient\Configuration\Bouncer as Configuration;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -43,6 +44,79 @@ class Bouncer extends AbstractClient
             $this->headers[Constants::HEADER_LAPI_API_KEY] = $this->configs['api_key'];
         }
         parent::__construct($this->configs, $requestHandler, $logger);
+    }
+
+    /**
+     * Helper to create well formatted metrics array.
+     *
+     * @param array   $properties
+     *                            Array containing metrics properties
+     *                            $properties = [
+     *                            'name' => (string) Bouncer name
+     *                            'type' => (string) Bouncer type (crowdsec-php-bouncer)
+     *                            'last_pull' => (integer) last pull timestamp,
+     *                            'version' => (string) Bouncer version
+     *                            'feature_flags' => (array) Should be empty for bouncer
+     *                            'utc_startup_timestamp' => (integer) Bouncer startup timestamp
+     *                            'os' => (array) OS information
+     *                            'os' = [
+     *                            'name' => (string) OS name
+     *                            'version' => (string) OS version
+     *                            ]
+     *                            ];
+     * @param array   $meta
+     *                            Array containing meta data
+     *                            $meta = [
+     *                            'window_size_seconds' => (integer) Window size in seconds
+     *                            'utc_now_timestamp' => (integer) Current timestamp
+     *                            ];
+     * @param array[] $items
+     *                            Array of items. Each item is an array too.
+     *                            $items = [
+     *                            [
+     *                            'name' => (string) Name of the metric
+     *                            'value' => (integer) Value of the metric
+     *                            'type' => (string) Type of the metric
+     *                            'labels' => (array) Labels of the metric
+     *                            'labels' = [
+     *                            'key' => (string) Tag key
+     *                            'value' => (string) Tag value
+     *                            ],
+     *                            ],
+     *                            ...
+     *                            ]
+     *
+     * @throws ClientException
+     */
+    public function buildUsageMetrics(array $properties, array $meta, array $items = [[]]): array
+    {
+        $finalProperties = [
+            'name' => $properties['name'] ?? '',
+            'type' => $properties['type'] ?? Constants::METRICS_TYPE,
+            'version' => $properties['version'] ?? '',
+            'feature_flags' => $properties['feature_flags'] ?? [],
+            'utc_startup_timestamp' => $properties['utc_startup_timestamp'] ?? 0,
+        ];
+        $lastPull = $properties['last_pull'] ?? 0;
+        $os = $properties['os'] ?? $this->getOs();
+        if ($lastPull) {
+            $finalProperties['last_pull'] = $lastPull;
+        }
+        if (!empty($os['name']) && !empty($os['version'])) {
+            $finalProperties['os'] = $os;
+        }
+        $meta = [
+            'window_size_seconds' => $meta['window_size_seconds'] ?? 0,
+            'utc_now_timestamp' => $meta['utc_now_timestamp'] ?? time(),
+        ];
+
+        try {
+            $metrics = new Metrics($finalProperties, $meta, $items);
+        } catch (\Exception $e) {
+            throw new ClientException('Something went wrong while creating metrics: ' . $e->getMessage());
+        }
+
+        return $metrics->toArray();
     }
 
     /**
@@ -99,6 +173,23 @@ class Bouncer extends AbstractClient
         );
     }
 
+    /**
+     * Push usage metrics to LAPI.
+     *
+     * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/Remediation%20component/usage-metrics
+     *
+     * @throws ClientException
+     * @codeCoverageIgnore
+     */
+    public function pushUsageMetrics(array $usageMetrics): array
+    {
+        return $this->manageRequest(
+            'POST',
+            Constants::METRICS_ENDPOINT,
+            $usageMetrics
+        );
+    }
+
     private function cleanHeadersForLog(array $headers): array
     {
         $cleanedHeaders = $headers;
@@ -134,6 +225,14 @@ class Bouncer extends AbstractClient
             !empty($configs['user_agent_version']) ? $configs['user_agent_version'] : Constants::VERSION;
 
         return Constants::USER_AGENT_PREFIX . $userAgentSuffix . '/' . $userAgentVersion;
+    }
+
+    private function getOs(): array
+    {
+        return [
+            'name' => php_uname('s'),
+            'version' => php_uname('v'),
+        ];
     }
 
     /**
