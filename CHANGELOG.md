@@ -13,7 +13,7 @@ As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com
 
 ---
 
-## [4.0.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v4.0.0) - 202?-??-??
+## [3.4.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.4.0) - 202?-??-??
 [_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.3.2...HEAD)
 
 **This release is not yet published**
@@ -22,9 +22,6 @@ As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com
 
 - Add `pushUsageMetrics` method to `Bouncer` class
 
-### Changed
-
-- *Breaking change*: Move configuration classes to `CrowdSec\LapiClient\Configuration` namespace
 
 ---
 

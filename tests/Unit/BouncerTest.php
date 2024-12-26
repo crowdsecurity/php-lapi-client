@@ -18,7 +18,6 @@ namespace CrowdSec\LapiClient\Tests\Unit;
 use CrowdSec\Common\Client\ClientException;
 use CrowdSec\Common\Client\HttpMessage\Response;
 use CrowdSec\LapiClient\Bouncer;
-use CrowdSec\LapiClient\Metrics;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use CrowdSec\LapiClient\Tests\MockedData;
@@ -33,11 +32,10 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @covers \CrowdSec\LapiClient\Bouncer::getAppSecDecision
  * @covers \CrowdSec\LapiClient\Bouncer::manageAppSecRequest
  * @covers \CrowdSec\LapiClient\Bouncer::formatUserAgent
- * @covers \CrowdSec\LapiClient\Configuration\Bouncer::getConfigTreeBuilder
- * @covers \CrowdSec\LapiClient\Configuration\Bouncer::addConnectionNodes
- * @covers \CrowdSec\LapiClient\Configuration\Bouncer::addAppSecNodes
- * @covers \CrowdSec\LapiClient\Configuration\Bouncer::validate
- *
+ * @covers \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
+ * @covers \CrowdSec\LapiClient\Configuration::addConnectionNodes
+ * @covers \CrowdSec\LapiClient\Configuration::addAppSecNodes
+ * @covers \CrowdSec\LapiClient\Configuration::validate
  * @covers \CrowdSec\LapiClient\Bouncer::buildUsageMetrics
  * @covers \CrowdSec\LapiClient\Bouncer::getOs
  * @covers \CrowdSec\LapiClient\Configuration\Metrics::getConfigTreeBuilder
@@ -115,9 +113,8 @@ final class BouncerTest extends AbstractClient
             'version' => '1.0.0',
             'type' => 'test',
             'utc_startup_timestamp' => 1234567890,
-
         ];
-        $meta   = [
+        $meta = [
             'window_size_seconds' => 60,
         ];
         $items = [
@@ -173,7 +170,6 @@ final class BouncerTest extends AbstractClient
             'last_pull' => 123456747,
         ];
 
-
         $metrics = $client->buildUsageMetrics($properties, $meta, $items);
 
         $this->assertEquals(
@@ -206,7 +202,6 @@ final class BouncerTest extends AbstractClient
             $metrics,
             'Should format metrics as expected'
         );
-
 
         // Test 3 : labels exception
 
@@ -243,7 +238,7 @@ final class BouncerTest extends AbstractClient
                 'name' => 'dropped',
                 'value' => 1,
                 'unit' => 'test',
-                'labels' => "origin",
+                'labels' => 'origin',
             ],
         ];
 
@@ -260,7 +255,6 @@ final class BouncerTest extends AbstractClient
             $error,
             'Labels must be an array'
         );
-
     }
 
     public function testAppSecDecisionParams()

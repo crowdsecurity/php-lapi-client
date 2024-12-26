@@ -161,9 +161,8 @@ final class BouncerTest extends TestCase
             'version' => '1.0.0',
             'type' => 'test',
             'utc_startup_timestamp' => 1234567890,
-
         ];
-        $meta   = [
+        $meta = [
             'window_size_seconds' => 60,
         ];
         $items = [
