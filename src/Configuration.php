@@ -50,27 +50,27 @@ class Configuration extends AbstractConfiguration
         $rootNode = $treeBuilder->getRootNode();
         $rootNode->children()
             ->scalarNode('user_agent_suffix')
-            ->validate()
-            ->ifTrue(function (string $value) {
-                return 1 !== preg_match('#^[A-Za-z0-9]{0,16}$#', $value);
-            })
-            ->thenInvalid('Invalid user agent suffix. Length must be <= 16. Allowed chars are A-Za-z0-9')
-            ->end()
+                ->validate()
+                    ->ifTrue(function (string $value) {
+                        return 1 !== preg_match('#^[A-Za-z0-9]{0,16}$#', $value);
+                    })
+                    ->thenInvalid('Invalid user agent suffix. Length must be <= 16. Allowed chars are A-Za-z0-9')
+                ->end()
             ->end()
             ->scalarNode('user_agent_version')
-            ->validate()
-            ->ifTrue(function (string $value) {
-                if (!empty($value)) {
-                    return 1 !== preg_match('#^v\d{1,4}(\.\d{1,4}){2}$#', $value);
-                }
+                ->validate()
+                    ->ifTrue(function (string $value) {
+                        if (!empty($value)) {
+                            return 1 !== preg_match('#^v\d{1,4}(\.\d{1,4}){2}$#', $value);
+                        }
 
-                return true;
-            })
-            ->thenInvalid('Invalid user agent version. Must match vX.Y.Z format')
-            ->end()
+                        return true;
+                    })
+                    ->thenInvalid('Invalid user agent version. Must match vX.Y.Z format')
+                ->end()
             ->defaultValue(Constants::VERSION)
             ->end()
-            ->end()
+        ->end()
         ;
         $this->addConnectionNodes($rootNode);
         $this->addAppSecNodes($rootNode);
@@ -94,7 +94,7 @@ class Configuration extends AbstractConfiguration
             ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
             ->integerNode('appsec_timeout_ms')->defaultValue(Constants::APPSEC_TIMEOUT_MS)->end()
             ->integerNode('appsec_connect_timeout_ms')->defaultValue(Constants::APPSEC_CONNECT_TIMEOUT_MS)->end()
-            ->end();
+        ->end();
     }
 
     /**
@@ -111,28 +111,28 @@ class Configuration extends AbstractConfiguration
         $rootNode->children()
             ->scalarNode('api_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_LAPI_URL)->end()
             ->enumNode('auth_type')
-            ->values(
-                [
-                    Constants::AUTH_KEY,
-                    Constants::AUTH_TLS,
-                ]
-            )
-            ->defaultValue(Constants::AUTH_KEY)
+                ->values(
+                    [
+                        Constants::AUTH_KEY,
+                        Constants::AUTH_TLS,
+                    ]
+                )
+                ->defaultValue(Constants::AUTH_KEY)
             ->end()
             ->scalarNode('api_key')->end()
             ->scalarNode('tls_cert_path')
-            ->info('Absolute path to the Bouncer certificate')->defaultValue('')
+                ->info('Absolute path to the Bouncer certificate')->defaultValue('')
             ->end()
             ->scalarNode('tls_key_path')
-            ->info('Absolute path to the Bouncer key')->defaultValue('')
+                ->info('Absolute path to the Bouncer key')->defaultValue('')
             ->end()
             ->scalarNode('tls_ca_cert_path')
-            ->info('Absolute path to the CA used to process TLS handshake')->defaultValue('')
+                ->info('Absolute path to the CA used to process TLS handshake')->defaultValue('')
             ->end()
             ->booleanNode('tls_verify_peer')->defaultValue(false)->end()
             ->integerNode('api_timeout')->defaultValue(Constants::API_TIMEOUT)->end()
             ->integerNode('api_connect_timeout')->defaultValue(Constants::API_CONNECT_TIMEOUT)->end()
-            ->end();
+        ->end();
     }
 
     /**
@@ -149,34 +149,34 @@ class Configuration extends AbstractConfiguration
     {
         $rootNode
             ->validate()
-            ->ifTrue(function (array $v) {
-                if (Constants::AUTH_KEY === $v['auth_type'] && empty($v['api_key'])) {
-                    return true;
-                }
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_KEY === $v['auth_type'] && empty($v['api_key'])) {
+                        return true;
+                    }
 
-                return false;
-            })
-            ->thenInvalid('Api key is required as auth type is api_key')
+                    return false;
+                })
+                ->thenInvalid('Api key is required as auth type is api_key')
             ->end()
             ->validate()
-            ->ifTrue(function (array $v) {
-                if (Constants::AUTH_TLS === $v['auth_type']) {
-                    return empty($v['tls_cert_path']) || empty($v['tls_key_path']);
-                }
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_TLS === $v['auth_type']) {
+                        return empty($v['tls_cert_path']) || empty($v['tls_key_path']);
+                    }
 
-                return false;
-            })
-            ->thenInvalid('Bouncer certificate and key paths are required for tls authentification.')
+                    return false;
+                })
+                ->thenInvalid('Bouncer certificate and key paths are required for tls authentification.')
             ->end()
             ->validate()
-            ->ifTrue(function (array $v) {
-                if (Constants::AUTH_TLS === $v['auth_type'] && true === $v['tls_verify_peer']) {
-                    return empty($v['tls_ca_cert_path']);
-                }
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_TLS === $v['auth_type'] && true === $v['tls_verify_peer']) {
+                        return empty($v['tls_ca_cert_path']);
+                    }
 
-                return false;
-            })
-            ->thenInvalid('CA path is required for tls authentification with verify_peer.')
-            ->end();
+                    return false;
+                })
+                ->thenInvalid('CA path is required for tls authentification with verify_peer.')
+        ->end();
     }
 }
