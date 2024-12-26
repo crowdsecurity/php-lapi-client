@@ -23,11 +23,11 @@ use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 
 /**
- * @uses \CrowdSec\LapiClient\Configuration\Bouncer::getConfigTreeBuilder
+ * @uses \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
  * @uses \CrowdSec\LapiClient\Bouncer::formatUserAgent
- * @uses \CrowdSec\LapiClient\Configuration\Bouncer::addConnectionNodes
- * @uses \CrowdSec\LapiClient\Configuration\Bouncer::validate
- * @uses \CrowdSec\LapiClient\Configuration\Bouncer::addAppSecNodes
+ * @uses \CrowdSec\LapiClient\Configuration::addConnectionNodes
+ * @uses \CrowdSec\LapiClient\Configuration::validate
+ * @uses \CrowdSec\LapiClient\Configuration::addAppSecNodes
  *
  * @covers \CrowdSec\LapiClient\Bouncer::__construct
  * @covers \CrowdSec\LapiClient\Bouncer::configure

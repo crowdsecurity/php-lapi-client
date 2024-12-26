@@ -8,7 +8,6 @@ use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\Common\Client\ClientException as CommonClientException;
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
 use CrowdSec\Common\Client\TimeoutException as CommonTimeoutException;
-use CrowdSec\LapiClient\Configuration\Bouncer as Configuration;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\Definition\Processor;
 
@@ -179,6 +178,7 @@ class Bouncer extends AbstractClient
      * @see https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/Remediation%20component/usage-metrics
      *
      * @throws ClientException
+     *
      * @codeCoverageIgnore
      */
     public function pushUsageMetrics(array $usageMetrics): array
