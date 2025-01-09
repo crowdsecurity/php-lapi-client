@@ -13,10 +13,8 @@ As far as possible, we try to adhere to [Symfony guidelines](https://symfony.com
 
 ---
 
-## [3.4.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.4.0) - 202?-??-??
-[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.3.2...HEAD)
-
-**This release is not yet published**
+## [3.4.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.4.0) - 2025-01-09
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.3.2...v3.4.0)
 
 ### Added
 
