@@ -20,6 +20,30 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @copyright Copyright (c) 2024+ CrowdSec
  * @license   MIT License
+ *
+ * @psalm-type TOS = array{
+ *     name: string,
+ *     version: string
+ * }
+ *
+ * @psalm-type TProperties = array{
+ *     name: string,
+ *     type: string,
+ *     version: string,
+ *     feature_flags: array,
+ *     utc_startup_timestamp: int,
+ *     last_pull?: positive-int,
+ *     os?: TOS
+ * }
+ *
+ * @psalm-type TMeta = array{
+ *     window_size_seconds: int,
+ *     utc_now_timestamp: positive-int
+ * }
+ *
+ * @psalm-type TItem = array{
+ *
+ * }
  */
 class Metrics
 {
@@ -36,6 +60,11 @@ class Metrics
      */
     private $properties;
 
+    /**
+     * @param TProperties $properties
+     * @param TMeta $meta
+     * @param list<TItem> $items
+     */
     public function __construct(
         array $properties,
         array $meta,

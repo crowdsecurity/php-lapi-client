@@ -44,7 +44,8 @@
     "require-dev": {
         "phpunit/phpunit": "^8.5.30 || ^9.3",
         "mikey179/vfsstream": "^1.6.11",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "vimeo/psalm": "^6.13"
     },
     "suggest": {
         "ext-curl": "*"

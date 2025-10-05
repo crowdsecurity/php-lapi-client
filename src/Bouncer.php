@@ -48,42 +48,44 @@ class Bouncer extends AbstractClient
     /**
      * Helper to create well formatted metrics array.
      *
-     * @param array   $properties
-     *                            Array containing metrics properties
-     *                            $properties = [
-     *                            'name' => (string) Bouncer name
-     *                            'type' => (string) Bouncer type (crowdsec-php-bouncer)
-     *                            'last_pull' => (integer) last pull timestamp,
-     *                            'version' => (string) Bouncer version
-     *                            'feature_flags' => (array) Should be empty for bouncer
-     *                            'utc_startup_timestamp' => (integer) Bouncer startup timestamp
-     *                            'os' => (array) OS information
-     *                            'os' = [
-     *                            'name' => (string) OS name
-     *                            'version' => (string) OS version
-     *                            ]
-     *                            ];
-     * @param array   $meta
-     *                            Array containing meta data
-     *                            $meta = [
-     *                            'window_size_seconds' => (integer) Window size in seconds
-     *                            'utc_now_timestamp' => (integer) Current timestamp
-     *                            ];
-     * @param array[] $items
-     *                            Array of items. Each item is an array too.
-     *                            $items = [
-     *                            [
-     *                            'name' => (string) Name of the metric
-     *                            'value' => (integer) Value of the metric
-     *                            'type' => (string) Type of the metric
-     *                            'labels' => (array) Labels of the metric
-     *                            'labels' = [
-     *                            'key' => (string) Tag key
-     *                            'value' => (string) Tag value
-     *                            ],
-     *                            ],
-     *                            ...
-     *                            ]
+     * @param array $properties Array containing metrics properties
+     *
+     *    $properties = [
+     *        'name' => (string) Bouncer name
+     *        'type' => (string) Bouncer type (crowdsec-php-bouncer)
+     *        'last_pull' => (integer) last pull timestamp,
+     *        'version' => (string) Bouncer version
+     *        'feature_flags' => (array) Should be empty for bouncer
+     *        'utc_startup_timestamp' => (integer) Bouncer startup timestamp
+     *        'os' => (array) OS information
+     *        'os' = [
+     *            'name' => (string) OS name
+     *            'version' => (string) OS version
+     *        ]
+     *    ];
+     *
+     * @param array $meta Array containing meta data
+     *
+     *    $meta = [
+     *        'window_size_seconds' => (integer) Window size in seconds
+     *        'utc_now_timestamp' => (integer) Current timestamp
+     *    ];
+     *
+     * @param array[] $items Array of items. Each item is an array too.
+     *
+     *    $items = [
+     *        [
+     *              'name' => (string) Name of the metric
+     *              'value' => (integer) Value of the metric
+     *              'type' => (string) Type of the metric
+     *              'labels' => (array) Labels of the metric
+     *              'labels' = [
+     *                'key' => (string) Tag key
+     *                'value' => (string) Tag value
+     *              ],
+     *          ],
+     *          ...
+     *    ]
      *
      * @throws ClientException
      */
@@ -227,6 +229,9 @@ class Bouncer extends AbstractClient
         return Constants::USER_AGENT_PREFIX . $userAgentSuffix . '/' . $userAgentVersion;
     }
 
+    /**
+     * @return TOS
+     */
     private function getOs(): array
     {
         return [
