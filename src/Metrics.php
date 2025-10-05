@@ -21,47 +21,27 @@ use Symfony\Component\Config\Definition\Processor;
  * @copyright Copyright (c) 2024+ CrowdSec
  * @license   MIT License
  *
- * @psalm-type TOS = array{
- *     name: string,
- *     version: string
- * }
- *
- * @psalm-type TProperties = array{
- *     name: string,
- *     type: string,
- *     version: string,
- *     feature_flags: array,
- *     utc_startup_timestamp: int,
- *     last_pull?: positive-int,
- *     os?: TOS
- * }
- *
- * @psalm-type TMeta = array{
- *     window_size_seconds: int,
- *     utc_now_timestamp: positive-int
- * }
- *
- * @psalm-type TItem = array{
- *
- * }
+ * @psalm-import-type TMetric from \CrowdSec\LapiClient\Configuration\Metrics
+ * @psalm-import-type TMeta   from \CrowdSec\LapiClient\Configuration\Metrics\Meta
+ * @psalm-import-type TItem   from \CrowdSec\LapiClient\Configuration\Metrics\Items
  */
 class Metrics
 {
     /**
-     * @var array
+     * @var list<TItem>
      */
     private $items;
     /**
-     * @var array
+     * @var TMeta
      */
     private $meta;
     /**
-     * @var array
+     * @var TMetric
      */
     private $properties;
 
     /**
-     * @param TProperties $properties
+     * @param TMetric $properties
      * @param TMeta $meta
      * @param list<TItem> $items
      */
@@ -69,7 +49,8 @@ class Metrics
         array $properties,
         array $meta,
         array $items = []
-    ) {
+    )
+    {
         $this->configureProperties($properties);
         $this->configureMeta($meta);
         $this->configureItems($items);

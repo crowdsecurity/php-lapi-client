@@ -20,6 +20,11 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
+ *
+ * @psalm-import-type TMetric from \CrowdSec\LapiClient\Configuration\Metrics
+ * @psalm-import-type TOS     from \CrowdSec\LapiClient\Configuration\Metrics
+ * @psalm-import-type TMeta   from \CrowdSec\LapiClient\Configuration\Metrics\Meta
+ * @psalm-import-type TItem   from \CrowdSec\LapiClient\Configuration\Metrics\Items
  */
 class Bouncer extends AbstractClient
 {
@@ -48,7 +53,7 @@ class Bouncer extends AbstractClient
     /**
      * Helper to create well formatted metrics array.
      *
-     * @param array $properties Array containing metrics properties
+     * @param TMetric $properties Array containing metrics properties.
      *
      *    $properties = [
      *        'name' => (string) Bouncer name
@@ -64,14 +69,14 @@ class Bouncer extends AbstractClient
      *        ]
      *    ];
      *
-     * @param array $meta Array containing meta data
+     * @param TMeta $meta Array containing meta data.
      *
      *    $meta = [
      *        'window_size_seconds' => (integer) Window size in seconds
      *        'utc_now_timestamp' => (integer) Current timestamp
      *    ];
      *
-     * @param array[] $items Array of items. Each item is an array too.
+     * @param list<TItem|array> $items Array of items. Each item is an array too.
      *
      *    $items = [
      *        [

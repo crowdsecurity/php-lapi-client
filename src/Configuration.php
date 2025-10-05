@@ -21,7 +21,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 class Configuration extends AbstractConfiguration
 {
-    /** @var array<string> The list of each configuration tree key */
+    /** @var list<string> The list of each configuration tree key */
     protected $keys = [
         'user_agent_suffix',
         'user_agent_version',
@@ -87,6 +87,8 @@ class Configuration extends AbstractConfiguration
      * @return void
      *
      * @throws \InvalidArgumentException
+     *
+     * @psalm-suppress UndefinedMethod
      */
     private function addAppSecNodes($rootNode)
     {
@@ -105,6 +107,8 @@ class Configuration extends AbstractConfiguration
      * @return void
      *
      * @throws \InvalidArgumentException
+     *
+     * @psalm-suppress UndefinedMethod
      */
     private function addConnectionNodes($rootNode)
     {
