@@ -26,11 +26,11 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *
  * @psalm-type TMetric = array{
  *     name: string,
- *     type: string,
+ *     type?: string,
  *     last_pull?: positive-int,
  *     version: string,
- *     os?: TOS,
- *     feature_flags: array,
+ *     os: TOS,
+ *     feature_flags?: array,
  *     utc_startup_timestamp: int
  * }
  */
