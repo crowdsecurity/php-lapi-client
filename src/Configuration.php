@@ -18,6 +18,23 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
+ *
+ * @psalm-type TBouncerConfig = array{
+ *     user_agent_suffix: string,
+ *     user_agent_version: string,
+ *     api_url?: string,
+ *     appsec_url?: string,
+ *     auth_type?: string,
+ *     api_key: string,
+ *     tls_cert_path?: string,
+ *     tls_key_path?: string,
+ *     tls_ca_cert_path?: string,
+ *     tls_verify_peer?: bool,
+ *     api_timeout?: int,
+ *     api_connect_timeout?: int,
+ *     appsec_timeout_ms?: int,
+ *     appsec_connect_timeout_ms?: int,
+ * }
  */
 class Configuration extends AbstractConfiguration
 {
