@@ -29,7 +29,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *     type?: string,
  *     last_pull?: positive-int,
  *     version: string,
- *     os: TOS,
+ *     os?: TOS,
  *     feature_flags?: array,
  *     utc_startup_timestamp: int
  * }
