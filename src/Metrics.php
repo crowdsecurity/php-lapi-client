@@ -86,8 +86,7 @@ class Metrics
         array $properties,
         array $meta,
         array $items = []
-    )
-    {
+    ) {
         $this->configureProperties($properties);
         $this->configureMeta($meta);
         $this->configureItems($items);
