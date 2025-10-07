@@ -21,9 +21,46 @@ use Symfony\Component\Config\Definition\Processor;
  * @copyright Copyright (c) 2024+ CrowdSec
  * @license   MIT License
  *
- * @psalm-import-type TMetric from \CrowdSec\LapiClient\Configuration\Metrics
- * @psalm-import-type TMeta   from \CrowdSec\LapiClient\Configuration\Metrics\Meta
- * @psalm-import-type TItem   from \CrowdSec\LapiClient\Configuration\Metrics\Items
+ * @psalm-type TOS = array{
+ *     name: string,
+ *     version: string
+ * }
+ *
+ * @psalm-type TMetric = array{
+ *     name: string,
+ *     type?: string,
+ *     last_pull?: positive-int,
+ *     version: string,
+ *     os?: TOS,
+ *     feature_flags?: array,
+ *     utc_startup_timestamp: int
+ * }
+ *
+ * @psalm-type TLabel = array{
+ *     key: non-empty-string,
+ *     value: string
+ * }
+ *
+ * @psalm-type TItem = array{
+ *     name: string,
+ *     value: non-negative-int,
+ *     unit: mixed,
+ *     labels: list<TLabel>
+ * }
+ *
+ * @psalm-type TMeta = array{
+ *     window_size_seconds: int,
+ *     utc_now_timestamp: positive-int
+ * }
+ *
+ * @psalm-type TRemediationComponents = TMetric & array{
+ *     metrics: list{
+ *         0: array{
+ *             meta: TMeta,
+ *             items: list<TItem>
+ *         }
+ *     }
+ * }
  */
 class Metrics
 {
@@ -56,6 +93,11 @@ class Metrics
         $this->configureItems($items);
     }
 
+    /**
+     * @return array{
+     *     remediation_components: list{0: TRemediationComponents}
+     * }
+     */
     public function toArray(): array
     {
         return [

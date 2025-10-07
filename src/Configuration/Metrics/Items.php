@@ -17,18 +17,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
- *
- * @psalm-type TLabel = array{
- *     key: non-empty-string,
- *     value: string
- * }
- *
- * @psalm-type TItem = array{
- *     name: string,
- *     value: non-negative-int,
- *     unit: mixed,
- *     labels: list<TLabel>
- * }
  */
 class Items extends AbstractConfiguration
 {

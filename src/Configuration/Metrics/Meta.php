@@ -17,11 +17,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
- *
- * @psalm-type TMeta = array{
- *     window_size_seconds: int,
- *     utc_now_timestamp: positive-int
- * }
  */
 class Meta extends AbstractConfiguration
 {
