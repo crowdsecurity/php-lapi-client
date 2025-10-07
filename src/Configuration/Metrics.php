@@ -18,21 +18,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
- *
- * @psalm-type TOS = array{
- *     name: string,
- *     version: string
- * }
- *
- * @psalm-type TMetric = array{
- *     name: string,
- *     type?: string,
- *     last_pull?: positive-int,
- *     version: string,
- *     os?: TOS,
- *     feature_flags?: array,
- *     utc_startup_timestamp: int
- * }
  */
 class Metrics extends AbstractConfiguration
 {
