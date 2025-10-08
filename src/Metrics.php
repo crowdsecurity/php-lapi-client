@@ -53,7 +53,14 @@ use Symfony\Component\Config\Definition\Processor;
  *     utc_now_timestamp: positive-int
  * }
  *
- * @psalm-type TRemediationComponents = TMetric & array{
+ * @psalm-type TRemediationComponents = array{
+ *     name: string,
+ *     type?: string,
+ *     last_pull?: positive-int,
+ *     version: string,
+ *     os?: TOS,
+ *     feature_flags?: array,
+ *     utc_startup_timestamp: int,
  *     metrics: list{
  *         0: array{
  *             meta: TMeta,
