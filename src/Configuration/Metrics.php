@@ -21,7 +21,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 class Metrics extends AbstractConfiguration
 {
-    /** @var array<string> The list of each configuration tree key */
+    /** @var list<string> The list of each configuration tree key */
     protected $keys = [
         'name',
         'type',

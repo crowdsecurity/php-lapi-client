@@ -20,22 +20,75 @@ use Symfony\Component\Config\Definition\Processor;
  *
  * @copyright Copyright (c) 2024+ CrowdSec
  * @license   MIT License
+ *
+ * @psalm-type TOS = array{
+ *     name: string,
+ *     version: string
+ * }
+ *
+ * @psalm-type TMetric = array{
+ *     name: string,
+ *     type?: string,
+ *     last_pull?: positive-int,
+ *     version: string,
+ *     os?: TOS,
+ *     feature_flags?: array,
+ *     utc_startup_timestamp: int
+ * }
+ *
+ * @psalm-type TLabel = array{
+ *     key: non-empty-string,
+ *     value: string
+ * }
+ *
+ * @psalm-type TItem = array{
+ *     name: string,
+ *     value: non-negative-int,
+ *     unit: mixed,
+ *     labels: list<TLabel>
+ * }
+ *
+ * @psalm-type TMeta = array{
+ *     window_size_seconds: int,
+ *     utc_now_timestamp: positive-int
+ * }
+ *
+ * @psalm-type TRemediationComponents = array{
+ *     name: string,
+ *     type?: string,
+ *     last_pull?: positive-int,
+ *     version: string,
+ *     os?: TOS,
+ *     feature_flags?: array,
+ *     utc_startup_timestamp: int,
+ *     metrics: list{
+ *         0: array{
+ *             meta: TMeta,
+ *             items: list<TItem>
+ *         }
+ *     }
+ * }
  */
 class Metrics
 {
     /**
-     * @var array
+     * @var list<TItem>
      */
     private $items;
     /**
-     * @var array
+     * @var TMeta
      */
     private $meta;
     /**
-     * @var array
+     * @var TMetric
      */
     private $properties;
 
+    /**
+     * @param TMetric $properties
+     * @param TMeta $meta
+     * @param list<TItem> $items
+     */
     public function __construct(
         array $properties,
         array $meta,
@@ -46,6 +99,11 @@ class Metrics
         $this->configureItems($items);
     }
 
+    /**
+     * @return array{
+     *     remediation_components: list{0: TRemediationComponents}
+     * }
+     */
     public function toArray(): array
     {
         return [

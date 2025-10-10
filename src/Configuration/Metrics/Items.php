@@ -20,7 +20,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 class Items extends AbstractConfiguration
 {
-    /** @var array<string> The list of each configuration tree key */
+    /** @var list<string> The list of each configuration tree key */
     protected $keys = [
         'name',
         'value',
