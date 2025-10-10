@@ -62,7 +62,6 @@ class Bouncer extends AbstractClient
      *        'version' => (string) Bouncer version
      *        'feature_flags' => (array) Should be empty for bouncer
      *        'utc_startup_timestamp' => (integer) Bouncer startup timestamp
-     *        'os' => (array) OS information
      *        'os' = [
      *            'name' => (string) OS name
      *            'version' => (string) OS version
