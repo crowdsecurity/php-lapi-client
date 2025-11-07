@@ -27,11 +27,7 @@
         </UndefinedMethod>
         <PropertyTypeCoercion>
             <errorLevel type="suppress">
-                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$properties"/>
-                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$source"/>
-                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$decisions"/>
-                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$events"/>
-                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$meta"/>
+                <file name="src/Payload/Alert.php"/>
             </errorLevel>
         </PropertyTypeCoercion>
     </issueHandlers>
