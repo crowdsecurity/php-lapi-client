@@ -25,5 +25,14 @@
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
             </errorLevel>
         </UndefinedMethod>
+        <PropertyTypeCoercion>
+            <errorLevel type="suppress">
+                <referencedMethod name="CrowdSec\LapiClient\Payload\Alert::configureProperties"/>
+                <referencedMethod name="CrowdSec\LapiClient\Payload\Alert::configureSource"/>
+                <referencedMethod name="CrowdSec\LapiClient\Payload\Alert::configureDecisions"/>
+                <referencedMethod name="CrowdSec\LapiClient\Payload\Alert::configureEvents"/>
+                <referencedMethod name="CrowdSec\LapiClient\Payload\Alert::configureMetaList"/>
+            </errorLevel>
+        </PropertyTypeCoercion>
     </issueHandlers>
 </psalm>

@@ -131,7 +131,7 @@ class Alert implements \JsonSerializable
         $this->configureSource($processor, $source);
         $this->configureDecisions($processor, $decisions);
         $this->configureEvents($processor, $events);
-        $this->configureMetaList($processor, $meta);
+        $this->configureMeta($processor, $meta);
         $this->labels = \array_filter($labels);
     }
 
@@ -212,7 +212,7 @@ class Alert implements \JsonSerializable
     /**
      * @param list<TMeta> $list
      */
-    private function configureMetaList(Processor $processor, array $list): void
+    private function configureMeta(Processor $processor, array $list): void
     {
         $this->meta = $this->handleList($processor, new Meta(), $list);
     }
