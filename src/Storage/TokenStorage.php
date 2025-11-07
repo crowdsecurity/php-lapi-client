@@ -42,7 +42,7 @@ final class TokenStorage implements TokenStorageInterface
             if (200 !== $tokenInfo['code']) {
                 return null;
             }
-            \assert(!empty($tokenInfo['token']));
+            \assert(isset($tokenInfo['token']));
             $ci
                 ->set($tokenInfo['token'])
                 ->expiresAt(new DateTime($tokenInfo['expire']));
