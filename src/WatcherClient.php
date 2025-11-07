@@ -43,8 +43,8 @@ class WatcherClient extends AbstractLapiClient
             'scenarios' => $scenarios,
         ];
         if ($this->configs['auth_type'] === Constants::AUTH_KEY) {
-            $data['machine_id'] = $this->configs['machine_id'];
-            $data['password'] = $this->configs['password'];
+            $data['machine_id'] = $this->configs['machine_id'] ?? '';
+            $data['password'] = $this->configs['password'] ?? '';
         }
 
         return $this->manageRequest(
