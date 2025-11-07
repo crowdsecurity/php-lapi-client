@@ -217,6 +217,9 @@ class Alert implements \JsonSerializable
         $this->meta = $this->handleList($processor, new Meta(), $list);
     }
 
+    /**
+     * @return list<TMeta>
+     */
     private function handleList(Processor $processor, AbstractConfiguration $param, array $list): array
     {
         $result = [];
