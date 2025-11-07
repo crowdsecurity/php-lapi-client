@@ -157,14 +157,10 @@ class Alert implements \JsonSerializable
     public function toArray(): array
     {
         $result = $this->properties;
+        $result['events'] = $this->events;
+        $result['source'] = $this->source;
         if ([] !== $this->decisions) {
             $result['decisions'] = $this->decisions;
-        }
-        if ([] !== $this->events) {
-            $result['events'] = $this->events;
-        }
-        if (null !== $this->source) {
-            $result['source'] = $this->source;
         }
         if ([] !== $this->meta) {
             $result['meta'] = $this->meta;
