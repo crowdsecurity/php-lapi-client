@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CrowdSec\LapiClient;
 
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
+use LogicException;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -25,7 +26,7 @@ class WatcherClient extends AbstractLapiClient
     ) {
         if ($configs['auth_type'] === Constants::AUTH_KEY) {
             if (empty($configs['machine_id']) || empty($configs['password'])) {
-                throw new \LogicException('Missing required config: machine_id or password.');
+                throw new LogicException('Missing required config: machine_id or password.');
             }
         }
 
