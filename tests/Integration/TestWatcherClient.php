@@ -7,11 +7,10 @@ namespace CrowdSec\LapiClient\Tests\Integration;
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\LapiClient\ClientException;
 use CrowdSec\LapiClient\Constants;
+use CrowdSec\LapiClient\WatcherClient;
 
-class WatcherClient extends AbstractClient
+class TestWatcherClient extends AbstractClient
 {
-    public const WATCHER_LOGIN_ENDPOINT = '/v1/watchers/login';
-
     public const WATCHER_DECISIONS_ENDPOINT = '/v1/decisions';
 
     public const WATCHER_ALERT_ENDPOINT = '/v1/alerts';
@@ -25,6 +24,9 @@ class WatcherClient extends AbstractClient
      */
     protected $headers = [];
 
+    /** @var WatcherClient */
+    protected $watcher;
+
     public function __construct(array $configs)
     {
         $this->configs = $configs;
@@ -37,6 +39,8 @@ class WatcherClient extends AbstractClient
         $this->configs['tls_cert_path'] = $agentTlsPath . '/agent.pem';
         $this->configs['tls_key_path'] = $agentTlsPath . '/agent-key.pem';
         $this->configs['tls_verify_peer'] = false;
+
+        $this->watcher = new WatcherClient($this->configs);
 
         parent::__construct($this->configs);
     }
@@ -96,15 +100,7 @@ class WatcherClient extends AbstractClient
     private function ensureLogin(): void
     {
         if (!$this->token) {
-            $data = [
-                'scenarios' => [],
-            ];
-            $credentials = $this->manageRequest(
-                'POST',
-                self::WATCHER_LOGIN_ENDPOINT,
-                $data
-            );
-
+            $credentials = $this->watcher->login();
             $this->token = $credentials['token'];
             $this->headers['Authorization'] = 'Bearer ' . $this->token;
         }
@@ -160,8 +156,7 @@ class WatcherClient extends AbstractClient
                     'value' => $value,
                 ],
             ],
-            'events' => [
-            ],
+            'events' => [],
             'events_count' => 1,
             'labels' => null,
             'leakspeed' => '0',

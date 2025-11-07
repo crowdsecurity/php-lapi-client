@@ -25,7 +25,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *     api_url?: string,
  *     appsec_url?: string,
  *     auth_type?: string,
- *     api_key: string,
+ *     api_key?: string,
  *     tls_cert_path?: string,
  *     tls_key_path?: string,
  *     tls_ca_cert_path?: string,
@@ -34,6 +34,8 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *     api_connect_timeout?: int,
  *     appsec_timeout_ms?: int,
  *     appsec_connect_timeout_ms?: int,
+ *     machine_id?: non-empty-string,
+ *     password?: non-empty-string
  * }
  */
 class Configuration extends AbstractConfiguration
@@ -54,6 +56,8 @@ class Configuration extends AbstractConfiguration
         'api_connect_timeout',
         'appsec_timeout_ms',
         'appsec_connect_timeout_ms',
+        'machine_id',
+        'password',
     ];
 
     /**
@@ -92,6 +96,7 @@ class Configuration extends AbstractConfiguration
         $this->addConnectionNodes($rootNode);
         $this->addAppSecNodes($rootNode);
         $this->validate($rootNode);
+        $this->watcher($rootNode);
 
         return $treeBuilder;
     }
@@ -105,7 +110,7 @@ class Configuration extends AbstractConfiguration
      *
      * @throws \InvalidArgumentException
      */
-    private function addAppSecNodes($rootNode)
+    private function addAppSecNodes($rootNode): void
     {
         $rootNode->children()
             ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
@@ -123,7 +128,7 @@ class Configuration extends AbstractConfiguration
      *
      * @throws \InvalidArgumentException
      */
-    private function addConnectionNodes($rootNode)
+    private function addConnectionNodes($rootNode): void
     {
         $rootNode->children()
             ->scalarNode('api_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_LAPI_URL)->end()
@@ -162,7 +167,7 @@ class Configuration extends AbstractConfiguration
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    private function validate($rootNode)
+    private function validate($rootNode): void
     {
         $rootNode
             ->validate()
@@ -194,6 +199,14 @@ class Configuration extends AbstractConfiguration
                     return false;
                 })
                 ->thenInvalid('CA path is required for tls authentification with verify_peer.')
+        ->end();
+    }
+
+    private function watcher(ArrayNodeDefinition $rootNode): void
+    {
+        $rootNode->children()
+            ->stringNode('machine_id')->end()
+            ->stringNode('password')->end()
         ->end();
     }
 }

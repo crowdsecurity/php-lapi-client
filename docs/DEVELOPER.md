@@ -82,8 +82,8 @@ ddev config --project-type=php --php-version=8.2 --project-name=crowdsec-lapi-cl
 - Add some DDEV add-ons:
 
 ```bash
-ddev get julienloizelet/ddev-tools
-ddev get julienloizelet/ddev-crowdsec-php
+ddev add-on get julienloizelet/ddev-tools
+ddev add-on get julienloizelet/ddev-crowdsec-php
 ```
 
 - Clone this repo sources in a `my-code/lapi-client` folder:
