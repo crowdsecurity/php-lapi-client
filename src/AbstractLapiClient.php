@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Processor;
 abstract class AbstractLapiClient extends AbstractClient
 {
     /**
-     * @var array|TBouncerConfig
+     * @var TBouncerConfig
      */
     protected $configs;
     /**

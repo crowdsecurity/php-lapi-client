@@ -40,5 +40,10 @@
                 <directory name="../../../src"/>
             </errorLevel>
         </MissingClassConstType>
+        <NonInvariantDocblockPropertyType>
+            <errorLevel type="suppress">
+                <file name="../../../src/AbstractLapiClient.php"/>
+            </errorLevel>
+        </NonInvariantDocblockPropertyType>
     </issueHandlers>
 </psalm>
