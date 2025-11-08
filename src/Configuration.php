@@ -40,7 +40,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 class Configuration extends AbstractConfiguration
 {
-    /** @var list<string> The list of each configuration tree key */
+    /** @var string[] The list of each configuration tree key */
     protected $keys = [
         'user_agent_suffix',
         'user_agent_version',

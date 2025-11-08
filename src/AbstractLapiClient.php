@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Processor;
 abstract class AbstractLapiClient extends AbstractClient
 {
     /**
-     * @var TBouncerConfig
+     * @var array|TBouncerConfig
      */
     protected $configs;
     /**
@@ -30,7 +30,7 @@ abstract class AbstractLapiClient extends AbstractClient
     ) {
         $this->configure($configs);
         $this->headers = [Constants::HEADER_LAPI_USER_AGENT => $this->formatUserAgent($this->configs)];
-        if (!empty($this->configs['api_key'])) {
+        if (isset($this->configs['api_key'])) {
             $this->headers[Constants::HEADER_LAPI_API_KEY] = $this->configs['api_key'];
         }
         parent::__construct($this->configs, $requestHandler, $logger);
