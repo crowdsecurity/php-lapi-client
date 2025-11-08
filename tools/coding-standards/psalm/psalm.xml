@@ -34,5 +34,10 @@
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$meta"/>
             </errorLevel>
         </PropertyTypeCoercion>
+        <MissingClassConstType>
+            <errorLevel type="suppress">
+                <directory name="../../../src"/>
+            </errorLevel>
+        </MissingClassConstType>
     </issueHandlers>
 </psalm>
