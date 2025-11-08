@@ -73,9 +73,9 @@ use Symfony\Component\Config\Definition\Processor;
  *     remediation: bool,
  *     source: TSource,
  *     events: list<TEvent>,
- *     decisions: list<TDecision>,
- *     meta: list<TMeta>,
- *     labels: list<non-empty-string>
+ *     decisions?: list<TDecision>,
+ *     meta?: list<TMeta>,
+ *     labels?: list<non-empty-string>
  * }
  */
 class Alert implements \JsonSerializable
@@ -157,8 +157,8 @@ class Alert implements \JsonSerializable
     public function toArray(): array
     {
         $result = $this->properties;
-        $result['events'] = $this->events;
         $result['source'] = $this->source;
+        $result['events'] = $this->events;
         if ([] !== $this->decisions) {
             $result['decisions'] = $this->decisions;
         }
