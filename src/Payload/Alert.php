@@ -137,7 +137,6 @@ class Alert implements \JsonSerializable
 
     /**
      * @param TAlertFull $data
-     * @return void
      */
     public static function fromArray(array $data): self
     {
