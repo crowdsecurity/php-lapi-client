@@ -7,7 +7,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 class Decision extends AbstractConfiguration
 {
-    /** @var list<string> The list of each configuration tree key */
+    /** @var string[] The list of each configuration tree key */
     protected $keys = [
         'origin',
         'type',
