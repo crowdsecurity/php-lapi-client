@@ -63,13 +63,13 @@ class Items extends AbstractConfiguration
                     ->variableNode('labels')
                         // Remove empty labels totally
                         ->beforeNormalization()
-                            ->ifTrue(function ($value) {
+                            ->ifTrue(function (mixed $value) {
                                 return empty($value);
                             })
                             ->thenUnset()
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($value) {
+                            ->ifTrue(function (mixed $value) {
                                 // Ensure all values in the array are strings
                                 if (!is_array($value)) {
                                     return true;

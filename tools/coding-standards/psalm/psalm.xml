@@ -18,6 +18,7 @@
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::integerNode"/>
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::scalarNode"/>
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::stringNode"/>
             </errorLevel>
         </UndefinedInterfaceMethod>
         <UndefinedMethod>
@@ -31,7 +32,7 @@
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$source"/>
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$decisions"/>
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$events"/>
-                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$meta"/>
+                <referencedProperty name="CrowdSec\LapiClient\Metrics::$items"/>
             </errorLevel>
         </PropertyTypeCoercion>
         <MissingClassConstType>

@@ -132,7 +132,7 @@ class Alert implements \JsonSerializable
         $this->configureDecisions($processor, $decisions);
         $this->configureEvents($processor, $events);
         $this->configureMeta($processor, $meta);
-        $this->labels = \array_filter($labels);
+        $this->labels = $labels;
     }
 
     /**
