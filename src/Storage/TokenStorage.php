@@ -24,7 +24,8 @@ final class TokenStorage implements TokenStorageInterface
      */
     private $scenarios;
 
-    public function __construct(WatcherClient $watcher, CacheItemPoolInterface $cache, array $scenarios = []) {
+    public function __construct(WatcherClient $watcher, CacheItemPoolInterface $cache, array $scenarios = [])
+    {
         $this->watcher = $watcher;
         $this->cache = $cache;
         $this->scenarios = $scenarios;
