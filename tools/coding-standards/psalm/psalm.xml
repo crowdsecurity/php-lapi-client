@@ -46,12 +46,12 @@
             </errorLevel>
         </NonInvariantDocblockPropertyType>
         <MoreSpecificReturnType>
-            <errorLevel type="info">
+            <errorLevel type="suppress">
                 <file name="../../../src/AlertsClient.php"/>
             </errorLevel>
         </MoreSpecificReturnType>
         <LessSpecificReturnStatement>
-            <errorLevel type="info">
+            <errorLevel type="suppress">
                 <file name="../../../src/AlertsClient.php"/>
             </errorLevel>
         </LessSpecificReturnStatement>
