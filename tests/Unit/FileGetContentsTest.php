@@ -17,7 +17,6 @@ namespace CrowdSec\LapiClient\Tests\Unit;
  * @license   MIT License
  */
 
-use CrowdSec\Common\Client\HttpMessage\Request;
 use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\TimeoutException;

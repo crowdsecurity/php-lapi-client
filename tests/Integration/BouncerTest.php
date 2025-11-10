@@ -36,7 +36,7 @@ final class BouncerTest extends TestCase
      */
     protected $useTls;
     /**
-     * @var WatcherClient
+     * @var TestWatcherClient
      */
     protected $watcherClient;
 
@@ -64,7 +64,7 @@ final class BouncerTest extends TestCase
         }
 
         $this->configs = $bouncerConfigs;
-        $this->watcherClient = new WatcherClient($this->configs);
+        $this->watcherClient = new TestWatcherClient($this->configs);
         // Delete all decisions
         $this->watcherClient->deleteAllDecisions();
         usleep(200000); // 200ms

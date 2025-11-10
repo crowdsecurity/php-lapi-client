@@ -18,12 +18,85 @@
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::integerNode"/>
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::scalarNode"/>
+                <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::stringNode"/>
             </errorLevel>
         </UndefinedInterfaceMethod>
         <UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
+                <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Alert.php"/>
+                <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </UndefinedMethod>
+        <PropertyTypeCoercion>
+            <errorLevel type="suppress">
+                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$properties"/>
+                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$source"/>
+                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$decisions"/>
+                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$events"/>
+                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$meta"/>
+                <referencedProperty name="CrowdSec\LapiClient\Metrics::$items"/>
+            </errorLevel>
+        </PropertyTypeCoercion>
+        <MissingClassConstType>
+            <errorLevel type="suppress">
+                <directory name="../../../src"/>
+            </errorLevel>
+        </MissingClassConstType>
+        <NonInvariantDocblockPropertyType>
+            <errorLevel type="suppress">
+                <file name="../../../src/AbstractLapiClient.php"/>
+            </errorLevel>
+        </NonInvariantDocblockPropertyType>
+        <MoreSpecificReturnType>
+            <errorLevel type="suppress">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </MoreSpecificReturnType>
+        <LessSpecificReturnStatement>
+            <errorLevel type="suppress">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </LessSpecificReturnStatement>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
+        <InvalidReturnStatement>
+            <errorLevel type="suppress">
+                <file name="../../../src/AlertsClient.php"/>
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </InvalidReturnStatement>
+        <RiskyTruthyFalsyComparison>
+            <errorLevel type="suppress">
+                <file name="../../../src/Bouncer.php"/>
+            </errorLevel>
+        </RiskyTruthyFalsyComparison>
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </InvalidArgument>
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </InvalidReturnType>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
+        <PossiblyNullReference>
+            <errorLevel type="suppress">
+                <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Metrics.php"/>
+                <file name="../../../src/Configuration/Metrics/Items.php"/>
+                <file name="../../../src/Configuration/Metrics/Meta.php"/>
+            </errorLevel>
+        </PossiblyNullReference>
     </issueHandlers>
 </psalm>

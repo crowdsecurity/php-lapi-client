@@ -92,7 +92,7 @@ class Metrics
     public function __construct(
         array $properties,
         array $meta,
-        array $items = []
+        array $items = [],
     ) {
         $this->configureProperties($properties);
         $this->configureMeta($meta);

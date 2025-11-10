@@ -20,7 +20,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 class Items extends AbstractConfiguration
 {
-    /** @var list<string> The list of each configuration tree key */
+    /** @var string[] The list of each configuration tree key */
     protected $keys = [
         'name',
         'value',
@@ -63,13 +63,13 @@ class Items extends AbstractConfiguration
                     ->variableNode('labels')
                         // Remove empty labels totally
                         ->beforeNormalization()
-                            ->ifTrue(function ($value) {
+                            ->ifTrue(function (mixed $value) {
                                 return empty($value);
                             })
                             ->thenUnset()
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($value) {
+                            ->ifTrue(function (mixed $value) {
                                 // Ensure all values in the array are strings
                                 if (!is_array($value)) {
                                     return true;
