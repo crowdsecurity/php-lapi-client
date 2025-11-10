@@ -62,7 +62,7 @@
         </InvalidReturnStatement>
         <RiskyTruthyFalsyComparison>
             <errorLevel type="suppress">
-                <file name="../../../src/Douncer.php"/>
+                <file name="../../../src/Bouncer.php"/>
             </errorLevel>
         </RiskyTruthyFalsyComparison>
         <InvalidArgument>
