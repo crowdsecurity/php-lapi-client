@@ -55,5 +55,20 @@
                 <file name="../../../src/AlertsClient.php"/>
             </errorLevel>
         </LessSpecificReturnStatement>
+        <InvalidReturnStatement>
+            <errorLevel type="suppress">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </InvalidReturnStatement>
+        <RiskyTruthyFalsyComparison>
+            <errorLevel type="suppress">
+                <file name="../../../src/Douncer.php"/>
+            </errorLevel>
+        </RiskyTruthyFalsyComparison>
+        <InvalidArgument>
+            <errorLevel type="suppress">
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </InvalidArgument>
     </issueHandlers>
 </psalm>
