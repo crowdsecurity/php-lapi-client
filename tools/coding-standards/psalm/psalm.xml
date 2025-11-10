@@ -25,6 +25,7 @@
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
                 <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Alert.php"/>
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </UndefinedMethod>
