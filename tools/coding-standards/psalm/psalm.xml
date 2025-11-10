@@ -45,5 +45,15 @@
                 <file name="../../../src/AbstractLapiClient.php"/>
             </errorLevel>
         </NonInvariantDocblockPropertyType>
+        <MoreSpecificReturnType>
+            <errorLevel type="info">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </MoreSpecificReturnType>
+        <LessSpecificReturnStatement>
+            <errorLevel type="info">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </LessSpecificReturnStatement>
     </issueHandlers>
 </psalm>
