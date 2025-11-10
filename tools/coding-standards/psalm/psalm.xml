@@ -24,6 +24,8 @@
         <UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
+                <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </UndefinedMethod>
         <PropertyTypeCoercion>
@@ -87,5 +89,13 @@
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </PropertyNotSetInConstructor>
+        <PossiblyNullReference>
+            <errorLevel type="suppress">
+                <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Metrics.php"/>
+                <file name="../../../src/Configuration/Metrics/Items.php"/>
+                <file name="../../../src/Configuration/Metrics/Meta.php"/>
+            </errorLevel>
+        </PossiblyNullReference>
     </issueHandlers>
 </psalm>
