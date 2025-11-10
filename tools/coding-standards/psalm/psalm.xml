@@ -55,6 +55,11 @@
                 <file name="../../../src/AlertsClient.php"/>
             </errorLevel>
         </LessSpecificReturnStatement>
+        <UndefinedDocblockClass>
+            <errorLevel type="suppress">
+                <file name="../../../src/AlertsClient.php"/>
+            </errorLevel>
+        </UndefinedDocblockClass>
         <InvalidReturnStatement>
             <errorLevel type="suppress">
                 <file name="../../../src/AlertsClient.php"/>
@@ -70,5 +75,10 @@
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </InvalidArgument>
+        <PropertyNotSetInConstructor>
+            <errorLevel type="suppress">
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </PropertyNotSetInConstructor>
     </issueHandlers>
 </psalm>
