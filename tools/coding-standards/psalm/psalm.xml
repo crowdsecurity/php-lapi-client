@@ -32,6 +32,7 @@
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$source"/>
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$decisions"/>
                 <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$events"/>
+                <referencedProperty name="CrowdSec\LapiClient\Payload\Alert::$meta"/>
                 <referencedProperty name="CrowdSec\LapiClient\Metrics::$items"/>
             </errorLevel>
         </PropertyTypeCoercion>
@@ -63,6 +64,7 @@
         <InvalidReturnStatement>
             <errorLevel type="suppress">
                 <file name="../../../src/AlertsClient.php"/>
+                <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </InvalidReturnStatement>
         <RiskyTruthyFalsyComparison>
@@ -75,6 +77,11 @@
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </InvalidArgument>
+        <InvalidReturnType>
+            <errorLevel type="suppress">
+                <file name="../../../src/Payload/Alert.php"/>
+            </errorLevel>
+        </InvalidReturnType>
         <PropertyNotSetInConstructor>
             <errorLevel type="suppress">
                 <file name="../../../src/Payload/Alert.php"/>
