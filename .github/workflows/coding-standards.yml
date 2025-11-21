@@ -82,6 +82,7 @@ jobs:
           ddev composer update --working-dir ./${{env.EXTENSION_PATH}}/tools/coding-standards
 
       - name: Run PHPCS
+        if: contains(fromJson('["7.4","8.0","8.1","8.2","8.3", "8.4"]'),matrix.php-version)
         run: ddev phpcs ./${{env.EXTENSION_PATH}}/tools/coding-standards ${{env.EXTENSION_PATH}}/src PSR12
 
       - name: Run PHPMD
