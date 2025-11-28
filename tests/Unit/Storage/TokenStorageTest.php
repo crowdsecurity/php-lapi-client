@@ -15,7 +15,7 @@ final class TokenStorageTest extends TestCase
     public function testLoginSuccess(): void
     {
         $watcher = $this->createMock(WatcherClient::class);
-        $expire = time() + 3600;
+        $expire = (new \DateTime('+1 hour'))->format('Y-m-d\TH:i:s\Z');
         $watcher
             ->expects(self::once())
             ->method('login')

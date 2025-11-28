@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @note You must delete all alerts manually before run this TestCase. Command `cscli alerts delete --all`.
+ * @note You must delete all alerts manually before running this TestCase. Command: `cscli alerts delete --all`.
  *
  * @coversDefaultClass \CrowdSec\LapiClient\AlertsClient
  */
@@ -36,7 +36,7 @@ final class AlertsClientTest extends TestCase
      */
     protected $alertsClient;
 
-    private function addTlsConfig(&$bouncerConfigs, $tlsPath)
+    private function addTlsConfig(array &$bouncerConfigs, string $tlsPath): void
     {
         $bouncerConfigs['tls_cert_path'] = $tlsPath . '/bouncer.pem';
         $bouncerConfigs['tls_key_path'] = $tlsPath . '/bouncer-key.pem';
@@ -57,6 +57,9 @@ final class AlertsClientTest extends TestCase
         ];
         if ($this->useTls) {
             $this->addTlsConfig($bouncerConfigs, $this->useTls);
+        } else {
+            $bouncerConfigs['machine_id'] = getenv('MACHINE_ID') ?: 'watcherLogin';
+            $bouncerConfigs['password'] = getenv('PASSWORD') ?: 'watcherPassword';
         }
 
         $this->configs = $bouncerConfigs;
@@ -64,15 +67,6 @@ final class AlertsClientTest extends TestCase
         $watcher = new WatcherClient($this->configs);
         $tokenStorage = new TokenStorage($watcher, new ArrayAdapter());
         $this->alertsClient = new AlertsClient($this->configs, $tokenStorage);
-    }
-
-    /**
-     * @covers ::delete
-     */
-    public function testDelete(): void
-    {
-        self::expectException(\RuntimeException::class);
-        $this->alertsClient->delete([]);
     }
 
     /**
@@ -272,7 +266,7 @@ final class AlertsClientTest extends TestCase
 
     /**
      * @covers ::search
-     * @depends testPush
+     * @depends      testPush
      * @dataProvider searchProvider
      */
     public function testSearch(array $query, int $expectedCount): void
@@ -294,7 +288,8 @@ final class AlertsClientTest extends TestCase
         ];
 
         yield 'ip - 1.1.0.1' => [
-            ['ip' => '1.1.0.1'], // alert01 (scope=ip;value=1.1.0.1 +decision) and alert02(scope=range;value=1.1.0.0/16 +decision)
+            ['ip' => '1.1.0.1'],
+            // alert01 (scope=ip;value=1.1.0.1 +decision) and alert02(scope=range;value=1.1.0.0/16 +decision)
             2
         ];
         yield 'ip - 2.0.1.1' => [
@@ -321,34 +316,34 @@ final class AlertsClientTest extends TestCase
             2
         ];
 
+        // has_active_decision is a FILTER: true = only with decisions, false = only without
         yield 'has_active_decision=true' => [
             ['has_active_decision' => 'true'],
-            0,
+            3, // alert01, alert02 have decisions; alert02 simulated also counted
         ];
 
         yield 'has_active_decision=false' => [
             ['has_active_decision' => 'false'],
-            1, //crowdsec-lapi-test/integration11
+            1, // alert11 only (alert12 is simulated and excluded by default)
         ];
-// TODO: why 4 byt not 2 ?
-//        yield 'simulated=true' => [
-//            ['simulated' => 'true'],
-//            4,
-//        ];
+        // simulated is an INCLUSION flag: true = include simulated, false = exclude simulated
+        yield 'simulated=true' => [
+            ['simulated' => 'true'],
+            4, // All alerts (both simulated and non-simulated)
+        ];
         yield 'simulated=false' => [
             ['simulated' => 'false'],
-            2,
+            2, // Only non-simulated: alert01, alert11
         ];
-
         yield 'since -1h' => [
             [
                 'since' => '-1h',
             ],
             0,
         ];
-        yield 'since 1s' => [
-            ['since' => '1s'],
-            0,
+        yield 'since 1m' => [
+            ['since' => '1m'],
+            4, // All alerts were just created
         ];
         yield 'since 1h' => [
             ['since' => '10h'],

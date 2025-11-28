@@ -227,7 +227,11 @@ class Alert implements \JsonSerializable
         return $result;
     }
 
-    public function jsonSerialize(): mixed
+    /**
+     * @return array
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
     {
         return $this->toArray();
     }
