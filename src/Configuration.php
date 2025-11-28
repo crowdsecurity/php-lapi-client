@@ -205,8 +205,8 @@ class Configuration extends AbstractConfiguration
     private function watcher(ArrayNodeDefinition $rootNode): void
     {
         $rootNode->children()
-            ->stringNode('machine_id')->end()
-            ->stringNode('password')->end()
+            ->scalarNode('machine_id')->end()
+            ->scalarNode('password')->end()
         ->end();
     }
 }

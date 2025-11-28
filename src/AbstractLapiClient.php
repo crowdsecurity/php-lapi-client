@@ -80,7 +80,7 @@ abstract class AbstractLapiClient extends AbstractClient
     protected function manageAppSecRequest(
         string $method,
         array $headers = [],
-        string $rawBody = '',
+        string $rawBody = ''
     ): array {
         try {
             $this->logger->debug('Now processing a bouncer AppSec request', [

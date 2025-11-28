@@ -42,7 +42,7 @@ final class TokenStorage implements TokenStorageInterface
             \assert(isset($tokenInfo['token']));
             $ci
                 ->set($tokenInfo['token'])
-                ->expiresAt(new DateTime($tokenInfo['expire']));
+                ->expiresAt(new DateTime('@' . $tokenInfo['expire']));
             $this->cache->save($ci);
         }
         return $ci->get();

@@ -26,13 +26,13 @@ class Decision extends AbstractConfiguration
         // @formatter:off
         $rootNode
             ->children()
-                ->stringNode('origin')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('type')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('scope')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('value')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('duration')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('until')->cannotBeEmpty()->end()
-                ->stringNode('scenario')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('origin')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('type')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('scope')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('value')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('duration')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('until')->cannotBeEmpty()->end()
+                ->scalarNode('scenario')->isRequired()->cannotBeEmpty()->end()
             ->end()
         ;
         // @formatter:on

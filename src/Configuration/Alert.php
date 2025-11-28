@@ -30,14 +30,13 @@ class Alert extends AbstractConfiguration
         $treeBuilder = new TreeBuilder('alert');
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
-
         // @formatter:off
         $rootNode
             ->children()
-                ->stringNode('scenario')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('scenario_hash')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('scenario_version')->isRequired()->cannotBeEmpty()->end()
-                ->stringNode('message')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('scenario')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('scenario_hash')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('scenario_version')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('message')->isRequired()->cannotBeEmpty()->end()
                 ->integerNode('events_count')->isRequired()->min(0)->end()
                 ->scalarNode('start_at')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('stop_at')->isRequired()->cannotBeEmpty()->end()
@@ -48,7 +47,7 @@ class Alert extends AbstractConfiguration
             ->end()
         ;
         // @formatter:on
-
+        
         return $treeBuilder;
     }
 }

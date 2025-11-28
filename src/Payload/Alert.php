@@ -112,7 +112,7 @@ class Alert implements \JsonSerializable
 
     /**
      * @param TProps $properties
-     * @param TSource $source
+     * @param ?TSource $source
      * @param list<TEvent> $events
      * @param list<TDecision> $decisions
      * @param list<TMeta> $meta
@@ -120,7 +120,7 @@ class Alert implements \JsonSerializable
      */
     public function __construct(
         array $properties,
-        array $source,
+        ?array $source,
         array $events = [],
         array $decisions = [],
         array $meta = [],
@@ -156,7 +156,9 @@ class Alert implements \JsonSerializable
     public function toArray(): array
     {
         $result = $this->properties;
-        $result['source'] = $this->source;
+        if (null !== $this->source) {
+            $result['source'] = $this->source;
+        }
         $result['events'] = $this->events;
         if ([] !== $this->decisions) {
             $result['decisions'] = $this->decisions;
