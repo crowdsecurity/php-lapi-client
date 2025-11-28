@@ -83,7 +83,7 @@ class AlertTest extends TestCase
             $minimal['decisions'],
             $minimal['source'],
             $minimal['meta'],
-            $minimal['labels'],
+            $minimal['labels']
         );
         yield 'minimal example' => [
             $minimal,

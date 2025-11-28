@@ -6,6 +6,7 @@ namespace CrowdSec\LapiClient\Tests\Integration;
 
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;
+use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 use CrowdSec\LapiClient\WatcherClient;
 use PHPUnit\Framework\TestCase;
 
@@ -20,7 +21,7 @@ final class WatcherClientTest extends TestCase
         if (!$agentTlsPath) {
             throw new \Exception('Using TLS auth for agent is required. Please set AGENT_TLS_PATH env.');
         }
-        
+
         $watcherConfigs = [
             'api_url' => getenv('LAPI_URL'),
             'appsec_url' => getenv('APPSEC_URL'),
@@ -32,7 +33,7 @@ final class WatcherClientTest extends TestCase
         ];
 
         $watcher = new WatcherClient($watcherConfigs);
-        self::assertLoginResult($watcher->login());
+        $this->assertLoginResult($watcher->login());
     }
 
     public function testLoginApiKey(): void
@@ -51,17 +52,17 @@ final class WatcherClientTest extends TestCase
         ];
 
         $watcher = new WatcherClient($watcherConfigs);
-        self::assertLoginResult($watcher->login());
+        $this->assertLoginResult($watcher->login());
     }
 
-    private static function assertLoginResult(array $data): void
+    private function assertLoginResult(array $data): void
     {
         self::assertArrayHasKey('code', $data);
         self::assertArrayHasKey('expire', $data);
         self::assertArrayHasKey('token', $data);
 
         self::assertSame(200, $data['code']);
-        self::assertMatchesRegularExpression('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $data['expire']);
+        PHPUnitUtil::assertRegExp($this, '/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/', $data['expire']);
         // JWT
         $parts = explode('.', $data['token']);
         self::assertCount(3, $parts);
