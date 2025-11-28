@@ -36,33 +36,20 @@ final class AlertsClientTest extends TestCase
      */
     protected $alertsClient;
 
-    private function addTlsConfig(array &$bouncerConfigs, string $tlsPath): void
-    {
-        $bouncerConfigs['tls_cert_path'] = $tlsPath . '/bouncer.pem';
-        $bouncerConfigs['tls_key_path'] = $tlsPath . '/bouncer-key.pem';
-        $bouncerConfigs['tls_ca_cert_path'] = $tlsPath . '/ca-chain.pem';
-        $bouncerConfigs['tls_verify_peer'] = true;
-    }
-
     protected function setUp(): void
     {
-        $this->useTls = (string)getenv('BOUNCER_TLS_PATH');
-
-        $bouncerConfigs = [
+        $watcherConfigs = [
             'auth_type' => $this->useTls ? Constants::AUTH_TLS : Constants::AUTH_KEY,
             'api_key' => getenv('BOUNCER_KEY'),
             'api_url' => getenv('LAPI_URL'),
             'appsec_url' => getenv('APPSEC_URL'),
             'user_agent_suffix' => TestConstants::USER_AGENT_SUFFIX,
         ];
-        if ($this->useTls) {
-            $this->addTlsConfig($bouncerConfigs, $this->useTls);
-        } else {
-            $bouncerConfigs['machine_id'] = getenv('MACHINE_ID') ?: 'watcherLogin';
-            $bouncerConfigs['password'] = getenv('PASSWORD') ?: 'watcherPassword';
-        }
 
-        $this->configs = $bouncerConfigs;
+        $watcherConfigs['machine_id'] = getenv('MACHINE_ID') ?: 'watcherLogin';
+        $watcherConfigs['password'] = getenv('PASSWORD') ?: 'watcherPassword';
+
+        $this->configs = $watcherConfigs;
 
         $watcher = new WatcherClient($this->configs);
         $tokenStorage = new TokenStorage($watcher, new ArrayAdapter());

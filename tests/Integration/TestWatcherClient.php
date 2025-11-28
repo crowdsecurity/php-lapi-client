@@ -11,10 +11,6 @@ use CrowdSec\LapiClient\WatcherClient;
 
 class TestWatcherClient extends AbstractClient
 {
-    public const WATCHER_DECISIONS_ENDPOINT = '/v1/decisions';
-
-    public const WATCHER_ALERT_ENDPOINT = '/v1/alerts';
-
     public const HOURS24 = '+24 hours';
 
     /** @var string */
@@ -113,7 +109,7 @@ class TestWatcherClient extends AbstractClient
 
         $this->manageRequest(
             'DELETE',
-            self::WATCHER_DECISIONS_ENDPOINT,
+            Constants::DECISIONS_FILTER_ENDPOINT,
             []
         );
     }
@@ -150,7 +146,7 @@ class TestWatcherClient extends AbstractClient
                     'duration' => $durationString,
                     'origin' => 'cscli',
                     'scenario' => $type . ' for scope/value (' . $scope . '/' . $value . ') for '
-                                  . $durationString . ' for PHPUnit tests',
+                        . $durationString . ' for PHPUnit tests',
                     'scope' => $this->getFinalScope($scope, $value),
                     'type' => $type,
                     'value' => $value,
@@ -175,7 +171,7 @@ class TestWatcherClient extends AbstractClient
 
         $result = $this->manageRequest(
             'POST',
-            self::WATCHER_ALERT_ENDPOINT,
+            Constants::ALERTS_ENDPOINT,
             [$body]
         );
     }

@@ -91,7 +91,7 @@ class AlertsClient extends AbstractLapiClient
         $this->login();
         return $this->manageRequest(
             'POST',
-            Constants::ALERTS,
+            Constants::ALERTS_ENDPOINT,
             $alerts
         );
     }
@@ -120,7 +120,7 @@ class AlertsClient extends AbstractLapiClient
         $this->login();
         return $this->manageRequest(
             'GET',
-            Constants::ALERTS,
+            Constants::ALERTS_ENDPOINT,
             $query
         );
     }
@@ -135,7 +135,7 @@ class AlertsClient extends AbstractLapiClient
         $this->login();
         return $this->manageRequest(
             'DELETE',
-            Constants::ALERTS,
+            Constants::ALERTS_ENDPOINT,
             $query
         );
     }
@@ -149,7 +149,7 @@ class AlertsClient extends AbstractLapiClient
         $this->login();
         $result = $this->manageRequest(
             'GET',
-            \sprintf('%s/%d', Constants::ALERTS, $id)
+            \sprintf('%s/%d', Constants::ALERTS_ENDPOINT, $id)
         );
         // workaround for muted 404 status.
         if (!isset($result['id'])) {

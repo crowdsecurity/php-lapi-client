@@ -29,7 +29,7 @@ class Constants extends CommonConstants
      */
     public const DECISIONS_STREAM_ENDPOINT = '/v1/decisions/stream';
 
-    public const ALERTS = '/v1/alerts';
+    public const ALERTS_ENDPOINT = '/v1/alerts';
 
     /**
      * @var string Authenticate current to get session ID
