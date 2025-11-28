@@ -47,7 +47,7 @@ class Alert extends AbstractConfiguration
             ->end()
         ;
         // @formatter:on
-        
+
         return $treeBuilder;
     }
 }

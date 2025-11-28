@@ -23,10 +23,10 @@ use Psr\Log\LoggerInterface;
  *     range?: string,
  *     since?: string,
  *     until?: string,
- *     simulated?: boolean,
- *     has_active_decision?: boolean,
+ *     simulated?: bool,
+ *     has_active_decision?: bool,
  *     decision_type?: string,
- *     limit?: number,
+ *     limit?: int,
  *     origin?: string
  * }
  *
@@ -38,7 +38,7 @@ use Psr\Log\LoggerInterface;
  *     range?: string,
  *     since?: string,
  *     until?: string,
- *     has_active_decision?: boolean,
+ *     has_active_decision?: bool,
  *     alert_source?: string
  * }
  *
@@ -142,7 +142,7 @@ class AlertsClient extends AbstractLapiClient
 
     /**
      * @param positive-int $id
-     * @return TStoredAlert
+     * @return ?TStoredAlert
      */
     public function getById(int $id): ?array
     {
@@ -151,11 +151,11 @@ class AlertsClient extends AbstractLapiClient
             'GET',
             \sprintf('%s/%d', Constants::ALERTS, $id)
         );
-        // workaround for mutes 404 status.
-        if (empty($result['id'])) {
-            \assert($result['message'] === 'object not found');
+        // workaround for muted 404 status.
+        if (!isset($result['id'])) {
             return null;
         }
+        /** @var TStoredAlert */
         return $result;
     }
 

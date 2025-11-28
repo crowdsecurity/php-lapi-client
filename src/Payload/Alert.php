@@ -71,17 +71,17 @@ use Symfony\Component\Config\Definition\Processor;
  *     leakspeed: string,
  *     simulated: bool,
  *     remediation: bool,
- *     source: TSource,
+ *     source?: TSource,
  *     events: list<TEvent>,
  *     decisions?: list<TDecision>,
  *     meta?: list<TMeta>,
- *     labels?: list<non-empty-string>
+ *     labels?: list<string>
  * }
  */
 class Alert implements \JsonSerializable
 {
     /**
-     * @var list<TProps>
+     * @var TProps
      */
     private $properties;
 
@@ -96,7 +96,7 @@ class Alert implements \JsonSerializable
     private $decisions = [];
 
     /**
-     * @var TSource
+     * @var ?TSource
      */
     private $source;
 
@@ -141,8 +141,20 @@ class Alert implements \JsonSerializable
     public static function fromArray(array $data): self
     {
         return new self(
-            $data,
-            $data['source'] ?? [],
+            [
+                'scenario' => $data['scenario'],
+                'scenario_hash' => $data['scenario_hash'],
+                'scenario_version' => $data['scenario_version'],
+                'message' => $data['message'],
+                'events_count' => $data['events_count'],
+                'start_at' => $data['start_at'],
+                'stop_at' => $data['stop_at'],
+                'capacity' => $data['capacity'],
+                'leakspeed' => $data['leakspeed'],
+                'simulated' => $data['simulated'],
+                'remediation' => $data['remediation'],
+            ],
+            $data['source'] ?? null,
             $data['events'] ?? [],
             $data['decisions'] ?? [],
             $data['meta'] ?? [],
