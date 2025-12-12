@@ -1,8 +1,6 @@
 name: Unit & integration tests
 on:
   push:
-    branches:
-      - main
     paths-ignore:
       - "**.md"
   pull_request:
@@ -59,8 +57,8 @@ jobs:
 
       - name: Add-ons install
         run: |
-          ddev get julienloizelet/ddev-tools
-          ddev get julienloizelet/ddev-crowdsec-php
+          ddev add-on get julienloizelet/ddev-tools
+          ddev add-on get julienloizelet/ddev-crowdsec-php
 
       - name: Prepare for TLS tests
         run: |
@@ -89,7 +87,7 @@ jobs:
         run: ddev create-watcher
 
       - name: Clone sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: ${{env.EXTENSION_PATH}}
 

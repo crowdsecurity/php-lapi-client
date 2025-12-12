@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3", "8.4"]
+        php-version: [ "7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3", "8.4" ]
 
     name: Unit and integration test
     runs-on: ubuntu-20.04
@@ -104,20 +104,20 @@ jobs:
 
       - name: Clone Lapi Client files
         if: inputs.is_call != true
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: ${{env.EXTENSION_PATH}}
 
       - name: Clone Lapi Client files
         if: inputs.is_call == true
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ env.LAPI_CLIENT_REPO }}
           path: ${{env.EXTENSION_PATH}}
           ref: "main"
 
       - name: Clone PHP common files
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ steps.set-common-data.outputs.repo}}
           ref: ${{ steps.set-common-data.outputs.branch  }}
