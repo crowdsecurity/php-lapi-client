@@ -18,7 +18,7 @@ use CrowdSec\Common\Constants as CommonConstants;
  */
 class Constants extends CommonConstants
 {
-    //<editor-fold desc="Endpoints">
+    // <editor-fold desc="Endpoints">
     /**
      * @var string The decisions endpoint
      */
@@ -40,7 +40,7 @@ class Constants extends CommonConstants
      * @var string The usage metrics endpoint
      */
     public const METRICS_ENDPOINT = '/v1/usage-metrics';
-    //</editor-fold desc="Endpoints">
+    // </editor-fold desc="Endpoints">
 
     /**
      * @var string The Default URL of the CrowdSec AppSec endpoint

@@ -248,12 +248,15 @@ final class AlertsClientTest extends TestCase
         ]);
         self::assertIsArray($result);
         self::assertCount(4, $result);
+
         return $result;
     }
 
     /**
      * @covers ::search
+     *
      * @depends      testPush
+     *
      * @dataProvider searchProvider
      */
     public function testSearch(array $query, int $expectedCount): void
@@ -266,22 +269,22 @@ final class AlertsClientTest extends TestCase
     {
         yield 'empty' => [
             [],
-            4
+            4,
         ];
 
         yield 'ip - no' => [
             ['ip' => '19.17.11.7'],
-            0
+            0,
         ];
 
         yield 'ip - 1.1.0.1' => [
             ['ip' => '1.1.0.1'],
             // alert01 (scope=ip;value=1.1.0.1 +decision) and alert02(scope=range;value=1.1.0.0/16 +decision)
-            2
+            2,
         ];
         yield 'ip - 2.0.1.1' => [
             ['ip' => '2.0.1.1'], // alert12 (range no decision)
-            1
+            1,
         ];
 
         yield 'scope - ip' => [
@@ -300,7 +303,7 @@ final class AlertsClientTest extends TestCase
 
         yield 'scenario' => [
             ['scenario' => 'crowdsec-lapi-test/with-decision'],
-            2
+            2,
         ];
 
         // has_active_decision is a FILTER: true = only with decisions, false = only without
@@ -382,7 +385,7 @@ final class AlertsClientTest extends TestCase
 
     public function testAlertInfoNotFound(): void
     {
-        $result = $this->alertsClient->getById(PHP_INT_MAX);
+        $result = $this->alertsClient->getById(\PHP_INT_MAX);
         self::assertNull($result);
     }
 }

@@ -26,7 +26,6 @@ use Symfony\Component\Config\Definition\Processor;
  *     simulated: bool,
  *     remediation: bool
  * }
- *
  * @psalm-type TSource = array{
  *     scope: string,
  *     value: string,
@@ -38,7 +37,6 @@ use Symfony\Component\Config\Definition\Processor;
  *     latitude?: float,
  *     longitude?: float
  * }
- *
  * @psalm-type TDecision = array{
  *     origin: string,
  *     type: string,
@@ -48,17 +46,14 @@ use Symfony\Component\Config\Definition\Processor;
  *     until?: string,
  *     scenario: string
  * }
- *
  * @psalm-type TMeta = array{
  *     key: string,
  *     value: string
  * }
- *
  * @psalm-type TEvent = array{
  *     meta: list<TMeta>,
  *     timestamp: string
  * }
- *
  * @psalm-type TAlertFull = array{
  *     scenario: string,
  *     scenario_hash: string,
@@ -111,12 +106,12 @@ class Alert implements \JsonSerializable
     private $labels = [];
 
     /**
-     * @param TProps $properties
-     * @param ?TSource $source
-     * @param list<TEvent> $events
+     * @param TProps          $properties
+     * @param ?TSource        $source
+     * @param list<TEvent>    $events
      * @param list<TDecision> $decisions
-     * @param list<TMeta> $meta
-     * @param list<string> $labels
+     * @param list<TMeta>     $meta
+     * @param list<string>    $labels
      */
     public function __construct(
         array $properties,
@@ -181,6 +176,7 @@ class Alert implements \JsonSerializable
         if ([] !== $this->labels) {
             $result['labels'] = $this->labels;
         }
+
         return $result;
     }
 
@@ -236,6 +232,7 @@ class Alert implements \JsonSerializable
         foreach ($list as $item) {
             $result[] = $processor->processConfiguration($param, [$param->cleanConfigs($item)]);
         }
+
         return $result;
     }
 

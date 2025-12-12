@@ -106,8 +106,6 @@ class Configuration extends AbstractConfiguration
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
      *
-     * @return void
-     *
      * @throws \InvalidArgumentException
      */
     private function addAppSecNodes($rootNode): void
@@ -123,8 +121,6 @@ class Configuration extends AbstractConfiguration
      * LAPI connection settings.
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException
      */
@@ -161,8 +157,6 @@ class Configuration extends AbstractConfiguration
      * Conditional validation.
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException

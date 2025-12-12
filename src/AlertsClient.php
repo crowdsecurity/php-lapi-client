@@ -29,7 +29,6 @@ use Psr\Log\LoggerInterface;
  *     limit?: int,
  *     origin?: string
  * }
- *
  * @psalm-type TDeleteQuery = array{
  *     scope?: string,
  *     value?: string,
@@ -41,7 +40,6 @@ use Psr\Log\LoggerInterface;
  *     has_active_decision?: bool,
  *     alert_source?: string
  * }
- *
  * @psalm-type TStoredAlert = array{
  *     capacity: int,
  *     created_at: string,
@@ -89,6 +87,7 @@ class AlertsClient extends AbstractLapiClient
     public function push(array $alerts): array
     {
         $this->login();
+
         return $this->manageRequest(
             'POST',
             Constants::ALERTS_ENDPOINT,
@@ -113,11 +112,13 @@ class AlertsClient extends AbstractLapiClient
      *     origin: Restrict results to this origin (ie. lists,CAPI,cscli).
      *
      * @param TSearchQuery $query
+     *
      * @return list<TStoredAlert>
      */
     public function search(array $query): array
     {
         $this->login();
+
         return $this->manageRequest(
             'GET',
             Constants::ALERTS_ENDPOINT,
@@ -133,6 +134,7 @@ class AlertsClient extends AbstractLapiClient
     public function delete(array $query): array
     {
         $this->login();
+
         return $this->manageRequest(
             'DELETE',
             Constants::ALERTS_ENDPOINT,
@@ -142,6 +144,7 @@ class AlertsClient extends AbstractLapiClient
 
     /**
      * @param positive-int $id
+     *
      * @return ?TStoredAlert
      */
     public function getById(int $id): ?array
@@ -155,6 +158,7 @@ class AlertsClient extends AbstractLapiClient
         if (!isset($result['id'])) {
             return null;
         }
+
         /** @var TStoredAlert */
         return $result;
     }
