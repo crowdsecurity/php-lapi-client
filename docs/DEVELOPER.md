@@ -9,17 +9,17 @@
 **Table of Contents**
 
 - [Local development](#local-development)
-  - [DDEV setup](#ddev-setup)
-    - [DDEV installation](#ddev-installation)
-    - [Prepare DDEV PHP environment](#prepare-ddev-php-environment)
-  - [DDEV Usage](#ddev-usage)
-    - [Use composer to update or install the lib](#use-composer-to-update-or-install-the-lib)
-    - [Unit test](#unit-test)
-    - [Integration test](#integration-test)
-    - [Coding standards](#coding-standards)
-    - [Testing timeout in the CrowdSec container](#testing-timeout-in-the-crowdsec-container)
+    - [DDEV setup](#ddev-setup)
+        - [DDEV installation](#ddev-installation)
+        - [Prepare DDEV PHP environment](#prepare-ddev-php-environment)
+    - [DDEV Usage](#ddev-usage)
+        - [Use composer to update or install the lib](#use-composer-to-update-or-install-the-lib)
+        - [Unit test](#unit-test)
+        - [Integration test](#integration-test)
+        - [Coding standards](#coding-standards)
+        - [Testing timeout in the CrowdSec container](#testing-timeout-in-the-crowdsec-container)
 - [Commit message](#commit-message)
-  - [Allowed message `type` values](#allowed-message-type-values)
+    - [Allowed message `type` values](#allowed-message-type-values)
 - [Update documentation table of contents](#update-documentation-table-of-contents)
 - [Release process](#release-process)
 
@@ -134,7 +134,7 @@ Finally, run
 In order to launch integration tests, we have to set some environment variables:
 
 ```bash
-ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --exclude-group timeout     
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --testdox --exclude-group timeout     
 ```
 
 `<BOUNCER_KEY>` should have been created and retrieved before this test by running `ddev create-bouncer`.

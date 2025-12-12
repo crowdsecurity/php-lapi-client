@@ -5,68 +5,52 @@ declare(strict_types=1);
 namespace CrowdSec\LapiClient\Tests\Integration;
 
 use CrowdSec\Common\Client\AbstractClient;
-use CrowdSec\LapiClient\ClientException;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\WatcherClient;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
+/**
+ * Test helper for setting up watcher state in integration tests.
+ *
+ * Uses WatcherClient to push alerts with decisions for testing bouncer functionality.
+ * Extends AbstractClient to make raw HTTP requests for deleting decisions.
+ */
 class TestWatcherClient extends AbstractClient
 {
     public const HOURS24 = '+24 hours';
 
+    /** @var WatcherClient */
+    private $watcher;
+
     /** @var string */
     private $token;
-    /**
-     * @var array|string[]
-     */
-    protected $headers = [];
 
-    /** @var WatcherClient */
-    protected $watcher;
+    /** @var array */
+    protected $headers = [];
 
     public function __construct(array $configs)
     {
-        $this->configs = $configs;
-        $this->headers = ['User-Agent' => 'LAPI_WATCHER_TEST/' . Constants::VERSION];
         $agentTlsPath = getenv('AGENT_TLS_PATH');
         if (!$agentTlsPath) {
             throw new \Exception('Using TLS auth for agent is required. Please set AGENT_TLS_PATH env.');
         }
-        $this->configs['auth_type'] = Constants::AUTH_TLS;
-        $this->configs['tls_cert_path'] = $agentTlsPath . '/agent.pem';
-        $this->configs['tls_key_path'] = $agentTlsPath . '/agent-key.pem';
-        $this->configs['tls_verify_peer'] = false;
+        $configs['auth_type'] = Constants::AUTH_TLS;
+        $configs['tls_cert_path'] = $agentTlsPath . '/agent.pem';
+        $configs['tls_key_path'] = $agentTlsPath . '/agent-key.pem';
+        $configs['tls_verify_peer'] = false;
 
         $cache = new ArrayAdapter();
-        $this->watcher = new WatcherClient($this->configs, $cache);
+        $this->watcher = new WatcherClient($configs, $cache);
 
-        parent::__construct($this->configs);
-    }
+        $this->headers = ['User-Agent' => 'LAPI_WATCHER_TEST/' . Constants::VERSION];
 
-    /**
-     * Make a request.
-     *
-     * @throws ClientException
-     */
-    private function manageRequest(
-        string $method,
-        string $endpoint,
-        array $parameters = []
-    ): array {
-        $this->logger->debug('', [
-            'type' => 'WATCHER_CLIENT_REQUEST',
-            'method' => $method,
-            'endpoint' => $endpoint,
-            'parameters' => $parameters,
-        ]);
-
-        return $this->request($method, $endpoint, $parameters, $this->headers);
+        parent::__construct($configs);
     }
 
     /** Set the initial watcher state */
     public function setInitialState(): void
     {
-        $this->deleteAllDecisions();
+        $this->deleteAllAlerts();
         $now = new \DateTime();
         $this->addDecision($now, '12h', '+12 hours', TestHelpers::BAD_IP, 'captcha');
         $this->addDecision($now, '24h', self::HOURS24, TestHelpers::BAD_IP . '/' . TestHelpers::IP_RANGE, 'ban');
@@ -76,8 +60,7 @@ class TestWatcherClient extends AbstractClient
     /** Set the second watcher state */
     public function setSecondState(): void
     {
-        $this->logger->info('', ['message' => 'Set "second" state']);
-        $this->deleteAllDecisions();
+        $this->deleteAllAlerts();
         $now = new \DateTime();
         $this->addDecision($now, '36h', '+36 hours', TestHelpers::NEWLY_BAD_IP, 'ban');
         $this->addDecision(
@@ -92,31 +75,54 @@ class TestWatcherClient extends AbstractClient
         $this->addDecision($now, '24h', self::HOURS24, TestHelpers::IP_FRANCE, 'ban');
     }
 
+    public function deleteAllAlerts(): void
+    {
+        $this->watcher->deleteAlerts([]);
+    }
+
     /**
-     * Ensure we retrieved a JWT to connect the API.
+     * Delete all decisions.
+     *
+     * This uses a raw HTTP request since WatcherClient doesn't have a method for
+     * deleting decisions (decisions are managed through the bouncer endpoint).
+     */
+    public function deleteAllDecisions(): void
+    {
+        $this->ensureLogin();
+
+        $this->request(
+            'DELETE',
+            Constants::DECISIONS_FILTER_ENDPOINT,
+            [],
+            $this->headers
+        );
+    }
+
+    /**
+     * Ensure we have a valid token by triggering a watcher operation.
      */
     private function ensureLogin(): void
     {
         if (!$this->token) {
-            $credentials = $this->watcher->login();
-            $this->token = $credentials['token'];
+            // Trigger authentication by searching for alerts (this will login internally)
+            $this->watcher->searchAlerts(['limit' => 1]);
+
+            // Now we need to get the token - we'll do a login call and get it from there
+            // Actually, we can't get the token from WatcherClient since login is private.
+            // We need to do our own login call.
+            $loginResponse = $this->request(
+                'POST',
+                Constants::WATCHER_LOGIN_ENDPOINT,
+                ['scenarios' => []],
+                $this->headers
+            );
+
+            $this->token = $loginResponse['token'] ?? '';
             $this->headers['Authorization'] = 'Bearer ' . $this->token;
         }
     }
 
-    public function deleteAllDecisions(): void
-    {
-        // Delete all existing decisions.
-        $this->ensureLogin();
-
-        $this->manageRequest(
-            'DELETE',
-            Constants::DECISIONS_FILTER_ENDPOINT,
-            []
-        );
-    }
-
-    protected function getFinalScope($scope, $value)
+    protected function getFinalScope(string $scope, string $value): string
     {
         $scope = (Constants::SCOPE_IP === $scope && 2 === count(explode('/', $value))) ? Constants::SCOPE_RANGE :
             $scope;
@@ -137,11 +143,11 @@ class TestWatcherClient extends AbstractClient
         string $value,
         string $type,
         string $scope = Constants::SCOPE_IP
-    ) {
+    ): void {
         $stopAt = (clone $now)->modify($dateTimeDurationString)->format('Y-m-d\TH:i:s.000\Z');
         $startAt = $now->format('Y-m-d\TH:i:s.000\Z');
 
-        $body = [
+        $alert = [
             'capacity' => 0,
             'decisions' => [
                 [
@@ -171,10 +177,6 @@ class TestWatcherClient extends AbstractClient
             'stop_at' => $stopAt,
         ];
 
-        $result = $this->manageRequest(
-            'POST',
-            Constants::ALERTS_ENDPOINT,
-            [$body]
-        );
+        $this->watcher->pushAlerts([$alert]);
     }
 }

@@ -112,8 +112,8 @@ jobs:
           github.event_name == 'push' ||
           github.event_name == 'pull_request'
         run: |
-          ddev exec -s crowdsec cscli alerts delete --all   
-          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout,appsec ./${{env.EXTENSION_PATH}}/tests/Integration
+          ddev exec -s crowdsec cscli alerts delete --all
+          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --configuration ./${{env.EXTENSION_PATH}}/tools/coding-standards/phpunit/phpunit.xml --testsuite Integration-Watcher,Integration-Bouncer --testdox --colors --exclude-group timeout,appsec
 
       - name: Run Integration tests (with TLS)
         if: |
@@ -121,8 +121,8 @@ jobs:
           github.event_name == 'push' ||
           github.event_name == 'pull_request'
         run: |
-          ddev exec -s crowdsec cscli alerts delete --all   
-          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl BOUNCER_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout,appsec ./${{env.EXTENSION_PATH}}/tests/Integration
+          ddev exec -s crowdsec cscli alerts delete --all
+          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl BOUNCER_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --configuration ./${{env.EXTENSION_PATH}}/tools/coding-standards/phpunit/phpunit.xml --testsuite Integration-Watcher,Integration-Bouncer --testdox --colors --exclude-group timeout,appsec
 
 
       - name: Run AppSec tests

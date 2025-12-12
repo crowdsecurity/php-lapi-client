@@ -73,88 +73,20 @@ final class WatcherClientTest extends AbstractClient
         );
     }
 
-    public function testLoginParams()
-    {
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
-            ->enableOriginalConstructor()
-            ->setConstructorArgs([
-                'configs' => $this->configs,
-                'cache' => $this->cache,
-            ])
-            ->onlyMethods(['request'])
-            ->getMock();
-
-        $mockClient->expects($this->exactly(1))->method('request')
-            ->with(
-                'POST',
-                Constants::WATCHER_LOGIN_ENDPOINT,
-                [
-                    'scenarios' => ['test/scenario'],
-                    'machine_id' => 'test-machine',
-                    'password' => 'test-password',
-                ],
-                $this->anything()
-            );
-
-        $mockClient->login(['test/scenario']);
-    }
-
-    public function testLoginWithTlsAuth()
+    public function testWatcherClientInitWithTlsAuth()
     {
         $tlsConfigs = [
             'auth_type' => Constants::AUTH_TLS,
-            'tls_cert_path' => '/path/to/cert',
-            'tls_key_path' => '/path/to/key',
+            'tls_cert_path' => '/path/to/cert.pem',
+            'tls_key_path' => '/path/to/key.pem',
         ];
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
-            ->enableOriginalConstructor()
-            ->setConstructorArgs([
-                'configs' => $tlsConfigs,
-                'cache' => $this->cache,
-            ])
-            ->onlyMethods(['request'])
-            ->getMock();
+        $client = new WatcherClient($tlsConfigs, $this->cache);
 
-        // With TLS auth, machine_id and password should NOT be included
-        $mockClient->expects($this->exactly(1))->method('request')
-            ->with(
-                'POST',
-                Constants::WATCHER_LOGIN_ENDPOINT,
-                ['scenarios' => []],
-                $this->anything()
-            );
-
-        $mockClient->login();
-    }
-
-    public function testLoginRequest()
-    {
-        $mockCurl = $this->getCurlMock(['handle']);
-
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
-            ->enableOriginalConstructor()
-            ->setConstructorArgs([
-                'configs' => $this->configs,
-                'cache' => $this->cache,
-                'scenarios' => [],
-                'requestHandler' => $mockCurl,
-            ])
-            ->onlyMethods(['sendRequest'])
-            ->getMock();
-
-        $mockCurl->expects($this->exactly(1))->method('handle')->will(
-            $this->returnValue(
-                new Response(MockedData::LOGIN_SUCCESS, MockedData::HTTP_200, [])
-            )
-        );
-
-        $response = $mockClient->login(['test/scenario']);
-
-        $this->assertEquals(
-            json_decode(MockedData::LOGIN_SUCCESS, true),
-            $response,
-            'Should return login response'
+        $this->assertInstanceOf(
+            WatcherClient::class,
+            $client,
+            'WatcherClient should be instantiated with TLS auth'
         );
     }
 

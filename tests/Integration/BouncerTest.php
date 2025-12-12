@@ -11,6 +11,8 @@ namespace CrowdSec\LapiClient\Tests\Integration;
  *
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
+ *
+ * @coversNothing
  */
 
 use CrowdSec\Common\Client\AbstractClient;

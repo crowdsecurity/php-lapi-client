@@ -52,12 +52,9 @@
   - [Push usage metrics](#push-usage-metrics)
     - [Command usage](#command-usage-3)
     - [Example](#example-2)
-  - [Watcher login](#watcher-login)
+  - [Push alert](#push-alert)
     - [Command usage](#command-usage-4)
     - [Example](#example-3)
-  - [Push alert](#push-alert)
-    - [Command usage](#command-usage-5)
-    - [Example](#example-4)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -74,7 +71,6 @@ This client allows you to interact with the CrowdSec Local API (LAPI).
   - Retrieve AppSec decision
   - Push usage metrics
 - CrowdSec LAPI Watcher client
-  - Login to LAPI
   - Push alerts
   - Search alerts
   - Delete alerts
@@ -219,18 +215,7 @@ In addition to the [common configurations](#bouncer-client-configurations), the 
 
 #### LAPI calls
 
-##### Login
-
-To manually authenticate and retrieve a JWT token:
-
-```php
-$response = $watcherClient->login($scenarios);
-// $response contains: ['code' => 200, 'expire' => '...', 'token' => '...']
-```
-
-The `$scenarios` parameter is an optional array of scenario names that the watcher is interested in.
-
-Note: You don't need to call `login()` manually before using alert methods - authentication is handled automatically.
+Once your watcher client is instantiated, you can perform the following calls. Authentication is handled automatically - the client will login and cache the JWT token as needed.
 
 ##### Push alerts
 
@@ -680,20 +665,6 @@ php tests/scripts/bouncer/build-and-push-metrics.php <METRICS_JSON> <BOUNCER_KEY
 
 ```bash
 php tests/scripts/bouncer/build-and-push-metrics.php '{"name":"TEST BOUNCER","type":"crowdsec-test-php-bouncer","version":"v0.0.0","items":[{"name":"dropped","value":12,"unit":"request","labels":{"origin":"CAPI"}}],"meta":{"window_size_seconds":900,"utc_now_timestamp":12}}' 92d3de1dde6d354b771d63035cf5ef83 https://crowdsec:8080
-```
-
-### Watcher login
-
-#### Command usage
-
-```bash
-php tests/scripts/watcher/login.php <MACHINE_ID> <PASSWORD> <LAPI_URL> [<SCENARIOS_JSON>]
-```
-
-#### Example
-
-```bash
-php tests/scripts/watcher/login.php my-machine-id my-password https://crowdsec:8080 '["crowdsecurity/http-probing"]'
 ```
 
 ### Push alert

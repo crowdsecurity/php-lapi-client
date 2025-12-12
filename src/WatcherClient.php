@@ -125,7 +125,7 @@ class WatcherClient extends AbstractLapiClient
      *
      * @throws ClientException
      */
-    public function login(array $scenarios = []): array
+    private function login(array $scenarios = []): array
     {
         $data = [
             'scenarios' => $scenarios ?: $this->scenarios,

@@ -14,9 +14,9 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 /**
  * @note You must delete all alerts manually before running this TestCase. Command: `cscli alerts delete --all`.
  *
- * @coversDefaultClass \CrowdSec\LapiClient\WatcherClient
+ * @coversNothing
  */
-final class AlertsClientTest extends TestCase
+final class WatcherTest extends TestCase
 {
     private const DT_FORMAT = 'Y-m-dTH:i:sZ';
 
@@ -24,10 +24,6 @@ final class AlertsClientTest extends TestCase
      * @var array
      */
     protected $configs;
-    /**
-     * @var string
-     */
-    protected $useTls;
 
     /**
      * @var WatcherClient
@@ -37,20 +33,53 @@ final class AlertsClientTest extends TestCase
     protected function setUp(): void
     {
         $watcherConfigs = [
-            'auth_type' => $this->useTls ? Constants::AUTH_TLS : Constants::AUTH_KEY,
+            'auth_type' => Constants::AUTH_KEY,
             'api_key' => getenv('BOUNCER_KEY'),
             'api_url' => getenv('LAPI_URL'),
             'appsec_url' => getenv('APPSEC_URL'),
             'user_agent_suffix' => TestConstants::USER_AGENT_SUFFIX,
+            'machine_id' => getenv('MACHINE_ID') ?: 'watcherLogin',
+            'password' => getenv('PASSWORD') ?: 'watcherPassword',
         ];
-
-        $watcherConfigs['machine_id'] = getenv('MACHINE_ID') ?: 'watcherLogin';
-        $watcherConfigs['password'] = getenv('PASSWORD') ?: 'watcherPassword';
 
         $this->configs = $watcherConfigs;
 
         $cache = new ArrayAdapter();
         $this->watcherClient = new WatcherClient($this->configs, $cache);
+    }
+
+    public function testAuthenticationWithTls(): void
+    {
+        $agentTlsPath = getenv('AGENT_TLS_PATH');
+        if (!$agentTlsPath) {
+            throw new \Exception('Using TLS auth for agent is required. Please set AGENT_TLS_PATH env.');
+        }
+
+        $watcherConfigs = [
+            'api_url' => getenv('LAPI_URL'),
+            'appsec_url' => getenv('APPSEC_URL'),
+            'user_agent_suffix' => TestConstants::USER_AGENT_SUFFIX,
+            'auth_type' => Constants::AUTH_TLS,
+            'tls_cert_path' => "{$agentTlsPath}/agent.pem",
+            'tls_key_path' => "{$agentTlsPath}/agent-key.pem",
+            'tls_verify_peer' => false,
+        ];
+
+        $cache = new ArrayAdapter();
+        $watcher = new WatcherClient($watcherConfigs, $cache);
+
+        // Authentication is tested implicitly through searchAlerts
+        // If auth fails, this will throw an exception
+        $result = $watcher->searchAlerts([]);
+        self::assertIsArray($result);
+    }
+
+    public function testAuthenticationWithApiKey(): void
+    {
+        // Authentication is tested implicitly through searchAlerts
+        // If auth fails, this will throw an exception
+        $result = $this->watcherClient->searchAlerts([]);
+        self::assertIsArray($result);
     }
 
     /**
@@ -369,6 +398,8 @@ final class AlertsClientTest extends TestCase
     }
 
     /**
+     * @covers ::getAlertById
+     *
      * @depends testPush
      */
     public function testGetById(array $idList): void
@@ -380,6 +411,9 @@ final class AlertsClientTest extends TestCase
         }
     }
 
+    /**
+     * @covers ::getAlertById
+     */
     public function testAlertInfoNotFound(): void
     {
         $result = $this->watcherClient->getAlertById(\PHP_INT_MAX);
