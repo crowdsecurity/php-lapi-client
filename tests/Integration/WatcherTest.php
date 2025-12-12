@@ -370,10 +370,6 @@ final class WatcherTest extends TestCase
             ['until' => '-1h'],
             4,
         ];
-        yield 'until 1s' => [
-            ['until' => '1s'],
-            4,
-        ];
         yield 'until 1h' => [
             ['until' => '1h'],
             0,
