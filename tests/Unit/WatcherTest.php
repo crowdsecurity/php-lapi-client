@@ -6,23 +6,23 @@ namespace CrowdSec\LapiClient\Tests\Unit;
 
 use CrowdSec\Common\Client\HttpMessage\Response;
 use CrowdSec\LapiClient\ClientException;
-use CrowdSec\LapiClient\Configuration\Watcher;
+use CrowdSec\LapiClient\Configuration\Watcher as WatcherConfig;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
-use CrowdSec\LapiClient\WatcherClient;
+use CrowdSec\LapiClient\Watcher;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @covers \CrowdSec\LapiClient\WatcherClient::__construct
- * @covers \CrowdSec\LapiClient\WatcherClient::getConfiguration
- * @covers \CrowdSec\LapiClient\WatcherClient::login
- * @covers \CrowdSec\LapiClient\WatcherClient::pushAlerts
- * @covers \CrowdSec\LapiClient\WatcherClient::searchAlerts
- * @covers \CrowdSec\LapiClient\WatcherClient::deleteAlerts
- * @covers \CrowdSec\LapiClient\WatcherClient::getAlertById
- * @covers \CrowdSec\LapiClient\WatcherClient::ensureAuthenticated
- * @covers \CrowdSec\LapiClient\WatcherClient::retrieveToken
+ * @covers \CrowdSec\LapiClient\Watcher::__construct
+ * @covers \CrowdSec\LapiClient\Watcher::getConfiguration
+ * @covers \CrowdSec\LapiClient\Watcher::login
+ * @covers \CrowdSec\LapiClient\Watcher::pushAlerts
+ * @covers \CrowdSec\LapiClient\Watcher::searchAlerts
+ * @covers \CrowdSec\LapiClient\Watcher::deleteAlerts
+ * @covers \CrowdSec\LapiClient\Watcher::getAlertById
+ * @covers \CrowdSec\LapiClient\Watcher::ensureAuthenticated
+ * @covers \CrowdSec\LapiClient\Watcher::retrieveToken
  * @covers \CrowdSec\LapiClient\Configuration\Watcher::getConfigTreeBuilder
  * @covers \CrowdSec\LapiClient\Configuration\Watcher::addWatcherNodes
  * @covers \CrowdSec\LapiClient\Configuration\Watcher::validateApiKey
@@ -38,7 +38,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
  * @uses \CrowdSec\LapiClient\Configuration::validateTls
  * @uses \CrowdSec\LapiClient\Configuration\Watcher::validateApiKey
  */
-final class WatcherClientTest extends AbstractClient
+final class WatcherTest extends AbstractClient
 {
     /**
      * @var ArrayAdapter
@@ -55,25 +55,25 @@ final class WatcherClientTest extends AbstractClient
         $this->cache = new ArrayAdapter();
     }
 
-    public function testWatcherClientInit()
+    public function testWatcherInit()
     {
-        $client = new WatcherClient($this->configs, $this->cache);
+        $client = new Watcher($this->configs, $this->cache);
 
         $this->assertInstanceOf(
-            WatcherClient::class,
+            Watcher::class,
             $client,
-            'WatcherClient should be instantiated'
+            'Watcher should be instantiated'
         );
 
         $configuration = PHPUnitUtil::callMethod($client, 'getConfiguration', []);
         $this->assertInstanceOf(
-            Watcher::class,
+            WatcherConfig::class,
             $configuration,
-            'WatcherClient should use Watcher configuration'
+            'Watcher should use Watcher configuration'
         );
     }
 
-    public function testWatcherClientInitWithTlsAuth()
+    public function testWatcherInitWithTlsAuth()
     {
         $tlsConfigs = [
             'auth_type' => Constants::AUTH_TLS,
@@ -81,12 +81,12 @@ final class WatcherClientTest extends AbstractClient
             'tls_key_path' => '/path/to/key.pem',
         ];
 
-        $client = new WatcherClient($tlsConfigs, $this->cache);
+        $client = new Watcher($tlsConfigs, $this->cache);
 
         $this->assertInstanceOf(
-            WatcherClient::class,
+            Watcher::class,
             $client,
-            'WatcherClient should be instantiated with TLS auth'
+            'Watcher should be instantiated with TLS auth'
         );
     }
 
@@ -95,7 +95,7 @@ final class WatcherClientTest extends AbstractClient
         // Test missing machine_id
         $error = '';
         try {
-            new WatcherClient([
+            new Watcher([
                 'api_key' => 'test-key',
                 'password' => 'test-password',
             ], $this->cache);
@@ -113,7 +113,7 @@ final class WatcherClientTest extends AbstractClient
         // Test missing password
         $error = '';
         try {
-            new WatcherClient([
+            new Watcher([
                 'api_key' => 'test-key',
                 'machine_id' => 'test-machine',
             ], $this->cache);
@@ -133,7 +133,7 @@ final class WatcherClientTest extends AbstractClient
     {
         $mockCurl = $this->getCurlMock(['handle']);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,
@@ -176,7 +176,7 @@ final class WatcherClientTest extends AbstractClient
     {
         $mockCurl = $this->getCurlMock(['handle']);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,
@@ -201,7 +201,7 @@ final class WatcherClientTest extends AbstractClient
     {
         $mockCurl = $this->getCurlMock(['handle']);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,
@@ -226,7 +226,7 @@ final class WatcherClientTest extends AbstractClient
     {
         $mockCurl = $this->getCurlMock(['handle']);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,
@@ -252,7 +252,7 @@ final class WatcherClientTest extends AbstractClient
     {
         $mockCurl = $this->getCurlMock(['handle']);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,
@@ -277,7 +277,7 @@ final class WatcherClientTest extends AbstractClient
     {
         $mockCurl = $this->getCurlMock(['handle']);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,
@@ -311,7 +311,7 @@ final class WatcherClientTest extends AbstractClient
         $cacheItem->expiresAt(new \DateTime('+1 hour'));
         $this->cache->save($cacheItem);
 
-        $mockClient = $this->getMockBuilder(WatcherClient::class)
+        $mockClient = $this->getMockBuilder(Watcher::class)
             ->enableOriginalConstructor()
             ->setConstructorArgs([
                 'configs' => $this->configs,

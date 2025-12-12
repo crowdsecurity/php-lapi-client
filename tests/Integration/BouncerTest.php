@@ -35,9 +35,9 @@ final class BouncerTest extends TestCase
      */
     protected $useTls;
     /**
-     * @var TestWatcherClient
+     * @var TestWatcher
      */
-    protected $watcherClient;
+    protected $watcher;
 
     private function addTlsConfig(&$bouncerConfigs, $tlsPath)
     {
@@ -63,9 +63,9 @@ final class BouncerTest extends TestCase
         }
 
         $this->configs = $bouncerConfigs;
-        $this->watcherClient = new TestWatcherClient($this->configs);
+        $this->watcher = new TestWatcher($this->configs);
         // Delete all decisions
-        $this->watcherClient->deleteAllDecisions();
+        $this->watcher->deleteAllDecisions();
         usleep(200000); // 200ms
     }
 
@@ -103,15 +103,15 @@ final class BouncerTest extends TestCase
 
         // Add decisions
         $now = new \DateTime();
-        $this->watcherClient->addDecision($now, '12h', '+12 hours', TestConstants::BAD_IP, 'captcha');
-        $this->watcherClient->addDecision(
+        $this->watcher->addDecision($now, '12h', '+12 hours', TestConstants::BAD_IP, 'captcha');
+        $this->watcher->addDecision(
             $now,
             '24h',
             '+24 hours',
             TestConstants::BAD_IP . '/' . TestConstants::IP_RANGE,
             'ban'
         );
-        $this->watcherClient->addDecision(
+        $this->watcher->addDecision(
             $now,
             '24h',
             '+24 hours',
@@ -150,7 +150,7 @@ final class BouncerTest extends TestCase
             'Should be no new if startup has been done. Response: ' . json_encode($response)
         );
         // Delete all decisions
-        $this->watcherClient->deleteAllDecisions();
+        $this->watcher->deleteAllDecisions();
         $response = $client->getStreamDecisions(
             false,
             [
@@ -243,9 +243,9 @@ final class BouncerTest extends TestCase
         $this->assertCount(0, $response, 'No decisions yet');
         // Add decisions
         $now = new \DateTime();
-        $this->watcherClient->addDecision($now, '12h', '+12 hours', TestConstants::BAD_IP, 'captcha');
-        $this->watcherClient->addDecision($now, '24h', '+24 hours', '1.2.3.0/' . TestConstants::IP_RANGE, 'ban');
-        $this->watcherClient->addDecision(
+        $this->watcher->addDecision($now, '12h', '+12 hours', TestConstants::BAD_IP, 'captcha');
+        $this->watcher->addDecision($now, '24h', '+24 hours', '1.2.3.0/' . TestConstants::IP_RANGE, 'ban');
+        $this->watcher->addDecision(
             $now,
             '24h',
             '+24 hours',
@@ -265,7 +265,7 @@ final class BouncerTest extends TestCase
         $response = $client->getFilteredDecisions(['type' => 'captcha']);
         $this->assertCount(2, $response, '2 decision for specified type. Response: ' . json_encode($response));
         // Delete all decisions
-        $this->watcherClient->deleteAllDecisions();
+        $this->watcher->deleteAllDecisions();
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
         $this->assertCount(
             0,

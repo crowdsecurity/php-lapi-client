@@ -7,7 +7,7 @@ namespace CrowdSec\LapiClient\Tests\Integration;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Payload\Alert;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;
-use CrowdSec\LapiClient\WatcherClient;
+use CrowdSec\LapiClient\Watcher;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
@@ -26,9 +26,9 @@ final class WatcherTest extends TestCase
     protected $configs;
 
     /**
-     * @var WatcherClient
+     * @var Watcher
      */
-    protected $watcherClient;
+    protected $watcher;
 
     protected function setUp(): void
     {
@@ -45,7 +45,7 @@ final class WatcherTest extends TestCase
         $this->configs = $watcherConfigs;
 
         $cache = new ArrayAdapter();
-        $this->watcherClient = new WatcherClient($this->configs, $cache);
+        $this->watcher = new Watcher($this->configs, $cache);
     }
 
     public function testAuthenticationWithTls(): void
@@ -66,7 +66,7 @@ final class WatcherTest extends TestCase
         ];
 
         $cache = new ArrayAdapter();
-        $watcher = new WatcherClient($watcherConfigs, $cache);
+        $watcher = new Watcher($watcherConfigs, $cache);
 
         // Authentication is tested implicitly through searchAlerts
         // If auth fails, this will throw an exception
@@ -78,7 +78,7 @@ final class WatcherTest extends TestCase
     {
         // Authentication is tested implicitly through searchAlerts
         // If auth fails, this will throw an exception
-        $result = $this->watcherClient->searchAlerts([]);
+        $result = $this->watcher->searchAlerts([]);
         self::assertIsArray($result);
     }
 
@@ -264,7 +264,7 @@ final class WatcherTest extends TestCase
                 ],
             ]
         );
-        $result = $this->watcherClient->pushAlerts([
+        $result = $this->watcher->pushAlerts([
             // with decisions
             $alert01->toArray(),
             $alert02->toArray(),
@@ -287,7 +287,7 @@ final class WatcherTest extends TestCase
      */
     public function testSearch(array $query, int $expectedCount): void
     {
-        $result = $this->watcherClient->searchAlerts($query);
+        $result = $this->watcher->searchAlerts($query);
         self::assertCount($expectedCount, $result);
     }
 
@@ -402,7 +402,7 @@ final class WatcherTest extends TestCase
     {
         foreach ($idList as $id) {
             self::assertIsNumeric($id);
-            $result = $this->watcherClient->getAlertById(\intval($id));
+            $result = $this->watcher->getAlertById(\intval($id));
             self::assertIsArray($result);
         }
     }
@@ -412,7 +412,7 @@ final class WatcherTest extends TestCase
      */
     public function testAlertInfoNotFound(): void
     {
-        $result = $this->watcherClient->getAlertById(\PHP_INT_MAX);
+        $result = $this->watcher->getAlertById(\PHP_INT_MAX);
         self::assertNull($result);
     }
 }

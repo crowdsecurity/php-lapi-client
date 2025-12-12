@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CrowdSec\LapiClient\Payload;
 
 use CrowdSec\Common\Configuration\AbstractConfiguration;
@@ -106,12 +108,12 @@ class Alert implements \JsonSerializable
     private $labels = [];
 
     /**
-     * @param TProps          $properties
-     * @param ?TSource        $source
-     * @param list<TEvent>    $events
+     * @param TProps $properties
+     * @param ?TSource $source
+     * @param list<TEvent> $events
      * @param list<TDecision> $decisions
-     * @param list<TMeta>     $meta
-     * @param list<string>    $labels
+     * @param list<TMeta> $meta
+     * @param list<string> $labels
      */
     public function __construct(
         array $properties,

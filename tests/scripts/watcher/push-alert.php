@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
 use CrowdSec\Common\Logger\ConsoleLog;
-use CrowdSec\LapiClient\WatcherClient;
+use CrowdSec\LapiClient\Watcher;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 $alertJson = $argv[1] ?? false;
@@ -32,15 +32,15 @@ $cacheDir = sys_get_temp_dir() . '/crowdsec-lapi-client-cache';
 $cache = new FilesystemAdapter('crowdsec', 0, $cacheDir);
 echo 'Cache directory: ' . $cacheDir . \PHP_EOL;
 
-echo \PHP_EOL . 'Instantiate watcher client ...' . \PHP_EOL;
+echo \PHP_EOL . 'Instantiate watcher ...' . \PHP_EOL;
 $configs = [
     'auth_type' => 'api_key',
     'api_url' => $lapiUrl,
     'machine_id' => $machineId,
     'password' => $password,
 ];
-$client = new WatcherClient($configs, $cache, [], null, $logger);
-echo 'Watcher client instantiated' . \PHP_EOL;
+$client = new Watcher($configs, $cache, [], null, $logger);
+echo 'Watcher instantiated' . \PHP_EOL;
 
 echo \PHP_EOL . 'Pushing alert to ' . $client->getConfig('api_url') . ' ...' . \PHP_EOL;
 echo 'Alert: ' . json_encode($alert, \JSON_UNESCAPED_SLASHES) . \PHP_EOL;

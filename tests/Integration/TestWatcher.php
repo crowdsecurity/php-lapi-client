@@ -6,20 +6,20 @@ namespace CrowdSec\LapiClient\Tests\Integration;
 
 use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\LapiClient\Constants;
-use CrowdSec\LapiClient\WatcherClient;
+use CrowdSec\LapiClient\Watcher;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * Test helper for setting up watcher state in integration tests.
  *
- * Uses WatcherClient to push alerts with decisions for testing bouncer functionality.
+ * Uses Watcher to push alerts with decisions for testing bouncer functionality.
  * Extends AbstractClient to make raw HTTP requests for deleting decisions.
  */
-class TestWatcherClient extends AbstractClient
+class TestWatcher extends AbstractClient
 {
     public const HOURS24 = '+24 hours';
 
-    /** @var WatcherClient */
+    /** @var Watcher */
     private $watcher;
 
     /** @var string */
@@ -40,7 +40,7 @@ class TestWatcherClient extends AbstractClient
         $configs['tls_verify_peer'] = false;
 
         $cache = new ArrayAdapter();
-        $this->watcher = new WatcherClient($configs, $cache);
+        $this->watcher = new Watcher($configs, $cache);
 
         $this->headers = ['User-Agent' => 'LAPI_WATCHER_TEST/' . Constants::VERSION];
 
@@ -83,7 +83,7 @@ class TestWatcherClient extends AbstractClient
     /**
      * Delete all decisions.
      *
-     * This uses a raw HTTP request since WatcherClient doesn't have a method for
+     * This uses a raw HTTP request since Watcher doesn't have a method for
      * deleting decisions (decisions are managed through the bouncer endpoint).
      */
     public function deleteAllDecisions(): void
@@ -108,7 +108,7 @@ class TestWatcherClient extends AbstractClient
             $this->watcher->searchAlerts(['limit' => 1]);
 
             // Now we need to get the token - we'll do a login call and get it from there
-            // Actually, we can't get the token from WatcherClient since login is private.
+            // Actually, we can't get the token from Watcher since login is private.
             // We need to do our own login call.
             $loginResponse = $this->request(
                 'POST',

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace CrowdSec\LapiClient;
 
 use CrowdSec\Common\Client\RequestHandler\RequestHandlerInterface;
-use CrowdSec\LapiClient\Configuration\Watcher;
+use CrowdSec\LapiClient\Configuration\Watcher as WatcherConfig;
 use DateTime;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Log\LoggerInterface;
@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
  *
  * If you use `auth_type = api_key` you must provide configs `machine_id` and `password`.
  *
- * @psalm-import-type TWatcherConfig from Watcher
+ * @psalm-import-type TWatcherConfig from WatcherConfig
  * @psalm-import-type TAlertFull from \CrowdSec\LapiClient\Payload\Alert
  * @psalm-import-type TDecision from \CrowdSec\LapiClient\Payload\Alert
  * @psalm-import-type TEvent from \CrowdSec\LapiClient\Payload\Alert
@@ -77,7 +77,7 @@ use Psr\Log\LoggerInterface;
  *     uuid: string
  * }
  */
-class WatcherClient extends AbstractLapiClient
+class Watcher extends AbstractLapiClient
 {
     private const CACHE_KEY = 'crowdsec_watcher_token';
 
@@ -113,7 +113,7 @@ class WatcherClient extends AbstractLapiClient
      */
     protected function getConfiguration(): Configuration
     {
-        return new Watcher();
+        return new WatcherConfig();
     }
 
     /**

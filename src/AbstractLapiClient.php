@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CrowdSec\LapiClient;
 
 use CrowdSec\Common\Client\AbstractClient;

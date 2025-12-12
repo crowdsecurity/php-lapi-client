@@ -186,7 +186,7 @@ The Watcher client is used to authenticate a machine to LAPI and manage alerts. 
 - A PSR-6 compatible cache implementation to store authentication tokens (e.g., `symfony/cache`)
 
 ```php
-use CrowdSec\LapiClient\WatcherClient;
+use CrowdSec\LapiClient\Watcher;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 // Create a cache adapter (requires symfony/cache or any PSR-6 implementation)
@@ -202,7 +202,7 @@ $configs = [
 // Optional: scenarios to register on login
 $scenarios = ['crowdsecurity/http-probing'];
 
-$watcherClient = new WatcherClient($configs, $cache, $scenarios);
+$watcher = new Watcher($configs, $cache, $scenarios);
 ```
 
 #### Watcher configuration
@@ -242,7 +242,7 @@ $alerts = [
         'events' => [],
     ],
 ];
-$alertIds = $watcherClient->pushAlerts($alerts);
+$alertIds = $watcher->pushAlerts($alerts);
 ```
 
 ##### Search alerts
@@ -255,7 +255,7 @@ $query = [
     'value' => '1.2.3.4',
     'limit' => 10,
 ];
-$alerts = $watcherClient->searchAlerts($query);
+$alerts = $watcher->searchAlerts($query);
 ```
 
 Available search parameters: `scope`, `value`, `scenario`, `ip`, `range`, `since`, `until`, `simulated`, `has_active_decision`, `decision_type`, `limit`, `origin`.
@@ -269,7 +269,7 @@ $query = [
     'scope' => 'ip',
     'value' => '1.2.3.4',
 ];
-$result = $watcherClient->deleteAlerts($query);
+$result = $watcher->deleteAlerts($query);
 ```
 
 ##### Get alert by ID
@@ -277,7 +277,7 @@ $result = $watcherClient->deleteAlerts($query);
 To retrieve a specific alert:
 
 ```php
-$alert = $watcherClient->getAlertById(123);
+$alert = $watcher->getAlertById(123);
 ```
 
 Returns `null` if the alert is not found.

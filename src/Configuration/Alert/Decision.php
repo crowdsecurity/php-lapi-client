@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CrowdSec\LapiClient\Configuration\Alert;
 
 use CrowdSec\Common\Configuration\AbstractConfiguration;
