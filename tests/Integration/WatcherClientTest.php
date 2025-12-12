@@ -9,6 +9,7 @@ use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 use CrowdSec\LapiClient\WatcherClient;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
  * @coversDefaultClass \CrowdSec\LapiClient\WatcherClient
@@ -32,7 +33,8 @@ final class WatcherClientTest extends TestCase
             'tls_verify_peer' => false,
         ];
 
-        $watcher = new WatcherClient($watcherConfigs);
+        $cache = new ArrayAdapter();
+        $watcher = new WatcherClient($watcherConfigs, $cache);
         $this->assertLoginResult($watcher->login());
     }
 
@@ -51,7 +53,8 @@ final class WatcherClientTest extends TestCase
             'password' => $password,
         ];
 
-        $watcher = new WatcherClient($watcherConfigs);
+        $cache = new ArrayAdapter();
+        $watcher = new WatcherClient($watcherConfigs, $cache);
         $this->assertLoginResult($watcher->login());
     }
 

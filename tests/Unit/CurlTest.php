@@ -25,7 +25,8 @@ use CrowdSec\LapiClient\TimeoutException;
  * @uses   \CrowdSec\LapiClient\Bouncer::configure
  * @uses   \CrowdSec\LapiClient\Bouncer::formatUserAgent
  * @uses   \CrowdSec\LapiClient\Configuration::addConnectionNodes
- * @uses   \CrowdSec\LapiClient\Configuration::validate
+ * @uses   \CrowdSec\LapiClient\Configuration::validateTls
+ * @uses   \CrowdSec\LapiClient\Configuration::validateApiKey
  * @uses   \CrowdSec\LapiClient\Configuration::addAppSecNodes
  * @uses   \CrowdSec\LapiClient\Bouncer::cleanHeadersForLog
  * @uses   \CrowdSec\LapiClient\Bouncer::cleanRawBodyForLog()

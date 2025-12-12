@@ -35,7 +35,8 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @covers \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
  * @covers \CrowdSec\LapiClient\Configuration::addConnectionNodes
  * @covers \CrowdSec\LapiClient\Configuration::addAppSecNodes
- * @covers \CrowdSec\LapiClient\Configuration::validate
+ * @covers \CrowdSec\LapiClient\Configuration::validateTls
+ * @covers \CrowdSec\LapiClient\Configuration::validateApiKey
  * @covers \CrowdSec\LapiClient\Bouncer::buildUsageMetrics
  * @covers \CrowdSec\LapiClient\Bouncer::getOs
  * @covers \CrowdSec\LapiClient\Configuration\Metrics::getConfigTreeBuilder

@@ -7,6 +7,7 @@ namespace CrowdSec\LapiClient\Configuration;
 use CrowdSec\LapiClient\Configuration;
 use CrowdSec\LapiClient\Constants;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 
 /**
@@ -73,7 +74,6 @@ class Watcher extends Configuration
         $rootNode = $treeBuilder->getRootNode();
 
         $this->addWatcherNodes($rootNode);
-        $this->validateWatcher($rootNode);
 
         return $treeBuilder;
     }
@@ -94,14 +94,16 @@ class Watcher extends Configuration
     }
 
     /**
-     * Watcher-specific validation.
+     * Override API key validation for Watcher.
      *
-     * @param ArrayNodeDefinition $rootNode
+     * For Watcher, api_key auth requires machine_id and password instead of api_key.
+     *
+     * @param NodeDefinition|ArrayNodeDefinition $rootNode
      *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    private function validateWatcher(ArrayNodeDefinition $rootNode): void
+    protected function validateApiKey($rootNode): void
     {
         $rootNode
             ->validate()

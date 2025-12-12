@@ -16,9 +16,6 @@
     - [LAPI calls](#lapi-calls)
   - [Watcher client instantiation](#watcher-client-instantiation)
     - [Watcher configuration](#watcher-configuration)
-    - [Login](#login)
-  - [Alerts client instantiation](#alerts-client-instantiation)
-    - [Token Storage](#token-storage)
     - [LAPI calls](#lapi-calls-1)
 - [Bouncer client configurations](#bouncer-client-configurations)
   - [LAPI url](#lapi-url)
@@ -55,6 +52,12 @@
   - [Push usage metrics](#push-usage-metrics)
     - [Command usage](#command-usage-3)
     - [Example](#example-2)
+  - [Watcher login](#watcher-login)
+    - [Command usage](#command-usage-4)
+    - [Example](#example-3)
+  - [Push alert](#push-alert)
+    - [Command usage](#command-usage-5)
+    - [Example](#example-4)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -72,7 +75,6 @@ This client allows you to interact with the CrowdSec Local API (LAPI).
   - Push usage metrics
 - CrowdSec LAPI Watcher client
   - Login to LAPI
-- CrowdSec LAPI Alerts client
   - Push alerts
   - Search alerts
   - Delete alerts
@@ -183,10 +185,16 @@ We provide a `buildUsageMetrics` method to help you build the `$usageMetrics` ar
 
 ### Watcher client instantiation
 
-The Watcher client is used to authenticate a machine to LAPI. It requires a `machine_id` and `password` when using API key authentication.
+The Watcher client is used to authenticate a machine to LAPI and manage alerts. It requires:
+- A `machine_id` and `password` when using API key authentication
+- A PSR-6 compatible cache implementation to store authentication tokens (e.g., `symfony/cache`)
 
 ```php
 use CrowdSec\LapiClient\WatcherClient;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+
+// Create a cache adapter (requires symfony/cache or any PSR-6 implementation)
+$cache = new FilesystemAdapter('crowdsec', 0, '/path/to/cache');
 
 $configs = [
     'auth_type' => 'api_key',
@@ -194,7 +202,11 @@ $configs = [
     'machine_id' => 'your-machine-id',
     'password' => 'your-machine-password',
 ];
-$watcherClient = new WatcherClient($configs);
+
+// Optional: scenarios to register on login
+$scenarios = ['crowdsecurity/http-probing'];
+
+$watcherClient = new WatcherClient($configs, $cache, $scenarios);
 ```
 
 #### Watcher configuration
@@ -203,10 +215,13 @@ In addition to the [common configurations](#bouncer-client-configurations), the 
 
 - `machine_id`: The machine ID registered with CrowdSec (required for `api_key` auth type)
 - `password`: The machine password (required for `api_key` auth type)
+- A PSR-6 cache implementation (mandatory) - used to store the authentication token
 
-#### Login
+#### LAPI calls
 
-To authenticate and retrieve a JWT token:
+##### Login
+
+To manually authenticate and retrieve a JWT token:
 
 ```php
 $response = $watcherClient->login($scenarios);
@@ -215,45 +230,7 @@ $response = $watcherClient->login($scenarios);
 
 The `$scenarios` parameter is an optional array of scenario names that the watcher is interested in.
 
-
-### Alerts client instantiation
-
-The Alerts client allows you to push, search, and manage alerts. It requires a token storage implementation to handle JWT authentication.
-
-#### Token Storage
-
-The Alerts client needs a `TokenStorageInterface` implementation to store and retrieve authentication tokens. You must provide a PSR-6 compatible cache implementation (e.g., `symfony/cache`):
-
-```php
-use CrowdSec\LapiClient\AlertsClient;
-use CrowdSec\LapiClient\WatcherClient;
-use CrowdSec\LapiClient\Storage\TokenStorage;
-use Symfony\Component\Cache\Adapter\FilesystemAdapter;
-
-// Create a cache adapter (requires symfony/cache or any PSR-6 implementation)
-$cache = new FilesystemAdapter('crowdsec', 0, '/path/to/cache');
-
-// Create a watcher client for authentication
-$watcherConfigs = [
-    'auth_type' => 'api_key',
-    'api_url' => 'https://your-crowdsec-lapi-url:8080',
-    'machine_id' => 'your-machine-id',
-    'password' => 'your-machine-password',
-];
-$watcherClient = new WatcherClient($watcherConfigs);
-
-// Create token storage
-$tokenStorage = new TokenStorage($watcherClient, $cache);
-
-// Create alerts client
-$alertsConfigs = [
-    'api_url' => 'https://your-crowdsec-lapi-url:8080',
-    'api_key' => '**************************',
-];
-$alertsClient = new AlertsClient($alertsConfigs, $tokenStorage);
-```
-
-#### LAPI calls
+Note: You don't need to call `login()` manually before using alert methods - authentication is handled automatically.
 
 ##### Push alerts
 
@@ -280,7 +257,7 @@ $alerts = [
         'events' => [],
     ],
 ];
-$alertIds = $alertsClient->push($alerts);
+$alertIds = $watcherClient->pushAlerts($alerts);
 ```
 
 ##### Search alerts
@@ -293,7 +270,7 @@ $query = [
     'value' => '1.2.3.4',
     'limit' => 10,
 ];
-$alerts = $alertsClient->search($query);
+$alerts = $watcherClient->searchAlerts($query);
 ```
 
 Available search parameters: `scope`, `value`, `scenario`, `ip`, `range`, `since`, `until`, `simulated`, `has_active_decision`, `decision_type`, `limit`, `origin`.
@@ -307,7 +284,7 @@ $query = [
     'scope' => 'ip',
     'value' => '1.2.3.4',
 ];
-$result = $alertsClient->delete($query);
+$result = $watcherClient->deleteAlerts($query);
 ```
 
 ##### Get alert by ID
@@ -315,7 +292,7 @@ $result = $alertsClient->delete($query);
 To retrieve a specific alert:
 
 ```php
-$alert = $alertsClient->getById(123);
+$alert = $watcherClient->getAlertById(123);
 ```
 
 Returns `null` if the alert is not found.
@@ -703,4 +680,32 @@ php tests/scripts/bouncer/build-and-push-metrics.php <METRICS_JSON> <BOUNCER_KEY
 
 ```bash
 php tests/scripts/bouncer/build-and-push-metrics.php '{"name":"TEST BOUNCER","type":"crowdsec-test-php-bouncer","version":"v0.0.0","items":[{"name":"dropped","value":12,"unit":"request","labels":{"origin":"CAPI"}}],"meta":{"window_size_seconds":900,"utc_now_timestamp":12}}' 92d3de1dde6d354b771d63035cf5ef83 https://crowdsec:8080
+```
+
+### Watcher login
+
+#### Command usage
+
+```bash
+php tests/scripts/watcher/login.php <MACHINE_ID> <PASSWORD> <LAPI_URL> [<SCENARIOS_JSON>]
+```
+
+#### Example
+
+```bash
+php tests/scripts/watcher/login.php my-machine-id my-password https://crowdsec:8080 '["crowdsecurity/http-probing"]'
+```
+
+### Push alert
+
+#### Command usage
+
+```bash
+php tests/scripts/watcher/push-alert.php <ALERT_JSON> <MACHINE_ID> <PASSWORD> <LAPI_URL>
+```
+
+#### Example
+
+```bash
+php tests/scripts/watcher/push-alert.php '{"scenario":"test/scenario","scenario_hash":"abc123","scenario_version":"1.0","message":"Test alert","events_count":1,"start_at":"2025-01-01T00:00:00Z","stop_at":"2025-01-01T00:00:01Z","capacity":10,"leakspeed":"10/1s","simulated":false,"remediation":true,"source":{"scope":"ip","value":"1.2.3.4"},"events":[]}' my-machine-id my-password https://crowdsec:8080
 ```

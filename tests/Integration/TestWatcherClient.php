@@ -8,6 +8,7 @@ use CrowdSec\Common\Client\AbstractClient;
 use CrowdSec\LapiClient\ClientException;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\WatcherClient;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 class TestWatcherClient extends AbstractClient
 {
@@ -36,7 +37,8 @@ class TestWatcherClient extends AbstractClient
         $this->configs['tls_key_path'] = $agentTlsPath . '/agent-key.pem';
         $this->configs['tls_verify_peer'] = false;
 
-        $this->watcher = new WatcherClient($this->configs);
+        $cache = new ArrayAdapter();
+        $this->watcher = new WatcherClient($this->configs, $cache);
 
         parent::__construct($this->configs);
     }

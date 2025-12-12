@@ -65,8 +65,8 @@ abstract class AbstractLapiClient extends AbstractClient
         array $parameters = []
     ): array {
         try {
-            $this->logger->debug('Now processing a bouncer request', [
-                'type' => 'BOUNCER_CLIENT_REQUEST',
+            $this->logger->debug('Now processing a LAPI client request', [
+                'type' => 'LAPI_CLIENT_REQUEST',
                 'method' => $method,
                 'endpoint' => $endpoint,
                 'parameters' => $parameters,

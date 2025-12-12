@@ -28,16 +28,6 @@
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </UndefinedMethod>
-        <UndefinedDocblockClass>
-            <errorLevel type="suppress">
-                <file name="../../../src/AlertsClient.php"/>
-            </errorLevel>
-        </UndefinedDocblockClass>
-        <InvalidReturnStatement>
-            <errorLevel type="suppress">
-                <file name="../../../src/AlertsClient.php"/>
-            </errorLevel>
-        </InvalidReturnStatement>
         <RiskyTruthyFalsyComparison>
             <errorLevel type="suppress">
                 <file name="../../../src/Bouncer.php"/>

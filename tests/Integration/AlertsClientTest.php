@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace CrowdSec\LapiClient\Tests\Integration;
 
-use CrowdSec\LapiClient\AlertsClient;
 use CrowdSec\LapiClient\Constants;
 use CrowdSec\LapiClient\Payload\Alert;
-use CrowdSec\LapiClient\Storage\TokenStorage;
 use CrowdSec\LapiClient\Tests\Constants as TestConstants;
 use CrowdSec\LapiClient\WatcherClient;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +14,7 @@ use Symfony\Component\Cache\Adapter\ArrayAdapter;
 /**
  * @note You must delete all alerts manually before running this TestCase. Command: `cscli alerts delete --all`.
  *
- * @coversDefaultClass \CrowdSec\LapiClient\AlertsClient
+ * @coversDefaultClass \CrowdSec\LapiClient\WatcherClient
  */
 final class AlertsClientTest extends TestCase
 {
@@ -32,9 +30,9 @@ final class AlertsClientTest extends TestCase
     protected $useTls;
 
     /**
-     * @var AlertsClient
+     * @var WatcherClient
      */
-    protected $alertsClient;
+    protected $watcherClient;
 
     protected function setUp(): void
     {
@@ -51,13 +49,12 @@ final class AlertsClientTest extends TestCase
 
         $this->configs = $watcherConfigs;
 
-        $watcher = new WatcherClient($this->configs);
-        $tokenStorage = new TokenStorage($watcher, new ArrayAdapter());
-        $this->alertsClient = new AlertsClient($this->configs, $tokenStorage);
+        $cache = new ArrayAdapter();
+        $this->watcherClient = new WatcherClient($this->configs, $cache);
     }
 
     /**
-     * @covers ::push
+     * @covers ::pushAlerts
      */
     public function testPush(): array
     {
@@ -238,13 +235,13 @@ final class AlertsClientTest extends TestCase
                 ],
             ]
         );
-        $result = $this->alertsClient->push([
+        $result = $this->watcherClient->pushAlerts([
             // with decisions
-            $alert01,
-            $alert02,
+            $alert01->toArray(),
+            $alert02->toArray(),
             // without decisions
-            $alert11,
-            $alert12,
+            $alert11->toArray(),
+            $alert12->toArray(),
         ]);
         self::assertIsArray($result);
         self::assertCount(4, $result);
@@ -253,7 +250,7 @@ final class AlertsClientTest extends TestCase
     }
 
     /**
-     * @covers ::search
+     * @covers ::searchAlerts
      *
      * @depends      testPush
      *
@@ -261,7 +258,7 @@ final class AlertsClientTest extends TestCase
      */
     public function testSearch(array $query, int $expectedCount): void
     {
-        $result = $this->alertsClient->search($query);
+        $result = $this->watcherClient->searchAlerts($query);
         self::assertCount($expectedCount, $result);
     }
 
@@ -378,14 +375,14 @@ final class AlertsClientTest extends TestCase
     {
         foreach ($idList as $id) {
             self::assertIsNumeric($id);
-            $result = $this->alertsClient->getById(\intval($id));
+            $result = $this->watcherClient->getAlertById(\intval($id));
             self::assertIsArray($result);
         }
     }
 
     public function testAlertInfoNotFound(): void
     {
-        $result = $this->alertsClient->getById(\PHP_INT_MAX);
+        $result = $this->watcherClient->getAlertById(\PHP_INT_MAX);
         self::assertNull($result);
     }
 }

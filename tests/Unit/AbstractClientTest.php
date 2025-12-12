@@ -26,7 +26,8 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @uses   \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
  * @uses   \CrowdSec\LapiClient\Bouncer::formatUserAgent
  * @uses   \CrowdSec\LapiClient\Configuration::addConnectionNodes
- * @uses   \CrowdSec\LapiClient\Configuration::validate
+ * @uses   \CrowdSec\LapiClient\Configuration::validateTls
+ * @uses   \CrowdSec\LapiClient\Configuration::validateApiKey
  * @uses   \CrowdSec\LapiClient\Configuration::addAppSecNodes
  *
  * @covers \CrowdSec\LapiClient\Bouncer::__construct
