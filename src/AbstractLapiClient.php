@@ -39,11 +39,19 @@ abstract class AbstractLapiClient extends AbstractClient
     /**
      * Process and validate input configurations.
      */
-    private function configure(array $configs): void
+    protected function configure(array $configs): void
     {
-        $configuration = new Configuration();
+        $configuration = $this->getConfiguration();
         $processor = new Processor();
         $this->configs = $processor->processConfiguration($configuration, [$configuration->cleanConfigs($configs)]);
+    }
+
+    /**
+     * Get the configuration class to use.
+     */
+    protected function getConfiguration(): Configuration
+    {
+        return new Configuration();
     }
 
     /**

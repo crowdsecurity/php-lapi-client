@@ -23,14 +23,15 @@ use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 
 /**
- * @uses \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
- * @uses \CrowdSec\LapiClient\Bouncer::formatUserAgent
- * @uses \CrowdSec\LapiClient\Configuration::addConnectionNodes
- * @uses \CrowdSec\LapiClient\Configuration::validate
- * @uses \CrowdSec\LapiClient\Configuration::addAppSecNodes
+ * @uses   \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
+ * @uses   \CrowdSec\LapiClient\Bouncer::formatUserAgent
+ * @uses   \CrowdSec\LapiClient\Configuration::addConnectionNodes
+ * @uses   \CrowdSec\LapiClient\Configuration::validate
+ * @uses   \CrowdSec\LapiClient\Configuration::addAppSecNodes
  *
  * @covers \CrowdSec\LapiClient\Bouncer::__construct
- * @covers \CrowdSec\LapiClient\Bouncer::configure
+ * @covers \CrowdSec\LapiClient\AbstractLapiClient::configure
+ * @covers \CrowdSec\LapiClient\AbstractLapiClient::getConfiguration
  * @covers \CrowdSec\LapiClient\Bouncer::cleanHeadersForLog
  * @covers \CrowdSec\LapiClient\Bouncer::cleanRawBodyForLog
  */

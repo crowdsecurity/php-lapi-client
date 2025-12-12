@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CrowdSec\LapiClient\Storage;
 
 use CrowdSec\LapiClient\WatcherClient;
+use DateTime;
 use Psr\Cache\CacheItemPoolInterface;
 
 final class TokenStorage implements TokenStorageInterface
@@ -41,7 +42,7 @@ final class TokenStorage implements TokenStorageInterface
             \assert(isset($tokenInfo['token']));
             $ci
                 ->set($tokenInfo['token'])
-                ->expiresAt(new \DateTime($tokenInfo['expire']));
+                ->expiresAt(new DateTime($tokenInfo['expire']));
             $this->cache->save($ci);
         }
 

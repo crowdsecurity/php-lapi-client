@@ -46,6 +46,7 @@
         <PossiblyNullReference>
             <errorLevel type="suppress">
                 <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Watcher.php"/>
                 <file name="../../../src/Configuration/Metrics.php"/>
                 <file name="../../../src/Configuration/Metrics/Items.php"/>
                 <file name="../../../src/Configuration/Metrics/Meta.php"/>

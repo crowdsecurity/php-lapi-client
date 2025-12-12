@@ -25,7 +25,7 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 
 /**
  * @covers \CrowdSec\LapiClient\Bouncer::__construct
- * @covers \CrowdSec\LapiClient\Bouncer::configure
+ * @covers \CrowdSec\LapiClient\AbstractLapiClient::configure
  * @covers \CrowdSec\LapiClient\Bouncer::manageRequest
  * @covers \CrowdSec\LapiClient\Bouncer::getStreamDecisions
  * @covers \CrowdSec\LapiClient\Bouncer::getFilteredDecisions
@@ -47,9 +47,10 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
  * @covers \CrowdSec\LapiClient\Metrics::configureMeta
  * @covers \CrowdSec\LapiClient\Metrics::configureProperties
  * @covers \CrowdSec\LapiClient\Metrics::toArray
+ * @covers \CrowdSec\LapiClient\AbstractLapiClient::getConfiguration
  *
- * @uses \CrowdSec\LapiClient\Bouncer::cleanHeadersForLog
- * @uses \CrowdSec\LapiClient\Bouncer::cleanRawBodyForLog()
+ * @uses   \CrowdSec\LapiClient\Bouncer::cleanHeadersForLog
+ * @uses   \CrowdSec\LapiClient\Bouncer::cleanRawBodyForLog()
  */
 final class BouncerTest extends AbstractClient
 {
@@ -69,7 +70,7 @@ final class BouncerTest extends AbstractClient
                     ['startup' => true],
                     [
                         'User-Agent' => Constants::USER_AGENT_PREFIX . '_' . TestConstants::USER_AGENT_SUFFIX
-                                        . '/' . TestConstants::USER_AGENT_VERSION,
+                            . '/' . TestConstants::USER_AGENT_VERSION,
                         'X-Api-Key' => TestConstants::API_KEY,
                     ],
                 ]
@@ -93,7 +94,7 @@ final class BouncerTest extends AbstractClient
                     ['ip' => '1.2.3.4'],
                     [
                         'User-Agent' => Constants::USER_AGENT_PREFIX . '_' . TestConstants::USER_AGENT_SUFFIX
-                                        . '/' . TestConstants::USER_AGENT_VERSION,
+                            . '/' . TestConstants::USER_AGENT_VERSION,
                         'X-Api-Key' => TestConstants::API_KEY,
                     ],
                 ]
@@ -267,7 +268,7 @@ final class BouncerTest extends AbstractClient
 
         $headers = [
             'User-Agent' => Constants::USER_AGENT_PREFIX . '_' . TestConstants::USER_AGENT_SUFFIX
-                            . '/' . TestConstants::USER_AGENT_VERSION,
+                . '/' . TestConstants::USER_AGENT_VERSION,
             'X-Api-Key' => TestConstants::API_KEY,
         ];
 
@@ -296,9 +297,11 @@ final class BouncerTest extends AbstractClient
             ->onlyMethods(['sendRequest'])
             ->getMock();
 
-        $mockCurl->expects($this->exactly(1))->method('handle')->will($this->returnValue(
-            new Response(MockedData::DECISIONS_FILTER, MockedData::HTTP_200, [])
-        ));
+        $mockCurl->expects($this->exactly(1))->method('handle')->will(
+            $this->returnValue(
+                new Response(MockedData::DECISIONS_FILTER, MockedData::HTTP_200, [])
+            )
+        );
 
         $response = PHPUnitUtil::callMethod(
             $mockClient,
@@ -333,7 +336,11 @@ final class BouncerTest extends AbstractClient
             'Not allowed method should throw an exception before sending request'
         );
 
-        $this->assertEquals('CrowdSec\LapiClient\ClientException', $errorClass, 'Thrown exception should be an instance of CrowdSec\LapiClient\ClientException');
+        $this->assertEquals(
+            'CrowdSec\LapiClient\ClientException',
+            $errorClass,
+            'Thrown exception should be an instance of CrowdSec\LapiClient\ClientException'
+        );
     }
 
     public function testRequestAppSec()
@@ -351,9 +358,11 @@ final class BouncerTest extends AbstractClient
             ->onlyMethods(['sendRequest'])
             ->getMock();
 
-        $mockCurl->expects($this->exactly(1))->method('handle')->will($this->returnValue(
-            new Response(MockedData::APPSEC_ALLOWED, MockedData::HTTP_200, [])
-        ));
+        $mockCurl->expects($this->exactly(1))->method('handle')->will(
+            $this->returnValue(
+                new Response(MockedData::APPSEC_ALLOWED, MockedData::HTTP_200, [])
+            )
+        );
 
         $response = PHPUnitUtil::callMethod(
             $mockClient,
@@ -388,7 +397,11 @@ final class BouncerTest extends AbstractClient
             'Not allowed method should throw an exception before sending request'
         );
 
-        $this->assertEquals('CrowdSec\LapiClient\ClientException', $errorClass, 'Thrown exception should be an instance of CrowdSec\LapiClient\ClientException');
+        $this->assertEquals(
+            'CrowdSec\LapiClient\ClientException',
+            $errorClass,
+            'Thrown exception should be an instance of CrowdSec\LapiClient\ClientException'
+        );
     }
 
     public function testConfigure()
@@ -553,7 +566,14 @@ final class BouncerTest extends AbstractClient
 
         $error = '';
         try {
-            new Bouncer(['auth_type' => Constants::AUTH_TLS, 'tls_cert_path' => 'test', 'tls_key_path' => 'test', 'tls_verify_peer' => true]);
+            new Bouncer(
+                [
+                    'auth_type' => Constants::AUTH_TLS,
+                    'tls_cert_path' => 'test',
+                    'tls_key_path' => 'test',
+                    'tls_verify_peer' => true
+                ]
+            );
         } catch (\Exception $e) {
             $error = $e->getMessage();
         }

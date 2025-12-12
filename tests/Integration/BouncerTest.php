@@ -22,9 +22,6 @@ use CrowdSec\LapiClient\Tests\PHPUnitUtil;
 use CrowdSec\LapiClient\TimeoutException;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @coversNothing
- */
 final class BouncerTest extends TestCase
 {
     /**
@@ -50,7 +47,7 @@ final class BouncerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->useTls = (string) getenv('BOUNCER_TLS_PATH');
+        $this->useTls = (string)getenv('BOUNCER_TLS_PATH');
 
         $bouncerConfigs = [
             'auth_type' => $this->useTls ? Constants::AUTH_TLS : Constants::AUTH_KEY,
@@ -105,11 +102,28 @@ final class BouncerTest extends TestCase
         // Add decisions
         $now = new \DateTime();
         $this->watcherClient->addDecision($now, '12h', '+12 hours', TestConstants::BAD_IP, 'captcha');
-        $this->watcherClient->addDecision($now, '24h', '+24 hours', TestConstants::BAD_IP . '/' . TestConstants::IP_RANGE, 'ban');
-        $this->watcherClient->addDecision($now, '24h', '+24 hours', TestConstants::JAPAN, 'captcha', Constants::SCOPE_COUNTRY);
+        $this->watcherClient->addDecision(
+            $now,
+            '24h',
+            '+24 hours',
+            TestConstants::BAD_IP . '/' . TestConstants::IP_RANGE,
+            'ban'
+        );
+        $this->watcherClient->addDecision(
+            $now,
+            '24h',
+            '+24 hours',
+            TestConstants::JAPAN,
+            'captcha',
+            Constants::SCOPE_COUNTRY
+        );
         // Retrieve default decisions (Ip and Range) without startup
         $response = $client->getStreamDecisions(false);
-        $this->assertCount(2, $response['new'], 'Should be 2 active decisions for default scopes Ip and Range. Response: ' . json_encode($response));
+        $this->assertCount(
+            2,
+            $response['new'],
+            'Should be 2 active decisions for default scopes Ip and Range. Response: ' . json_encode($response)
+        );
         // Retrieve all decisions (Ip, Range and Country) with startup
         $response = $client->getStreamDecisions(
             true,
@@ -117,7 +131,11 @@ final class BouncerTest extends TestCase
                 'scopes' => Constants::SCOPE_IP . ',' . Constants::SCOPE_RANGE . ',' . Constants::SCOPE_COUNTRY,
             ]
         );
-        $this->assertCount(3, $response['new'], 'Should be 3 active decisions for all scopes. Response: ' . json_encode($response));
+        $this->assertCount(
+            3,
+            $response['new'],
+            'Should be 3 active decisions for all scopes. Response: ' . json_encode($response)
+        );
         // Retrieve all decisions (Ip, Range and Country) without startup
         $response = $client->getStreamDecisions(
             false,
@@ -125,7 +143,10 @@ final class BouncerTest extends TestCase
                 'scopes' => Constants::SCOPE_IP . ',' . Constants::SCOPE_RANGE . ',' . Constants::SCOPE_COUNTRY,
             ]
         );
-        $this->assertNull($response['new'], 'Should be no new if startup has been done. Response: ' . json_encode($response));
+        $this->assertNull(
+            $response['new'],
+            'Should be no new if startup has been done. Response: ' . json_encode($response)
+        );
         // Delete all decisions
         $this->watcherClient->deleteAllDecisions();
         $response = $client->getStreamDecisions(
@@ -135,7 +156,10 @@ final class BouncerTest extends TestCase
             ]
         );
         $this->assertNull($response['new'], 'Should be no new decision yet. Response: ' . json_encode($response));
-        $this->assertNotNull($response['deleted'], 'Should be deleted decisions now. Response: ' . json_encode($response));
+        $this->assertNotNull(
+            $response['deleted'],
+            'Should be deleted decisions now. Response: ' . json_encode($response)
+        );
     }
 
     /**
@@ -219,10 +243,18 @@ final class BouncerTest extends TestCase
         $now = new \DateTime();
         $this->watcherClient->addDecision($now, '12h', '+12 hours', TestConstants::BAD_IP, 'captcha');
         $this->watcherClient->addDecision($now, '24h', '+24 hours', '1.2.3.0/' . TestConstants::IP_RANGE, 'ban');
-        $this->watcherClient->addDecision($now, '24h', '+24 hours', TestConstants::JAPAN, 'captcha', Constants::SCOPE_COUNTRY);
+        $this->watcherClient->addDecision(
+            $now,
+            '24h',
+            '+24 hours',
+            TestConstants::JAPAN,
+            'captcha',
+            Constants::SCOPE_COUNTRY
+        );
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
         $this->assertCount(2, $response, '2 decisions for specified IP. Response: ' . json_encode($response));
-        $response = $client->getFilteredDecisions(['scope' => Constants::SCOPE_COUNTRY, 'value' => TestConstants::JAPAN]);
+        $response = $client->getFilteredDecisions(['scope' => Constants::SCOPE_COUNTRY, 'value' => TestConstants::JAPAN]
+        );
         $this->assertCount(1, $response, '1 decision for specified country. Response: ' . json_encode($response));
         $response = $client->getFilteredDecisions(['range' => '1.2.3.0/' . TestConstants::IP_RANGE]);
         $this->assertCount(1, $response, '1 decision for specified range. Response: ' . json_encode($response));
@@ -233,7 +265,11 @@ final class BouncerTest extends TestCase
         // Delete all decisions
         $this->watcherClient->deleteAllDecisions();
         $response = $client->getFilteredDecisions(['ip' => TestConstants::BAD_IP]);
-        $this->assertCount(0, $response, '0 decision after delete for specified IP. Response: ' . json_encode($response));
+        $this->assertCount(
+            0,
+            $response,
+            '0 decision after delete for specified IP. Response: ' . json_encode($response)
+        );
     }
 
     /**
@@ -271,16 +307,22 @@ final class BouncerTest extends TestCase
 
         // Test 1: clean GET request
         $response = $client->getAppSecDecision($headers);
-        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200. Response: ' . json_encode($response));
+        $this->assertEquals(['action' => 'allow', 'http_status' => 200],
+            $response,
+            'Should receive 200. Response: ' . json_encode($response));
         // Test 2: malicious GET request
         $headers['X-Crowdsec-Appsec-Uri'] = '/.env';
         $response = $client->getAppSecDecision($headers);
-        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403. Response: ' . json_encode($response));
+        $this->assertEquals(['action' => 'ban', 'http_status' => 403],
+            $response,
+            'Should receive 403. Response: ' . json_encode($response));
         // Test 3: clean POST request
         $headers['X-Crowdsec-Appsec-Verb'] = 'POST';
         $headers['X-Crowdsec-Appsec-Uri'] = '/login';
         $response = $client->getAppSecDecision($headers, 'something');
-        $this->assertEquals(['action' => 'allow', 'http_status' => 200], $response, 'Should receive 200. Response: ' . json_encode($response));
+        $this->assertEquals(['action' => 'allow', 'http_status' => 200],
+            $response,
+            'Should receive 200. Response: ' . json_encode($response));
         // Test 4: malicious POST request
         $headers['X-Crowdsec-Appsec-Uri'] = '/login';
         $rawBody = 'class.module.classLoader.resources.'; // Malicious payload (@see /etc/crowdsec/appsec-rules/vpatch-CVE-2022-22965.yaml)
@@ -290,7 +332,9 @@ final class BouncerTest extends TestCase
         }
         $response = $client->getAppSecDecision($headers, $rawBody);
 
-        $this->assertEquals(['action' => 'ban', 'http_status' => 403], $response, 'Should receive 403. Response: ' . json_encode($response));
+        $this->assertEquals(['action' => 'ban', 'http_status' => 403],
+            $response,
+            'Should receive 403. Response: ' . json_encode($response));
     }
 
     /**
@@ -328,7 +372,12 @@ final class BouncerTest extends TestCase
         } catch (TimeoutException $e) {
             $error = $e->getMessage();
             if ('FileGetContents' === $requestHandler) {
-                PHPUnitUtil::assertRegExp($this, '/^file_get_contents call timeout/', $error, 'Should be file_get_contents timeout');
+                PHPUnitUtil::assertRegExp(
+                    $this,
+                    '/^file_get_contents call timeout/',
+                    $error,
+                    'Should be file_get_contents timeout'
+                );
             } else {
                 // Curl by default
                 PHPUnitUtil::assertRegExp($this, '/^CURL call timeout/', $error, 'Should be CURL timeout');

@@ -8,7 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
- * @coversDefaultClass \CrowdSec\LapiClient\Storage\TokenStorage
+ * @covers \CrowdSec\LapiClient\Storage\TokenStorage::retrieveToken
+ * @covers \CrowdSec\LapiClient\Storage\TokenStorage::__construct
  */
 final class TokenStorageTest extends TestCase
 {
@@ -30,5 +31,21 @@ final class TokenStorageTest extends TestCase
         self::assertTrue($cache->hasItem('crowdsec_token'));
         $ci = $cache->getItem('crowdsec_token');
         self::assertSame('j.w.t', $ci->get());
+    }
+
+    public function testLoginFailure(): void
+    {
+        $watcher = $this->createMock(WatcherClient::class);
+        $watcher
+            ->expects(self::once())
+            ->method('login')
+            ->willReturn([
+                'code' => 401,
+                'message' => 'Unauthorized',
+            ]);
+        $cache = new ArrayAdapter();
+        $storage = new TokenStorage($watcher, $cache);
+        self::assertNull($storage->retrieveToken());
+        self::assertFalse($cache->hasItem('crowdsec_token'));
     }
 }

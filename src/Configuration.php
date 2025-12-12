@@ -34,8 +34,6 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *     api_connect_timeout?: int,
  *     appsec_timeout_ms?: int,
  *     appsec_connect_timeout_ms?: int,
- *     machine_id?: non-empty-string,
- *     password?: non-empty-string
  * }
  */
 class Configuration extends AbstractConfiguration
@@ -56,8 +54,6 @@ class Configuration extends AbstractConfiguration
         'api_connect_timeout',
         'appsec_timeout_ms',
         'appsec_connect_timeout_ms',
-        'machine_id',
-        'password',
     ];
 
     /**
@@ -96,7 +92,6 @@ class Configuration extends AbstractConfiguration
         $this->addConnectionNodes($rootNode);
         $this->addAppSecNodes($rootNode);
         $this->validate($rootNode);
-        $this->watcher($rootNode);
 
         return $treeBuilder;
     }
@@ -193,14 +188,6 @@ class Configuration extends AbstractConfiguration
                     return false;
                 })
                 ->thenInvalid('CA path is required for tls authentification with verify_peer.')
-        ->end();
-    }
-
-    private function watcher(ArrayNodeDefinition $rootNode): void
-    {
-        $rootNode->children()
-            ->scalarNode('machine_id')->end()
-            ->scalarNode('password')->end()
         ->end();
     }
 }
