@@ -37,4 +37,28 @@ EOT;
     public const APPSEC_ALLOWED = <<<EOT
 {"action":"allow","http_status":200}
 EOT;
+
+    public const LOGIN_SUCCESS = <<<EOT
+{"code":200,"expire":"2025-01-01T00:00:00Z","token":"test-jwt-token"}
+EOT;
+
+    public const ALERTS_PUSH_SUCCESS = <<<EOT
+["1"]
+EOT;
+
+    public const ALERTS_SEARCH_SUCCESS = <<<EOT
+[]
+EOT;
+
+    public const ALERTS_DELETE_SUCCESS = <<<EOT
+{"nbDeleted":"1"}
+EOT;
+
+    public const ALERT_BY_ID_SUCCESS = <<<EOT
+{"id":1,"capacity":10,"created_at":"2025-01-01T00:00:00Z","decisions":[],"events":[],"events_count":1,"labels":null,"leakspeed":"10/1s","machine_id":"test","message":"Test alert","meta":[],"scenario":"test/scenario","scenario_hash":"abc123","scenario_version":"1.0","simulated":false,"source":{"scope":"ip","value":"1.2.3.4"},"start_at":"2025-01-01T00:00:00Z","stop_at":"2025-01-01T00:00:01Z","uuid":"test-uuid"}
+EOT;
+
+    public const ALERT_NOT_FOUND = <<<EOT
+{"message":"not found"}
+EOT;
 }

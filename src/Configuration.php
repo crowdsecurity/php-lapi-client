@@ -25,7 +25,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  *     api_url?: string,
  *     appsec_url?: string,
  *     auth_type?: string,
- *     api_key: string,
+ *     api_key?: string,
  *     tls_cert_path?: string,
  *     tls_key_path?: string,
  *     tls_ca_cert_path?: string,
@@ -38,7 +38,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
  */
 class Configuration extends AbstractConfiguration
 {
-    /** @var list<string> The list of each configuration tree key */
+    /** @var string[] The list of each configuration tree key */
     protected $keys = [
         'user_agent_suffix',
         'user_agent_version',
@@ -91,7 +91,8 @@ class Configuration extends AbstractConfiguration
         ;
         $this->addConnectionNodes($rootNode);
         $this->addAppSecNodes($rootNode);
-        $this->validate($rootNode);
+        $this->validateTls($rootNode);
+        $this->validateApiKey($rootNode);
 
         return $treeBuilder;
     }
@@ -101,11 +102,9 @@ class Configuration extends AbstractConfiguration
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
      *
-     * @return void
-     *
      * @throws \InvalidArgumentException
      */
-    private function addAppSecNodes($rootNode)
+    private function addAppSecNodes($rootNode): void
     {
         $rootNode->children()
             ->scalarNode('appsec_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_APPSEC_URL)->end()
@@ -119,11 +118,9 @@ class Configuration extends AbstractConfiguration
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
      *
-     * @return void
-     *
      * @throws \InvalidArgumentException
      */
-    private function addConnectionNodes($rootNode)
+    private function addConnectionNodes($rootNode): void
     {
         $rootNode->children()
             ->scalarNode('api_url')->cannotBeEmpty()->defaultValue(Constants::DEFAULT_LAPI_URL)->end()
@@ -153,28 +150,16 @@ class Configuration extends AbstractConfiguration
     }
 
     /**
-     * Conditional validation.
+     * Validate TLS authentication settings.
      *
      * @param NodeDefinition|ArrayNodeDefinition $rootNode
-     *
-     * @return void
      *
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
-    private function validate($rootNode)
+    protected function validateTls($rootNode): void
     {
         $rootNode
-            ->validate()
-                ->ifTrue(function (array $v) {
-                    if (Constants::AUTH_KEY === $v['auth_type'] && empty($v['api_key'])) {
-                        return true;
-                    }
-
-                    return false;
-                })
-                ->thenInvalid('Api key is required as auth type is api_key')
-            ->end()
             ->validate()
                 ->ifTrue(function (array $v) {
                     if (Constants::AUTH_TLS === $v['auth_type']) {
@@ -195,5 +180,31 @@ class Configuration extends AbstractConfiguration
                 })
                 ->thenInvalid('CA path is required for tls authentification with verify_peer.')
         ->end();
+    }
+
+    /**
+     * Validate API key authentication settings (for Bouncer).
+     *
+     * This can be overridden by subclasses (e.g., Watcher) that have different
+     * API key auth requirements.
+     *
+     * @param NodeDefinition|ArrayNodeDefinition $rootNode
+     *
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     */
+    protected function validateApiKey($rootNode): void
+    {
+        $rootNode
+            ->validate()
+                ->ifTrue(function (array $v) {
+                    if (Constants::AUTH_KEY === $v['auth_type'] && empty($v['api_key'])) {
+                        return true;
+                    }
+
+                    return false;
+                })
+                ->thenInvalid('Api key is required as auth type is api_key')
+            ->end();
     }
 }

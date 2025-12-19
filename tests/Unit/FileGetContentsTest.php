@@ -17,20 +17,21 @@ namespace CrowdSec\LapiClient\Tests\Unit;
  * @license   MIT License
  */
 
-use CrowdSec\Common\Client\HttpMessage\Request;
 use CrowdSec\LapiClient\Bouncer;
 use CrowdSec\LapiClient\Tests\MockedData;
 use CrowdSec\LapiClient\TimeoutException;
 
 /**
- * @uses \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
- * @uses \CrowdSec\LapiClient\Bouncer::__construct
- * @uses \CrowdSec\LapiClient\Bouncer::configure
- * @uses \CrowdSec\LapiClient\Bouncer::formatUserAgent
- * @uses \CrowdSec\LapiClient\Bouncer::manageRequest
- * @uses \CrowdSec\LapiClient\Configuration::addConnectionNodes
- * @uses \CrowdSec\LapiClient\Configuration::validate
- * @uses \CrowdSec\LapiClient\Configuration::addAppSecNodes
+ * @uses   \CrowdSec\LapiClient\Configuration::getConfigTreeBuilder
+ * @uses   \CrowdSec\LapiClient\Bouncer::__construct
+ * @uses   \CrowdSec\LapiClient\Bouncer::configure
+ * @uses   \CrowdSec\LapiClient\Bouncer::formatUserAgent
+ * @uses   \CrowdSec\LapiClient\Bouncer::manageRequest
+ * @uses   \CrowdSec\LapiClient\Configuration::addConnectionNodes
+ * @uses   \CrowdSec\LapiClient\Configuration::validateTls
+ * @uses   \CrowdSec\LapiClient\Configuration::validateApiKey
+ * @uses   \CrowdSec\LapiClient\Configuration::addAppSecNodes
+ * @uses   \CrowdSec\LapiClient\AbstractLapiClient::getConfiguration
  *
  * @covers \CrowdSec\LapiClient\Bouncer::getStreamDecisions
  * @covers \CrowdSec\LapiClient\Bouncer::getFilteredDecisions

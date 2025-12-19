@@ -18,34 +18,50 @@ use CrowdSec\Common\Constants as CommonConstants;
  */
 class Constants extends CommonConstants
 {
+    // <editor-fold desc="Endpoints">
     /**
      * @var string The decisions endpoint
      */
     public const DECISIONS_FILTER_ENDPOINT = '/v1/decisions';
+
     /**
      * @var string The decisions stream endpoint
      */
     public const DECISIONS_STREAM_ENDPOINT = '/v1/decisions/stream';
+
+    public const ALERTS_ENDPOINT = '/v1/alerts';
+
     /**
-     * @var string The Default URL of the CrowdSec AppSec endpoint
+     * @var string Authenticate current to get session ID
      */
-    public const DEFAULT_APPSEC_URL = 'http://localhost:7422';
-    /**
-     * @var string The Default URL of the CrowdSec LAPI
-     */
-    public const DEFAULT_LAPI_URL = 'http://localhost:8080';
+    public const WATCHER_LOGIN_ENDPOINT = '/v1/watchers/login';
+
     /**
      * @var string The usage metrics endpoint
      */
     public const METRICS_ENDPOINT = '/v1/usage-metrics';
+    // </editor-fold desc="Endpoints">
+
+    /**
+     * @var string The Default URL of the CrowdSec AppSec endpoint
+     */
+    public const DEFAULT_APPSEC_URL = 'http://localhost:7422';
+
+    /**
+     * @var string The Default URL of the CrowdSec LAPI
+     */
+    public const DEFAULT_LAPI_URL = 'http://localhost:8080';
+
     /**
      * @var string The metrics type
      */
     public const METRICS_TYPE = 'crowdsec-php-bouncer';
+
     /**
      * @var string The user agent prefix used to send request to LAPI
      */
     public const USER_AGENT_PREFIX = 'csphplapi';
+
     /**
      * @var string The current version of this library
      */

@@ -25,7 +25,6 @@ use Symfony\Component\Config\Definition\Processor;
  *     name: string,
  *     version: string
  * }
- *
  * @psalm-type TMetric = array{
  *     name: string,
  *     type?: string,
@@ -35,24 +34,20 @@ use Symfony\Component\Config\Definition\Processor;
  *     feature_flags?: array,
  *     utc_startup_timestamp: int
  * }
- *
  * @psalm-type TLabel = array{
  *     key: non-empty-string,
  *     value: string
  * }
- *
  * @psalm-type TItem = array{
  *     name: string,
  *     value: non-negative-int,
  *     unit: mixed,
  *     labels: list<TLabel>
  * }
- *
  * @psalm-type TMeta = array{
  *     window_size_seconds: int,
  *     utc_now_timestamp: positive-int
  * }
- *
  * @psalm-type TRemediationComponents = array{
  *     name: string,
  *     type?: string,
@@ -85,8 +80,8 @@ class Metrics
     private $properties;
 
     /**
-     * @param TMetric $properties
-     * @param TMeta $meta
+     * @param TMetric     $properties
+     * @param TMeta       $meta
      * @param list<TItem> $items
      */
     public function __construct(

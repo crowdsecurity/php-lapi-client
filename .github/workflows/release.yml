@@ -35,7 +35,7 @@ jobs:
           echo "version_number=$(echo ${{ env.TAG_NAME }} | sed 's/v//g' )" >> $GITHUB_OUTPUT
 
       - name: Clone sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Check version consistency in files
         # Check src/Constants.php and CHANGELOG.md
