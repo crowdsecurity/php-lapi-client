@@ -4,6 +4,11 @@ on:
   push:
     paths-ignore:
       - "**.md"
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
 
 permissions:
   contents: read
@@ -18,7 +23,7 @@ jobs:
     uses: crowdsecurity/cs-standalone-php-bouncer/.github/workflows/php-sdk-development-tests.yml@main
     with:
       php_common_json: '["main"]'
-      lapi_client_json: '["${{ github.ref_name }}"]'
+      lapi_client_json: '["${{ github.head_ref || github.ref_name }}"]'
       capi_client_json: '["main"]'
       remediation_engine_json: '["main"]'
       bouncer_lib_json: '["main"]'
@@ -28,7 +33,7 @@ jobs:
     uses: crowdsecurity/php-cs-bouncer/.github/workflows/php-sdk-development-tests.yml@main
     with:
       php_common_json: '["main"]'
-      lapi_client_json: '["${{ github.ref_name }}"]'
+      lapi_client_json: '["${{ github.head_ref || github.ref_name }}"]'
       capi_client_json: '["main"]'
       remediation_engine_json: '["main"]'
 
@@ -37,7 +42,7 @@ jobs:
     uses: crowdsecurity/php-remediation-engine/.github/workflows/php-sdk-development-tests.yml@main
     with:
       php_common_json: '["main"]'
-      lapi_client_json: '["${{ github.ref_name }}"]'
+      lapi_client_json: '["${{ github.head_ref || github.ref_name }}"]'
       capi_client_json: '["main"]'
     secrets:
       TEST_MACHINE_ID: ${{ secrets.TEST_MACHINE_ID }}
@@ -48,7 +53,7 @@ jobs:
     uses: crowdsecurity/magento-cs-extension/.github/workflows/php-sdk-development-tests.yml@main
     with:
       php_common_json: '["main"]'
-      lapi_client_json: '["${{ github.ref_name }}"]'
+      lapi_client_json: '["${{ github.head_ref || github.ref_name }}"]'
       capi_client_json: '["main"]'
       remediation_engine_json: '["main"]'
       bouncer_lib_json: '["main"]'
