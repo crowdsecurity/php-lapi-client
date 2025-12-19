@@ -109,42 +109,6 @@ class Watcher extends AbstractLapiClient
     }
 
     /**
-     * @inheritDoc
-     */
-    protected function getConfiguration(): Configuration
-    {
-        return new WatcherConfig();
-    }
-
-    /**
-     * Authenticate with LAPI and retrieve a JWT token.
-     *
-     * @param string[] $scenarios Optional list of scenarios to register
-     *
-     * @return TLoginResponse
-     *
-     * @throws ClientException
-     */
-    private function login(array $scenarios = []): array
-    {
-        $data = [
-            'scenarios' => $scenarios ?: $this->scenarios,
-        ];
-        if (isset($this->configs['auth_type']) && Constants::AUTH_KEY === $this->configs['auth_type']) {
-            /** @var array{machine_id?: string, password?: string} $configs */
-            $configs = $this->configs;
-            $data['machine_id'] = $configs['machine_id'] ?? '';
-            $data['password'] = $configs['password'] ?? '';
-        }
-
-        return $this->manageRequest(
-            'POST',
-            Constants::WATCHER_LOGIN_ENDPOINT,
-            $data
-        );
-    }
-
-    /**
      * Push alerts to LAPI.
      *
      * @param list<TAlertFull> $alerts
@@ -241,6 +205,42 @@ class Watcher extends AbstractLapiClient
 
         /** @var TStoredAlert */
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    protected function getConfiguration(): Configuration
+    {
+        return new WatcherConfig();
+    }
+
+    /**
+     * Authenticate with LAPI and retrieve a JWT token.
+     *
+     * @param string[] $scenarios Optional list of scenarios to register
+     *
+     * @return TLoginResponse
+     *
+     * @throws ClientException
+     */
+    private function login(array $scenarios = []): array
+    {
+        $data = [
+            'scenarios' => $scenarios ?: $this->scenarios,
+        ];
+        if (isset($this->configs['auth_type']) && Constants::AUTH_KEY === $this->configs['auth_type']) {
+            /** @var array{machine_id?: string, password?: string} $configs */
+            $configs = $this->configs;
+            $data['machine_id'] = $configs['machine_id'] ?? '';
+            $data['password'] = $configs['password'] ?? '';
+        }
+
+        return $this->manageRequest(
+            'POST',
+            Constants::WATCHER_LOGIN_ENDPOINT,
+            $data
+        );
     }
 
     /**

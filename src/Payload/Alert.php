@@ -182,6 +182,15 @@ class Alert implements \JsonSerializable
         return $result;
     }
 
+    /**
+     * @return array
+     */
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize()
+    {
+        return $this->toArray();
+    }
+
     private function configureProperties(Processor $processor, array $properties): void
     {
         $configuration = new AlertConf();
@@ -236,14 +245,5 @@ class Alert implements \JsonSerializable
         }
 
         return $result;
-    }
-
-    /**
-     * @return array
-     */
-    #[\ReturnTypeWillChange]
-    public function jsonSerialize()
-    {
-        return $this->toArray();
     }
 }

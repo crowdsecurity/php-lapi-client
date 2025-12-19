@@ -79,21 +79,6 @@ class Watcher extends Configuration
     }
 
     /**
-     * Watcher-specific settings.
-     *
-     * @param ArrayNodeDefinition $rootNode
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function addWatcherNodes(ArrayNodeDefinition $rootNode): void
-    {
-        $rootNode->children()
-            ->scalarNode('machine_id')->end()
-            ->scalarNode('password')->end()
-        ->end();
-    }
-
-    /**
      * Override API key validation for Watcher.
      *
      * For Watcher, api_key auth requires machine_id and password instead of api_key.
@@ -107,14 +92,29 @@ class Watcher extends Configuration
     {
         $rootNode
             ->validate()
-                ->ifTrue(function (array $v) {
-                    if (Constants::AUTH_KEY === $v['auth_type']) {
-                        return empty($v['machine_id']) || empty($v['password']);
-                    }
+            ->ifTrue(function (array $v) {
+                if (Constants::AUTH_KEY === $v['auth_type']) {
+                    return empty($v['machine_id']) || empty($v['password']);
+                }
 
-                    return false;
-                })
-                ->thenInvalid('machine_id and password are required when auth_type is api_key')
+                return false;
+            })
+            ->thenInvalid('machine_id and password are required when auth_type is api_key')
+            ->end();
+    }
+
+    /**
+     * Watcher-specific settings.
+     *
+     * @param ArrayNodeDefinition $rootNode
+     *
+     * @throws \InvalidArgumentException
+     */
+    private function addWatcherNodes(ArrayNodeDefinition $rootNode): void
+    {
+        $rootNode->children()
+            ->scalarNode('machine_id')->end()
+            ->scalarNode('password')->end()
             ->end();
     }
 }

@@ -65,5 +65,5 @@ class Constants extends CommonConstants
     /**
      * @var string The current version of this library
      */
-    public const VERSION = 'v3.6.0';
+    public const VERSION = 'v3.7.0';
 }
