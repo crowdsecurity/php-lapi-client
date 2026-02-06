@@ -1,8 +1,6 @@
 name: Coding Standards
 on:
   push:
-    branches:
-      - main
     paths-ignore:
       - '**.md'
   pull_request:
@@ -29,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+        php-version: [ '7.4', '8.0', '8.1', '8.2', '8.3', '8.4' ]
 
     name: Coding standards test
     runs-on: ubuntu-latest
@@ -52,7 +50,7 @@ jobs:
         run: ddev config --project-type=php --project-name=crowdsec-lapi-client  --php-version=${{ matrix.php-version }}
 
       - name: Add-ons install
-        run: ddev get julienloizelet/ddev-tools
+        run: ddev add-on get julienloizelet/ddev-tools
 
       - name: Start DDEV
         uses: nick-fields/retry@v3
@@ -68,12 +66,12 @@ jobs:
           ddev exec php -v
 
       - name: Clone sources
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: ${{env.EXTENSION_PATH}}
 
       - name: Validate composer.json
-        run: | 
+        run: |
           ddev composer validate --strict --working-dir ./${{env.EXTENSION_PATH}}
 
       - name: Install dependencies and Coding standards tools

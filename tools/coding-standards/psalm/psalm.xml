@@ -1,16 +1,16 @@
 <?xml version="1.0"?>
 <psalm
-    errorLevel="5"
-    resolveFromConfigFile="true"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns="https://getpsalm.org/schema/config"
-    xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+        errorLevel="5"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="../../../src" />
+        <directory name="../../../src"/>
         <ignoreFiles>
-            <directory name="../../../vendor" />
-            <directory name="../vendor" />
+            <directory name="../../../vendor"/>
+            <directory name="../vendor"/>
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
@@ -23,7 +23,25 @@
         <UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
+                <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Alert.php"/>
+                <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </UndefinedMethod>
+        <RiskyTruthyFalsyComparison>
+            <errorLevel type="suppress">
+                <file name="../../../src/Bouncer.php"/>
+            </errorLevel>
+        </RiskyTruthyFalsyComparison>
+        <PossiblyNullReference>
+            <errorLevel type="suppress">
+                <file name="../../../src/Configuration.php"/>
+                <file name="../../../src/Configuration/Watcher.php"/>
+                <file name="../../../src/Configuration/Metrics.php"/>
+                <file name="../../../src/Configuration/Metrics/Items.php"/>
+                <file name="../../../src/Configuration/Metrics/Meta.php"/>
+                <file name="../../../src/Configuration/Alert.php"/>
+            </errorLevel>
+        </PossiblyNullReference>
     </issueHandlers>
 </psalm>

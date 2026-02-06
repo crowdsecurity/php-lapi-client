@@ -37,11 +37,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ["7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3", "8.4"]
+        php-version: [ "7.2", "7.3", "7.4", "8.0", "8.1", "8.2", "8.3", "8.4" ]
 
     name: Unit and integration test
-    runs-on: ubuntu-20.04
-    if: ${{ !contains(github.event.head_commit.message, 'chore(') }}
+    runs-on: ubuntu-latest
     env:
       EXTENSION_PATH: "my-code/php-lapi-client"
       PHP_COMMON_PATH: "my-code/php-common"
@@ -99,23 +98,25 @@ jobs:
       - name: Set BOUNCER_KEY env
         run: |
           echo "BOUNCER_KEY=$(ddev create-bouncer)" >> $GITHUB_ENV
+      - name: Create watcher
+        run: ddev create-watcher
 
       - name: Clone Lapi Client files
         if: inputs.is_call != true
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           path: ${{env.EXTENSION_PATH}}
 
       - name: Clone Lapi Client files
         if: inputs.is_call == true
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ env.LAPI_CLIENT_REPO }}
           path: ${{env.EXTENSION_PATH}}
           ref: "main"
 
       - name: Clone PHP common files
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ steps.set-common-data.outputs.repo}}
           ref: ${{ steps.set-common-data.outputs.branch  }}
@@ -158,10 +159,14 @@ jobs:
         run: ddev php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --debug ./${{env.EXTENSION_PATH}}/tests/Unit --testdox
 
       - name: Run Integration tests (without TLS)
-        run: ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout,appsec ./${{env.EXTENSION_PATH}}/tests/Integration
+        run: |
+          ddev exec -s crowdsec cscli alerts delete --all
+          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --configuration ./${{env.EXTENSION_PATH}}/tools/coding-standards/phpunit/phpunit.xml --testsuite Integration-Watcher,Integration-Bouncer --testdox --colors --exclude-group timeout,appsec 
 
       - name: Run Integration tests (with TLS)
-        run: ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl BOUNCER_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --testdox --colors --exclude-group timeout,appsec ./${{env.EXTENSION_PATH}}/tests/Integration
+        run: |
+          ddev exec -s crowdsec cscli alerts delete --all
+          ddev exec BOUNCER_KEY=${{ env.BOUNCER_KEY }} AGENT_TLS_PATH=/var/www/html/cfssl BOUNCER_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 /usr/bin/php ./${{env.EXTENSION_PATH}}/vendor/bin/phpunit --configuration ./${{env.EXTENSION_PATH}}/tools/coding-standards/phpunit/phpunit.xml --testsuite Integration-Watcher,Integration-Bouncer --testdox --colors --exclude-group timeout,appsec
 
       - name: Run AppSec tests
         run: |

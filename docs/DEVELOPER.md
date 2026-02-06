@@ -1,31 +1,29 @@
 ![CrowdSec Logo](images/logo_crowdsec.png)
+
 # CrowdSec LAPI PHP client
 
 ## Developer guide
-
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
 - [Local development](#local-development)
-  - [DDEV setup](#ddev-setup)
-    - [DDEV installation](#ddev-installation)
-    - [Prepare DDEV PHP environment](#prepare-ddev-php-environment)
-  - [DDEV Usage](#ddev-usage)
-    - [Use composer to update or install the lib](#use-composer-to-update-or-install-the-lib)
-    - [Unit test](#unit-test)
-    - [Integration test](#integration-test)
-    - [Coding standards](#coding-standards)
-    - [Testing timeout in the CrowdSec container](#testing-timeout-in-the-crowdsec-container)
+    - [DDEV setup](#ddev-setup)
+        - [DDEV installation](#ddev-installation)
+        - [Prepare DDEV PHP environment](#prepare-ddev-php-environment)
+    - [DDEV Usage](#ddev-usage)
+        - [Use composer to update or install the lib](#use-composer-to-update-or-install-the-lib)
+        - [Unit test](#unit-test)
+        - [Integration test](#integration-test)
+        - [Coding standards](#coding-standards)
+        - [Testing timeout in the CrowdSec container](#testing-timeout-in-the-crowdsec-container)
 - [Commit message](#commit-message)
-  - [Allowed message `type` values](#allowed-message-type-values)
+    - [Allowed message `type` values](#allowed-message-type-values)
 - [Update documentation table of contents](#update-documentation-table-of-contents)
 - [Release process](#release-process)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-
 
 ## Local development
 
@@ -35,16 +33,15 @@ We are using [DDEV](https://docs.ddev.com/en/stable/) because it is quite simple
 
 Of course, you may use your own local stack, but we provide here some useful tools that depends on DDEV.
 
-
 ### DDEV setup
 
 For a quick start, follow the below steps.
 
-
 #### DDEV installation
 
 This project is fully compatible with DDEV 1.21.4, and it is recommended to use this specific version.
-For the DDEV installation, please follow the [official instructions](https://docs.ddev.com/en/stable/users/install/ddev-installation/).
+For the DDEV installation, please follow
+the [official instructions](https://docs.ddev.com/en/stable/users/install/ddev-installation/).
 
 #### Prepare DDEV PHP environment
 
@@ -68,6 +65,7 @@ crowdsec-lapi-dev-project (choose the name you want for this folder)
 ```
 
 - Create an empty folder that will contain all necessary sources:
+
 ```bash
 mkdir crowdsec-lapi-dev-project
 ```
@@ -82,8 +80,8 @@ ddev config --project-type=php --php-version=8.2 --project-name=crowdsec-lapi-cl
 - Add some DDEV add-ons:
 
 ```bash
-ddev get julienloizelet/ddev-tools
-ddev get julienloizelet/ddev-crowdsec-php
+ddev add-on get julienloizelet/ddev-tools
+ddev add-on get julienloizelet/ddev-crowdsec-php
 ```
 
 - Clone this repo sources in a `my-code/lapi-client` folder:
@@ -93,9 +91,7 @@ mkdir -p my-code/lapi-client
 cd my-code/lapi-client && git clone git@github.com:crowdsecurity/php-lapi-client.git ./
 ```
 
-
 ### DDEV Usage
-
 
 #### Use composer to update or install the lib
 
@@ -119,6 +115,12 @@ First, create a bouncer and keep the result key.
 ddev create-bouncer
 ```
 
+Create also a watcher with default login/password for integration tests:
+
+```bash
+ddev create-watcher
+```
+
 Then, as we use a TLS ready CrowdSec container, you have to copy some certificates and key:
 
 ```bash
@@ -132,7 +134,7 @@ Finally, run
 In order to launch integration tests, we have to set some environment variables:
 
 ```bash
-ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --exclude-group timeout     
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --testdox --exclude-group timeout     
 ```
 
 `<BOUNCER_KEY>` should have been created and retrieved before this test by running `ddev create-bouncer`.
@@ -159,7 +161,6 @@ We are using the [PHP Coding Standards Fixer](https://cs.symfony.com/)
 
 With ddev, you can do the following:
 
-
 ```bash
 ddev phpcsfixer my-code/lapi-client/tools/coding-standards/php-cs-fixer ../
 ```
@@ -168,12 +169,10 @@ ddev phpcsfixer my-code/lapi-client/tools/coding-standards/php-cs-fixer ../
 
 To use the [PHPSTAN](https://github.com/phpstan/phpstan) tool, you can run:
 
-
 ```bash
 ddev phpstan /var/www/html/my-code/lapi-client/tools/coding-standards phpstan/phpstan.neon /var/www/html/my-code/lapi-client/src
 
 ```
-
 
 ##### PHP Mess Detector
 
@@ -198,7 +197,6 @@ and:
 ddev phpcbf  ./my-code/lapi-client/tools/coding-standards my-code/lapi-client/src PSR12
 ```
 
-
 ##### PSALM
 
 To use [PSALM](https://github.com/vimeo/psalm) tools, you can run:
@@ -211,24 +209,24 @@ ddev psalm ./my-code/lapi-client/tools/coding-standards ./my-code/lapi-client/to
 
 In order to generate a code coverage report, you have to:
 
-
 - Enable `xdebug`:
+
 ```bash
 ddev xdebug
 ```
 
 To generate a html report, you can run:
+
 ```bash
-ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/vendor/bin/phpunit --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml
+ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/vendor/bin/phpunit --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml ./my-code/lapi-client/tests/Unit
 ```
 
 You should find the main report file `dashboard.html` in `tools/coding-standards/phpunit/code-coverage` folder.
 
-
 If you want to generate a text report in the same folder:
 
 ```bash
-ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/vendor/bin/phpunit --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --coverage-text=./my-code/lapi-client/tools/coding-standards/phpunit/code-coverage/report.txt
+ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/vendor/bin/phpunit --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml ./my-code/lapi-client/tests/Unit --coverage-text=./my-code/lapi-client/tools/coding-standards/phpunit/code-coverage/report.txt
 ```
 
 #### Testing timeout in the CrowdSec container
@@ -236,15 +234,19 @@ ddev php -dxdebug.mode=coverage ./my-code/lapi-client/tools/coding-standards/ven
 If you need to test a timeout, you can use the following command:
 
 Install `iproute2`
+
 ```bash
 ddev exec -s crowdsec apk add iproute2
 ```
+
 Add the delay you want:
+
 ```bash
 ddev exec -s crowdsec tc qdisc add dev eth0 root netem delay 500ms
 ```
 
 To remove the delay:
+
 ```bash
 ddev exec -s crowdsec tc qdisc del dev eth0 root netem
 ```
@@ -255,8 +257,6 @@ To execute integration tests with a timeout, you can run:
 ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 
 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --group timeout     
 ```
-
-
 
 ## Commit message
 
@@ -273,14 +273,6 @@ Example:
 
     feat(bouncer): Add a new endpoint for bouncer
 
-
-You can use the `commit-msg` git hook that you will find in the `.githooks` folder : 
-
-```
-cp .githooks/commit-msg .git/hooks/commit-msg
-chmod +x .git/hooks/commit-msg
-```
-
 ### Allowed message `type` values
 
 - chore (automatic tasks; no production code change)
@@ -293,10 +285,10 @@ chmod +x .git/hooks/commit-msg
 - style (formatting; no production code change)
 - test (adding missing tests, refactoring tests; no production code change)
 
-
 ## Update documentation table of contents
 
-To update the table of contents in the documentation, you can use [the `doctoc` tool](https://github.com/thlorenz/doctoc).
+To update the table of contents in the documentation, you can use [the
+`doctoc` tool](https://github.com/thlorenz/doctoc).
 
 First, install it:
 
@@ -310,20 +302,19 @@ Then, run it in the documentation folder:
 doctoc docs/* --maxlevel 4  
 ```
 
-
 ## Release process
 
-We are using [semantic versioning](https://semver.org/) to determine a version number. 
+We are using [semantic versioning](https://semver.org/) to determine a version number.
 
 Before publishing a new release, there are some manual steps to take:
 
 - Change the version number in the `Constants.php` file
 - Update the `CHANGELOG.md` file
 
-Then, you have to [run the action manually from the GitHub repository](https://github.com/crowdsecurity/php-lapi-client/actions/workflows/release.yml)
+Then, you have
+to [run the action manually from the GitHub repository](https://github.com/crowdsecurity/php-lapi-client/actions/workflows/release.yml)
 
-
-Alternatively, you could use the [GitHub CLI](https://github.com/cli/cli) to publish a release: 
+Alternatively, you could use the [GitHub CLI](https://github.com/cli/cli) to publish a release:
 
 ```
 gh workflow run release.yml -f tag_name=vx.y.z

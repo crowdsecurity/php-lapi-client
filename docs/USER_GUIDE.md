@@ -14,6 +14,9 @@
   - [Installation](#installation)
   - [Bouncer client instantiation](#bouncer-client-instantiation)
     - [LAPI calls](#lapi-calls)
+  - [Watcher client instantiation](#watcher-client-instantiation)
+    - [Watcher configuration](#watcher-configuration)
+    - [LAPI calls](#lapi-calls-1)
 - [Bouncer client configurations](#bouncer-client-configurations)
   - [LAPI url](#lapi-url)
   - [AppSec url](#appsec-url)
@@ -49,6 +52,9 @@
   - [Push usage metrics](#push-usage-metrics)
     - [Command usage](#command-usage-3)
     - [Example](#example-2)
+  - [Push alert](#push-alert)
+    - [Command usage](#command-usage-4)
+    - [Example](#example-3)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -59,11 +65,16 @@ This client allows you to interact with the CrowdSec Local API (LAPI).
 
 ## Features
 
-- CrowdSec LAPI Bouncer available endpoints
+- CrowdSec LAPI Bouncer client
   - Retrieve decisions stream list
   - Retrieve decisions for some filter
   - Retrieve AppSec decision
   - Push usage metrics
+- CrowdSec LAPI Watcher client
+  - Push alerts
+  - Search alerts
+  - Delete alerts
+  - Get alert by ID
 - Overridable request handler (`curl` by default, `file_get_contents` also available)
 
 
@@ -166,6 +177,110 @@ $client->pushUsageMetrics($usageMetrics);
 The `$usageMetrics` parameter is an array containing the usage metrics to push. Please see the [CrowdSec LAPI documentation](https://crowdsecurity.github.io/api_doc/index.html?urls.primaryName=LAPI#/bouncers/postUsageMetrics) for more details.
 
 We provide a `buildUsageMetrics` method to help you build the `$usageMetrics` array.
+
+
+### Watcher client instantiation
+
+The Watcher client is used to authenticate a machine to LAPI and manage alerts. It requires:
+- A `machine_id` and `password` when using API key authentication
+- A PSR-6 compatible cache implementation to store authentication tokens (e.g., `symfony/cache`)
+
+```php
+use CrowdSec\LapiClient\Watcher;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
+
+// Create a cache adapter (requires symfony/cache or any PSR-6 implementation)
+$cache = new FilesystemAdapter('crowdsec', 0, '/path/to/cache');
+
+$configs = [
+    'auth_type' => 'api_key',
+    'api_url' => 'https://your-crowdsec-lapi-url:8080',
+    'machine_id' => 'your-machine-id',
+    'password' => 'your-machine-password',
+];
+
+// Optional: scenarios to register on login
+$scenarios = ['crowdsecurity/http-probing'];
+
+$watcher = new Watcher($configs, $cache, $scenarios);
+```
+
+#### Watcher configuration
+
+In addition to the [common configurations](#bouncer-client-configurations), the Watcher client requires:
+
+- `machine_id`: The machine ID registered with CrowdSec (required for `api_key` auth type)
+- `password`: The machine password (required for `api_key` auth type)
+- A PSR-6 cache implementation (mandatory) - used to store the authentication token
+
+#### LAPI calls
+
+Once your watcher client is instantiated, you can perform the following calls. Authentication is handled automatically - the client will login and cache the JWT token as needed.
+
+##### Push alerts
+
+To push alerts to LAPI:
+
+```php
+$alerts = [
+    [
+        'scenario' => 'crowdsecurity/http-probing',
+        'scenario_hash' => 'abc123',
+        'scenario_version' => '1.0',
+        'message' => 'HTTP probing detected',
+        'events_count' => 5,
+        'start_at' => '2025-01-01T00:00:00Z',
+        'stop_at' => '2025-01-01T00:10:00Z',
+        'capacity' => 10,
+        'leakspeed' => '10/1s',
+        'simulated' => false,
+        'remediation' => true,
+        'source' => [
+            'scope' => 'ip',
+            'value' => '1.2.3.4',
+        ],
+        'events' => [],
+    ],
+];
+$alertIds = $watcher->pushAlerts($alerts);
+```
+
+##### Search alerts
+
+To search for existing alerts:
+
+```php
+$query = [
+    'scope' => 'ip',
+    'value' => '1.2.3.4',
+    'limit' => 10,
+];
+$alerts = $watcher->searchAlerts($query);
+```
+
+Available search parameters: `scope`, `value`, `scenario`, `ip`, `range`, `since`, `until`, `simulated`, `has_active_decision`, `decision_type`, `limit`, `origin`.
+
+##### Delete alerts
+
+To delete alerts by condition:
+
+```php
+$query = [
+    'scope' => 'ip',
+    'value' => '1.2.3.4',
+];
+$result = $watcher->deleteAlerts($query);
+```
+
+##### Get alert by ID
+
+To retrieve a specific alert:
+
+```php
+$alert = $watcher->getAlertById(123);
+```
+
+Returns `null` if the alert is not found.
 
 
 ## Bouncer client configurations
@@ -550,4 +665,18 @@ php tests/scripts/bouncer/build-and-push-metrics.php <METRICS_JSON> <BOUNCER_KEY
 
 ```bash
 php tests/scripts/bouncer/build-and-push-metrics.php '{"name":"TEST BOUNCER","type":"crowdsec-test-php-bouncer","version":"v0.0.0","items":[{"name":"dropped","value":12,"unit":"request","labels":{"origin":"CAPI"}}],"meta":{"window_size_seconds":900,"utc_now_timestamp":12}}' 92d3de1dde6d354b771d63035cf5ef83 https://crowdsec:8080
+```
+
+### Push alert
+
+#### Command usage
+
+```bash
+php tests/scripts/watcher/push-alert.php <ALERT_JSON> <MACHINE_ID> <PASSWORD> <LAPI_URL>
+```
+
+#### Example
+
+```bash
+php tests/scripts/watcher/push-alert.php '{"scenario":"test/scenario","scenario_hash":"abc123","scenario_version":"1.0","message":"Test alert","events_count":1,"start_at":"2025-01-01T00:00:00Z","stop_at":"2025-01-01T00:00:01Z","capacity":10,"leakspeed":"10/1s","simulated":false,"remediation":true,"source":{"scope":"ip","value":"1.2.3.4"},"events":[]}' my-machine-id my-password https://crowdsec:8080
 ```
