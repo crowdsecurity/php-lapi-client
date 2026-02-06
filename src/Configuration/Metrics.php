@@ -36,6 +36,7 @@ class Metrics extends AbstractConfiguration
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('metricsConfig');

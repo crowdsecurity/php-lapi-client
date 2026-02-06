@@ -18,6 +18,8 @@ use Psr\Log\LoggerInterface;
  *
  * If you use `auth_type = api_key` you must provide configs `machine_id` and `password`.
  *
+ * @psalm-api
+ *
  * @psalm-import-type TWatcherConfig from WatcherConfig
  * @psalm-import-type TAlertFull from \CrowdSec\LapiClient\Payload\Alert
  * @psalm-import-type TDecision from \CrowdSec\LapiClient\Payload\Alert
@@ -210,6 +212,7 @@ class Watcher extends AbstractLapiClient
     /**
      * @inheritDoc
      */
+    #[\Override]
     protected function getConfiguration(): Configuration
     {
         return new WatcherConfig();

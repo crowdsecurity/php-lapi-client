@@ -22,6 +22,7 @@ class Source extends AbstractConfiguration
         'longitude',
     ];
 
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('source');

@@ -32,6 +32,7 @@ class Items extends AbstractConfiguration
      * Keep only necessary configs
      * Override because $configs is an array of array (metrics item) and we want to clean each item.
      */
+    #[\Override]
     public function cleanConfigs(array $configs): array
     {
         $result = [];
@@ -46,6 +47,7 @@ class Items extends AbstractConfiguration
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('metricsItemsConfig');

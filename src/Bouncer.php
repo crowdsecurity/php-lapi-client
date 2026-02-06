@@ -14,6 +14,8 @@ namespace CrowdSec\LapiClient;
  * @copyright Copyright (c) 2022+ CrowdSec
  * @license   MIT License
  *
+ * @psalm-api
+ *
  * @psalm-import-type TMetric       from \CrowdSec\LapiClient\Metrics
  * @psalm-import-type TOS           from \CrowdSec\LapiClient\Metrics
  * @psalm-import-type TMeta         from \CrowdSec\LapiClient\Metrics

@@ -15,6 +15,7 @@ class Meta extends AbstractConfiguration
         'value',
     ];
 
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('meta');

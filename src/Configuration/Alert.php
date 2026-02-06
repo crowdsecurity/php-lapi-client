@@ -25,6 +25,7 @@ class Alert extends AbstractConfiguration
         'remediation',
     ];
 
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('alert');

@@ -14,26 +14,27 @@
         </ignoreFiles>
     </projectFiles>
     <issueHandlers>
-        <UndefinedInterfaceMethod>
+    <!--    <UndefinedInterfaceMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::integerNode"/>
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeParentInterface::scalarNode"/>
             </errorLevel>
-        </UndefinedInterfaceMethod>
-        <UndefinedMethod>
+        </UndefinedInterfaceMethod>-->
+        <!--<UndefinedMethod>
             <errorLevel type="suppress">
                 <referencedMethod name="Symfony\Component\Config\Definition\Builder\NodeDefinition::children"/>
                 <file name="../../../src/Configuration.php"/>
                 <file name="../../../src/Configuration/Alert.php"/>
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
-        </UndefinedMethod>
+        </UndefinedMethod>-->
+        <UnusedMethodCall errorLevel="suppress"/>
         <RiskyTruthyFalsyComparison>
             <errorLevel type="suppress">
                 <file name="../../../src/Bouncer.php"/>
             </errorLevel>
         </RiskyTruthyFalsyComparison>
-        <PossiblyNullReference>
+        <!--<PossiblyNullReference>
             <errorLevel type="suppress">
                 <file name="../../../src/Configuration.php"/>
                 <file name="../../../src/Configuration/Watcher.php"/>
@@ -42,6 +43,6 @@
                 <file name="../../../src/Configuration/Metrics/Meta.php"/>
                 <file name="../../../src/Configuration/Alert.php"/>
             </errorLevel>
-        </PossiblyNullReference>
+        </PossiblyNullReference>-->
     </issueHandlers>
 </psalm>
