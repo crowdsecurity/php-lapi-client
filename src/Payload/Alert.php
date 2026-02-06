@@ -133,6 +133,7 @@ class Alert implements \JsonSerializable
     }
 
     /**
+     * @psalm-api
      * @param TAlertFull $data
      */
     public static function fromArray(array $data): self
@@ -186,6 +187,7 @@ class Alert implements \JsonSerializable
      * @return array
      */
     #[\ReturnTypeWillChange]
+    #[\Override]
     public function jsonSerialize()
     {
         return $this->toArray();

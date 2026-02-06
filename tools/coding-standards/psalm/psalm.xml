@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <psalm
         errorLevel="5"
+        findUnusedIssueHandlerSuppression="false"
         resolveFromConfigFile="true"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns="https://getpsalm.org/schema/config"
@@ -28,6 +29,7 @@
                 <file name="../../../src/Payload/Alert.php"/>
             </errorLevel>
         </UndefinedMethod>
+        <UnusedMethodCall errorLevel="suppress"/>
         <RiskyTruthyFalsyComparison>
             <errorLevel type="suppress">
                 <file name="../../../src/Bouncer.php"/>

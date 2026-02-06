@@ -129,12 +129,18 @@ mkdir cfssl
 cp -r .ddev/okaeli-add-on/custom_files/crowdsec/cfssl/* cfssl
 ```
 
+Delete existing decisions: 
+
+```bash
+ddev exec -s crowdsec cscli alerts delete --all 
+```
+
 Finally, run
 
 In order to launch integration tests, we have to set some environment variables:
 
 ```bash
-ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --testdox --exclude-group timeout     
+ddev exec BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --testsuite Integration-Watcher,Integration-Bouncer --testdox --exclude-group timeout,appsec     
 ```
 
 `<BOUNCER_KEY>` should have been created and retrieved before this test by running `ddev create-bouncer`.
@@ -143,7 +149,7 @@ If you need to test with a TLS authentication, you should launch:
 
 ```bash
 ddev exec BOUNCER_TLS_PATH=/var/www/html/cfssl BOUNCER_KEY=<BOUNCER_KEY> AGENT_TLS_PATH=/var/www/html/cfssl 
-APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  ./my-code/lapi-client/tests/Integration --testdox --exclude-group timeout     
+APPSEC_URL=http://crowdsec:7422 LAPI_URL=https://crowdsec:8080 php ./my-code/lapi-client/vendor/bin/phpunit  --configuration ./my-code/lapi-client/tools/coding-standards/phpunit/phpunit.xml --testsuite Integration-Watcher,Integration-Bouncer --testdox --exclude-group timeout     
 ```
 
 #### Coding standards

@@ -15,6 +15,7 @@ class Event extends AbstractConfiguration
         'timestamp',
     ];
 
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('event');

@@ -20,6 +20,7 @@ class Decision extends AbstractConfiguration
         'scenario',
     ];
 
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('decision');

@@ -67,6 +67,7 @@ class Watcher extends Configuration
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
+    #[\Override]
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = parent::getConfigTreeBuilder();
@@ -88,6 +89,7 @@ class Watcher extends Configuration
      * @throws \InvalidArgumentException
      * @throws \RuntimeException
      */
+    #[\Override]
     protected function validateApiKey($rootNode): void
     {
         $rootNode
