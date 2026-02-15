@@ -16,6 +16,16 @@ whether a change is a breaking change or not.
 
 ---
 
+## [3.7.1](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.7.1) - 2026-02-16
+
+[_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.7.0...v3.7.1)
+
+### Fixed
+
+- Fix deprecation warning in PHP 8.5
+
+---
+
 ## [3.7.0](https://github.com/crowdsecurity/php-lapi-client/releases/tag/v3.7.0) - 2025-12-19
 
 [_Compare with previous release_](https://github.com/crowdsecurity/php-lapi-client/compare/v3.6.0...v3.7.0)
