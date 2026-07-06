@@ -23,6 +23,7 @@ class Alert extends AbstractConfiguration
         'leakspeed',
         'simulated',
         'remediation',
+        'kind',
     ];
 
     #[\Override]
@@ -45,6 +46,7 @@ class Alert extends AbstractConfiguration
                 ->scalarNode('leakspeed')->isRequired()->cannotBeEmpty()->end()
                 ->booleanNode('simulated')->isRequired()->end()
                 ->booleanNode('remediation')->isRequired()->end()
+                ->scalarNode('kind')->cannotBeEmpty()->end()
             ->end()
         ;
         // @formatter:on

@@ -54,6 +54,7 @@ class AlertTest extends TestCase
             'leakspeed' => '10/1s',
             'simulated' => false,
             'remediation' => true,
+            'kind' => 'my-app-name',
             'source' => [
                 'scope' => 'ip',
                 'value' => '1.2.3.4',
@@ -122,6 +123,7 @@ class AlertTest extends TestCase
             'leakspeed' => '10/1s',
             'simulated' => false,
             'remediation' => true,
+            'kind' => 'my-app-name',
             'source' => [
                 'scope' => 'ip',
                 'value' => '1.2.3.4',

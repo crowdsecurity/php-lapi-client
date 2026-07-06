@@ -26,7 +26,8 @@ use Symfony\Component\Config\Definition\Processor;
  *     capacity: int,
  *     leakspeed: string,
  *     simulated: bool,
- *     remediation: bool
+ *     remediation: bool,
+ *     kind?: string
  * }
  * @psalm-type TSource = array{
  *     scope: string,
@@ -68,6 +69,7 @@ use Symfony\Component\Config\Definition\Processor;
  *     leakspeed: string,
  *     simulated: bool,
  *     remediation: bool,
+ *     kind?: string,
  *     source?: TSource,
  *     events: list<TEvent>,
  *     decisions?: list<TDecision>,
@@ -138,20 +140,25 @@ class Alert implements \JsonSerializable
      */
     public static function fromArray(array $data): self
     {
+        $properties = [
+            'scenario' => $data['scenario'],
+            'scenario_hash' => $data['scenario_hash'],
+            'scenario_version' => $data['scenario_version'],
+            'message' => $data['message'],
+            'events_count' => $data['events_count'],
+            'start_at' => $data['start_at'],
+            'stop_at' => $data['stop_at'],
+            'capacity' => $data['capacity'],
+            'leakspeed' => $data['leakspeed'],
+            'simulated' => $data['simulated'],
+            'remediation' => $data['remediation'],
+        ];
+        if (isset($data['kind'])) {
+            $properties['kind'] = $data['kind'];
+        }
+
         return new self(
-            [
-                'scenario' => $data['scenario'],
-                'scenario_hash' => $data['scenario_hash'],
-                'scenario_version' => $data['scenario_version'],
-                'message' => $data['message'],
-                'events_count' => $data['events_count'],
-                'start_at' => $data['start_at'],
-                'stop_at' => $data['stop_at'],
-                'capacity' => $data['capacity'],
-                'leakspeed' => $data['leakspeed'],
-                'simulated' => $data['simulated'],
-                'remediation' => $data['remediation'],
-            ],
+            $properties,
             $data['source'] ?? null,
             $data['events'] ?? [],
             $data['decisions'] ?? [],
