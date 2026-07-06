@@ -79,7 +79,7 @@ use Psr\Log\LoggerInterface;
  *     uuid: string
  * }
  */
-class Watcher extends AbstractLapiClient
+class Watcher extends AbstractLapiClient implements AlertPusherInterface
 {
     private const CACHE_KEY = 'crowdsec_watcher_token';
 
