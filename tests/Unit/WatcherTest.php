@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace CrowdSec\LapiClient\Tests\Unit;
 
 use CrowdSec\Common\Client\HttpMessage\Response;
+use CrowdSec\LapiClient\AlertPusherInterface;
 use CrowdSec\LapiClient\ClientException;
 use CrowdSec\LapiClient\Configuration\Watcher as WatcherConfig;
 use CrowdSec\LapiClient\Constants;
@@ -70,6 +71,17 @@ final class WatcherTest extends AbstractClient
             WatcherConfig::class,
             $configuration,
             'Watcher should use Watcher configuration'
+        );
+    }
+
+    public function testWatcherIsAlertPusher()
+    {
+        $client = new Watcher($this->configs, $this->cache);
+
+        $this->assertInstanceOf(
+            AlertPusherInterface::class,
+            $client,
+            'Watcher should implement AlertPusherInterface'
         );
     }
 
